@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 
+export const paddingHorizontal = 20;
 export default StyleSheet.create({
 	screenView: (theme) => ({
 		flex: 1,

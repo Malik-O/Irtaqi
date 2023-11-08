@@ -26,7 +26,7 @@ export default function ({
 				},
 			]}
 		>
-			<Text>{JSON.stringify(colorScheme)}</Text>
+			{/* <Text>{JSON.stringify(colorScheme)}</Text> */}
 			<ScrollViewExists condition={hasScrollView}>
 				{children}
 			</ScrollViewExists>

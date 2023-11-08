@@ -1,10 +1,12 @@
 import { View, Text } from "react-native";
 import React from "react";
+// components
+import ScrollViewWithPicker from "../../../../../../components/ScrollViewWithPicker";
 
 export default function index() {
 	return (
-		<View>
-			<Text></Text>
-		</View>
+		<ScrollViewWithPicker>
+			<Text>index</Text>
+		</ScrollViewWithPicker>
 	);
 }
