@@ -4,6 +4,7 @@ import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming,
+	interpolate,
 	useDerivedValue,
 } from "react-native-reanimated";
 // components
@@ -19,9 +20,7 @@ import useTranslate from "../../hook/useTranslate";
 import useWeeks from "../../hook/globalDatePicker/useWeeks";
 import useFormattedDate from "../../hook/globalDatePicker/useFormattedDate";
 
-export default function ({
-	isCollapseOpenState: [isCollapseOpen, setIsCollapseOpen],
-}) {
+export default function ({ collapseOpen }) {
 	useEffect(() => {
 		// console.log("render:");
 	});
@@ -35,21 +34,18 @@ export default function ({
 		() => -dayButtonTextInnerHight * selectedRow,
 	);
 	const height = useSharedValue(dayButtonTextInnerHight);
-	const containerAnimatedStyle = useAnimatedStyle(() => {
-		return {
-			height: withTiming(
-				dayButtonTextInnerHight * monthWeeks.length ** isCollapseOpen,
-			),
-			overflow: "hidden",
-			// backgroundColor: "red",
-		};
-	});
+	const containerAnimatedStyle = useAnimatedStyle(() => ({
+		height:
+			dayButtonTextInnerHight * monthWeeks.length ** collapseOpen.value,
+		overflow: "hidden",
+	}));
 	const contentAnimatedStyle = useAnimatedStyle(() => ({
 		transform: [
 			{
-				translateY: isCollapseOpen
-					? 0
-					: withTiming(-dayButtonTextInnerHight * selectedRow),
+				translateY:
+					-dayButtonTextInnerHight *
+					selectedRow *
+					interpolate(collapseOpen.value, [0, 1], [1, 0]),
 			},
 		],
 	}));
@@ -65,10 +61,10 @@ export default function ({
 
 	return (
 		<View style={{ paddingHorizontal }}>
-			<Button
+			{/* <Button
 				title="collapse"
-				onPress={() => setIsCollapseOpen(!isCollapseOpen)}
-			/>
+				onPress={() => collapseOpen(!isCollapseOpen)}
+			/> */}
 			<ScreenText reverse variant="headlineSmall">
 				{formattedDate.subtitleDate}
 			</ScreenText>
@@ -88,9 +84,9 @@ export default function ({
 						<View key={i} style={styles.calendarRow}>
 							{week.map((day, i) => (
 								<DayButton
-									collapseClose={() =>
-										setIsCollapseOpen(false)
-									}
+									collapseClose={() => {
+										// (collapseOpen.value = withTiming(0))
+									}}
 									day={day}
 									key={i}
 								/>

@@ -1,77 +1,117 @@
-import { useRef, useState } from "react";
-import { SafeAreaView, StyleSheet, Dimensions } from "react-native";
+import { useRef } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { View, SafeAreaView, StyleSheet, StatusBar } from "react-native";
 import Animated, {
-	useAnimatedProps,
+	interpolate,
+	useDerivedValue,
 	useSharedValue,
+	Extrapolation,
+	useAnimatedStyle,
 } from "react-native-reanimated";
-// components
-import Svg, { Path } from "react-native-svg";
 import GlobalDatePicker from "../../components/GlobalDatePicker";
-import { paddingHorizontal } from "../../styles/layout";
 import CollapseIndicator from "./CollapseIndicator";
 // styles
-// import { dayButtonTextInnerHight } from "../GlobalDatePicker/styles";
-import styles, {
-	MAGIC_NUM,
+import { dayButtonTextInnerHight } from "../GlobalDatePicker/styles";
+import {
 	MIN_BUBBLE_HEIGHT,
 	MAX_BUBBLE_SHIFT,
+	minHeight,
+	navigateHight,
 } from "./styles";
 // hook
-// import useWeeks from "../../hook/globalDatePicker/useWeeks";
-
-const AnimatedPath = Animated.createAnimatedComponent(Path);
-
-const { width, height } = Dimensions.get("window");
-
-function vec2(x, y) {
-	"worklet";
-	return { x, y };
-}
-function curve(c1, c2, to) {
-	"worklet";
-	return `C ${c1.x} ${c1.y} ${c2.x} ${c2.y} ${to.x} ${to.y}`;
-}
+import useWeeks from "../../hook/globalDatePicker/useWeeks";
+// Components
+import ScrollView from "./ScrollView";
+import Canvas from "./Canvas";
 
 export default function () {
-	// const { monthWeeks, selectedRow } = useWeeks();
-	// const datePickerFullHeight = dayButtonTextInnerHight * monthWeeks.length;
-	//
-	const R = useRef(useSharedValue(1)).current;
-	const bubbleHeight = useRef(useSharedValue(MIN_BUBBLE_HEIGHT)).current;
+	const insets = useSafeAreaInsets();
+	const zero = insets.top + StatusBar.currentHeight;
+	const CalendarDim = useRef(useSharedValue({})).current;
+	const translateY = useRef(useSharedValue(zero)).current;
+	// calc month weeks
+	const { monthWeeks } = useWeeks();
+	const datePickerFullHeight = dayButtonTextInnerHight * monthWeeks.length;
+	const inputRange = [
+		MIN_BUBBLE_HEIGHT + minHeight,
+		MIN_BUBBLE_HEIGHT + datePickerFullHeight - MAX_BUBBLE_SHIFT,
+	];
+	// some shared values
+	const bubbleHeight = useRef(useSharedValue(inputRange[1])).current;
 	const bubbleShift = useRef(useSharedValue(0)).current;
-	const translateY = useRef(useSharedValue(0)).current;
-	const bgPathProps = useAnimatedProps(() => {
-		// R.value = isActive.value ? withSpring(70) : withSpring(40);
-		const C = R.value * MAGIC_NUM;
-		const middlePoint = vec2(
-			width / 2,
-			bubbleHeight.value + bubbleShift.value,
+	const collapseOpen = useRef(useSharedValue(0)).current;
+	// bubble updates
+	useDerivedValue(() => {
+		bubbleHeight.value = interpolate(
+			collapseOpen.value,
+			[0, 1],
+			inputRange,
+			Extrapolation.CLAMP,
 		);
-		const endPoint = vec2(0, bubbleHeight.value);
-		const c1 = vec2(middlePoint.x - C, middlePoint.y);
-		const c2 = vec2(endPoint.x, endPoint.y);
-		// radius driven values
-		const d = [
-			"M 0 0",
-			`H ${width}`,
-			`V ${bubbleHeight.value}`,
-			curve(c1, c2, endPoint),
-			"Z",
-		];
-		return { d: d.join(" ") };
-	});
-	const isCollapseOpenState = useState(false);
-	const [isCollapseOpen, setIsCollapseOpen] = isCollapseOpenState;
+	}, [collapseOpen]);
+	useDerivedValue(() => {
+		collapseOpen.value = interpolate(
+			translateY.value,
+			[MIN_BUBBLE_HEIGHT + datePickerFullHeight, zero + navigateHight],
+			[0, 1],
+			Extrapolation.CLAMP,
+		);
+	}, [translateY]);
+	//
+	const scrollViewStyle = useAnimatedStyle(
+		() => ({
+			paddingTop:
+				CalendarDim.value.height + bubbleShift.value + navigateHight ||
+				0,
+		}),
+		[CalendarDim],
+	);
+	//
+	const datePickerStyle = useAnimatedStyle(() => {
+		const transformTranslateY =
+			translateY.value < navigateHight + zero
+				? interpolate(
+						translateY.value,
+						[navigateHight + zero, zero],
+						[0, navigateHight],
+						Extrapolation.CLAMP,
+				  )
+				: 0;
+		return { transform: [{ translateY: transformTranslateY }] };
+	}, [translateY]);
 	return (
 		<SafeAreaView style={StyleSheet.absoluteFill}>
-			<Svg style={styles.bobbleSVG}>
-				<AnimatedPath fill="#88B9F2" animatedProps={bgPathProps} />
-			</Svg>
-			<CollapseIndicator
-				bubbleHeight={bubbleHeight}
-				bubbleShift={bubbleShift}
-			/>
-			<GlobalDatePicker isCollapseOpenState={isCollapseOpenState} />
+			{/* children */}
+			<ScrollView animatedStyle={scrollViewStyle} translateY={translateY}>
+				<View
+					style={{
+						height: 300,
+						width: 50,
+						backgroundColor: "yellow",
+					}}
+				/>
+				<View
+					style={{ height: 3000, width: 50, backgroundColor: "red" }}
+				/>
+			</ScrollView>
+			<View
+				style={[
+					{ width: "100%", position: "absolute", top: zero, left: 0 },
+				]}
+				onLayout={(event) =>
+					(CalendarDim.value = event.nativeEvent.layout)
+				}
+			>
+				<Animated.View style={datePickerStyle}>
+					<GlobalDatePicker collapseOpen={collapseOpen} />
+				</Animated.View>
+				<Canvas
+					translateY={translateY}
+					collapseOpen={collapseOpen}
+					inputRange={inputRange}
+					zero={zero}
+				/>
+			</View>
 		</SafeAreaView>
 	);
 }
