@@ -2,7 +2,7 @@ import React from "react";
 import { Stack } from "expo-router";
 import { useColorScheme } from "react-native";
 
-import styles from "../../../../styles/layout";
+import styles from "../../../../../../styles/layout";
 
 export default function () {
 	const colorScheme = useColorScheme();
@@ -15,7 +15,7 @@ export default function () {
 			}}
 		>
 			<Stack.Screen name="index" />
-			<Stack.Screen name="asTeacher" />
+			<Stack.Screen name="[studentID]" />
 		</Stack>
 	);
 }

@@ -1,11 +1,11 @@
 import React from "react";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { addPlanActions } from "../../../../../../../store/addPlans";
+import { addPlanActions } from "../../../../../../../../store/addPlans";
 // components
-import PickerWithSearch from "../../../../../../../components/PickerWithSearch";
-import ScreenView from "../../../../../../../components/ScreenView";
-import ListItemRipple from "../../../../../../../components/ListItemRipple";
+import PickerWithSearch from "../../../../../../../../components/PickerWithSearch";
+import ScreenView from "../../../../../../../../components/ScreenView";
+import ListItemRipple from "../../../../../../../../components/ListItemRipple";
 
 const items = [
 	"saturday",

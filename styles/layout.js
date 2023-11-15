@@ -9,11 +9,12 @@ export default StyleSheet.create({
 	}),
 	tabBarStyle: () => ({
 		position: "absolute",
-		left: 10,
-		right: 10,
-		bottom: 20,
+		// left: 10,
+		// right: 10,
+		bottom: 40,
 		borderRadius: 30,
-		shadowOpacity: 0,
+		backgroundColor: "red",
+		// shadowOpacity: 0,
 	}),
 	barBackground: (theme) => ({
 		backgroundColor: theme === "light" ? "#ffffff" : "#0D171C",

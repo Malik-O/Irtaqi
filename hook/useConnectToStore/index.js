@@ -39,7 +39,7 @@ export default class ConnectToStore {
 		this.fireAction(this.updateActionName, feedData);
 	}
 	delete() {
-		AsyncStorage.setItem(this.secureStorageKey, null).then(() =>
+		AsyncStorage.removeItem(this.secureStorageKey).then(() =>
 			this.dispatch(this.reduxActions[this.deleteActionName]()),
 		);
 	}

@@ -1,11 +1,12 @@
 import {
 	View,
+	Text,
 	Button,
 	useColorScheme,
 	StyleSheet,
 	TouchableOpacity,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useRouter } from "expo-router";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 // redux
@@ -16,7 +17,10 @@ import MaskedView from "@react-native-masked-view/masked-view";
 import ScreenText from "./ScreenText";
 import Avatar from "./Avatar";
 // hook
-import useUpdateAttendance from "../hook/useUpdateAttendance";
+import useUpdateAttendance from "../hook/attendance/useUpdateAttendance";
+// utils
+import extractISODate from "../utils/extractISODate";
+import sameHistoryCondition from "../utils/sameHistoryCondition";
 
 // resolvers
 function fullName(entity) {
@@ -25,16 +29,26 @@ function fullName(entity) {
 
 export default function ({ student, href }) {
 	const colorScheme = useColorScheme();
+	// redux
 	const { globalDate } = useSelector((state) => state.globalDate);
+	const { attendanceHistory } = useSelector((state) => state.groups);
 	const updateAttendance = useUpdateAttendance();
-
-	const ball = useAnimatedStyle(() => ({
-		transform: [{ scale: 5 }],
-	}));
-	// router
-	const router = useRouter();
+	// filter out the history
+	function currHistoryInstance() {
+		return attendanceHistory.filter((h) =>
+			sameHistoryCondition(h, {
+				...student,
+				date: globalDate,
+			}),
+		)?.[0];
+	}
+	const currHistory = useMemo(currHistoryInstance, [
+		globalDate,
+		attendanceHistory,
+	]);
 	return (
 		<View style={styles.cardContainer(colorScheme)}>
+			<Text>{currHistory?.status}</Text>
 			<View
 				style={{
 					height: "100%",
@@ -54,9 +68,14 @@ export default function ({ student, href }) {
 				</ScreenText>
 			</View>
 			<View style={styles.halfContainer}>
-				{/* <TouchableOpacity
+				<TouchableOpacity
 					style={[styles.attendanceButton, styles.presentButton]}
-					onPress={() => {}}
+					onPress={() =>
+						updateAttendance({
+							user_id: student.id,
+							status: "attended",
+						})
+					}
 				>
 					<Ionicons
 						name="checkmark-outline"
@@ -66,49 +85,16 @@ export default function ({ student, href }) {
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={[styles.attendanceButton, styles.absentButton]}
-					onPress={() => {}}
+					onPress={() =>
+						updateAttendance({
+							user_id: student.id,
+							status: "absent",
+						})
+					}
 				>
 					<Ionicons name="close-outline" size={20} color="white" />
-				</TouchableOpacity> */}
+				</TouchableOpacity>
 			</View>
-			<MaskedView
-				maskElement={
-					<View
-						style={{
-							height: 100,
-							width: 100,
-							// transform: [{ scale: 2 }],
-							backgroundColor: "black",
-							// position: "absolute",
-							// top: 0,
-							// left: 0,
-						}}
-					/>
-				}
-			>
-				<View
-					style={{
-						height: 100,
-						width: 100,
-						borderRadius: 20,
-						backgroundColor: "red",
-						// transform: [{ scale: 5 }],
-						position: "absolute",
-						top: 0,
-						left: 0,
-					}}
-				/>
-			</MaskedView>
-			{/* <Button
-						title="att"
-						onPress={() =>
-							updateAttendance({
-								userID: student.id,
-								status: "a",
-								date: globalDate,
-							})
-						}
-					/> */}
 		</View>
 	);
 }

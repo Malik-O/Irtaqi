@@ -4,10 +4,10 @@ import { useLocalSearchParams, usePathname, useRouter } from "expo-router";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 // components
-import Card from "../../../../../components/Card";
-import ScreenView from "../../../../../components/ScreenView";
-import ScreenText from "../../../../../components/ScreenText";
-import CoolTabsView from "../../../../../components/CoolTabsView";
+import Card from "../../../../../../components/Card";
+import ScreenView from "../../../../../../components/ScreenView";
+import ScreenText from "../../../../../../components/ScreenText";
+import CoolTabsView from "../../../../../../components/CoolTabsView";
 // paper
 import {
 	Button as PaperButton,

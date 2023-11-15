@@ -2,18 +2,25 @@ import { gql } from "@apollo/client";
 
 export default gql`
 	mutation Mutation(
-		$userId: ID
+		$user_id: ID
 		$status: String
 		$date: String
 		$note: String
-		$updatedBy: ID
+		$updated_by: ID
 	) {
 		updateAttendance(
-			user_id: $userId
+			user_id: $user_id
 			status: $status
 			date: $date
 			note: $note
-			updated_by: $updatedBy
-		)
+			updated_by: $updated_by
+		) {
+			id
+			user_id
+			status
+			date
+			note
+			updated_by
+		}
 	}
 `;

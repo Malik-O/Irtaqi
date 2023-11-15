@@ -8,20 +8,20 @@ import {
 } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 // hook
-import connectToPlansStore from "../../../../../../../hook/useConnectToStore/instants/connectToPlansStore";
+import connectToPlansStore from "../../../../../../../../hook/useConnectToStore/instants/connectToPlansStore";
 // apollo
-import graphQl from "../../../../../../../graphQl";
+import graphQl from "../../../../../../../../graphQl";
 import { useMutation } from "@apollo/client";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { addPlanActions } from "../../../../../../../store/addPlans";
-import { plansActions } from "../../../../../../../store/plans";
+import { addPlanActions } from "../../../../../../../../store/addPlans";
+import { plansActions } from "../../../../../../../../store/plans";
 // components
-import ListItemRipple from "../../../../../../../components/ListItemRipple";
-import ScreenView from "../../../../../../../components/ScreenView";
-import SelectDialog from "../../../../../../../components/SelectDialog";
-import MultiSelectDialog from "../../../../../../../components/MultiSelectDialog";
-import DatePickerListItem from "../../../../../../../components/DatePickerListItem";
+import ListItemRipple from "../../../../../../../../components/ListItemRipple";
+import ScreenView from "../../../../../../../../components/ScreenView";
+import SelectDialog from "../../../../../../../../components/SelectDialog";
+import MultiSelectDialog from "../../../../../../../../components/MultiSelectDialog";
+import DatePickerListItem from "../../../../../../../../components/DatePickerListItem";
 // paper
 import {
 	TextInput,

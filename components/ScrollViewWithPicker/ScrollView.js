@@ -67,7 +67,7 @@ export default function ({ children, animatedStyle, translateY }) {
 			// onScrollEndDrag={onScrollStop}
 			// onMomentumEnd={onScrollStop}
 			// onScrollToTop={onScrollStop}
-			scrollEventThrottle={16}
+			scrollEventThrottle={6}
 			style={[animatedStyle]}
 		>
 			{children}

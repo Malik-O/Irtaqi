@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 // components
-import ScrollViewWithPicker from "../../../../../../components/ScrollViewWithPicker";
+import ScrollViewWithPicker from "../../../../../../../components/ScrollViewWithPicker";
 
 export default function index() {
 	return (
