@@ -1,9 +1,9 @@
 // redux
 import { useSelector } from "react-redux";
 // hook
-import useTranslate from "./useTranslate";
+import useTranslate from "../useTranslate";
 // utils
-import stringify from "../utils/stringify";
+import stringify from "../../utils/stringify";
 
 export default function () {
 	// redux

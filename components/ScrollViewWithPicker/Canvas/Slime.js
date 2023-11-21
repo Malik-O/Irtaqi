@@ -7,6 +7,7 @@ import {
 import { Path, Skia } from "@shopify/react-native-skia";
 // styles
 import { navigateHight, MAX_BUBBLE_SHIFT } from "../styles";
+import useTheme from "../../../hook/useTheme";
 
 const { width } = Dimensions.get("window");
 
@@ -16,6 +17,7 @@ export default function ({
 	positionXPercent,
 	slimeMaxWidth,
 }) {
+	const COLORS = useTheme();
 	const positionX = width * positionXPercent - slimeMaxWidth / 2;
 	const navigateSlimeShape = useDerivedValue(() => {
 		const slimeWidth = interpolate(
@@ -33,5 +35,5 @@ export default function ({
 		path.close();
 		return path;
 	}, []);
-	return <Path color="#88B9F2" path={navigateSlimeShape} />;
+	return <Path color={COLORS.primary} path={navigateSlimeShape} />;
 }

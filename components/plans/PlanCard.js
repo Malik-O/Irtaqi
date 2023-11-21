@@ -10,7 +10,7 @@ import { Card } from "react-native-paper";
 import { useSelector } from "react-redux";
 // hook
 import useTranslate from "../../hook/useTranslate";
-import usePlanInstanceString from "../../hook/usePlanInstanceString";
+import usePlanInstanceString from "../../hook/plans/usePlanInstanceString";
 // components
 import {
 	Button,

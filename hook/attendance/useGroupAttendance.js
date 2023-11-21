@@ -13,6 +13,7 @@ import addToAttendanceStore from "./addToAttendanceStore";
 export default function () {
 	loadDevMessages();
 	loadErrorMessages();
+	const [isLoading, setIsLoading] = useState(false);
 	// redux states
 	const dispatch = useDispatch();
 	const { groupID } = useLocalSearchParams();
@@ -21,7 +22,7 @@ export default function () {
 	const GroupAttendance = graphQl.queries.groupAttendance;
 	const [
 		getGroupAttendance,
-		{ loading, error: graphQlError, data: graphQlData, refetch },
+		{ loading, error: graphQlError, data: graphQlData, refetch, ...d },
 	] = useLazyQuery(GroupAttendance);
 	// variables
 	const variables = {
@@ -30,18 +31,30 @@ export default function () {
 	};
 	// first fetch
 	useEffect(() => {
+		setIsLoading(true);
 		// console.log("variables:", variables);
 		getGroupAttendance({ variables })
 			.then(({ data }) => {
+				setIsLoading(false);
 				addToAttendanceStore(dispatch, data.groupAttendance);
 			})
-			.catch((err) => console.log("rrrrrrrr0", { err }));
+			.catch((err) => {
+				setIsLoading(false);
+				console.log("rrrrrrrr0", { err });
+			});
 	}, []);
 	// refetch data
 	const refetchGroupAttendance = async () => {
+		setIsLoading(true);
 		const { data } = await refetch(variables);
-		// console.log("refetchGroupAttendance:", data);
+		console.log("refetchGroupAttendance:", { variables, data });
 		addToAttendanceStore(dispatch, data.groupAttendance);
+		setIsLoading(false);
 	};
-	return { loading, refetchGroupAttendance };
+	// first fetch
+	useEffect(() => {
+		refetchGroupAttendance();
+	}, [globalDate]);
+
+	return { isLoading, refetchGroupAttendance };
 }

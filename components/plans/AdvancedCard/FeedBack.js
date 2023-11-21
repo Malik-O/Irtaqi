@@ -1,16 +1,17 @@
 import { useCallback } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, ActivityIndicator } from "react-native";
 // redux
 import { useSelector } from "react-redux";
 // hook
-import useInstanceHistory from "../../../hook/useInstanceHistory";
-import useUpdateInstanceHistory from "../../../hook/useUpdateInstanceHistory";
+import useInstanceHistory from "../../../hook/plans/useInstanceHistory";
+import useUpdateInstanceHistory from "../../../hook/plans/useUpdateInstanceHistory";
 // utils
 import extractISODate from "../../../utils/extractISODate";
 import Debouncer from "../../../utils/Debouncer";
 // components
 import { Slider } from "@miblanchard/react-native-slider";
 import GradeInput from "./GradeInput";
+// import GradeInput from "../../CoolCardSlider";
 
 export default function ({ amountDone, setAmountDone, allVerses, plan }) {
 	// redux states
@@ -27,10 +28,11 @@ export default function ({ amountDone, setAmountDone, allVerses, plan }) {
 			amount_done,
 			date: extractISODate({ date: globalDate }),
 		};
+		// console.log({ variables });
 		Debouncer(() => updateInstanceHistory(variables));
 	});
 	// return
-	if (isHistoryLoading) return;
+	if (isHistoryLoading) return <ActivityIndicator />;
 	return (
 		<>
 			<Slider

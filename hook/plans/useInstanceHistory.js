@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { plansActions } from "../store/plans";
+import { plansActions } from "../../store/plans";
 // graphQL
 import { useLazyQuery } from "@apollo/client";
-import graphQl from "../graphQl";
+import graphQl from "../../graphQl";
 // utils
-import sameHistoryCondition from "../utils/sameHistoryCondition";
+import sameHistoryCondition from "../../utils/sameHistoryCondition";
 
 export default function (planInstance) {
 	// redux states
@@ -27,16 +27,16 @@ export default function (planInstance) {
 		// let isLoading = false;
 		// check if there existing history do not make request
 		const isThereAny = instancesHistory.some((instance) => {
-			console.log("instance:", { instance, planInstance });
-			return sameHistoryCondition(instance, null, planInstance);
+			// console.log("instance:", { instance, planInstance });
+			return sameHistoryCondition(instance, planInstance);
 		});
 		if (isThereAny) return;
-		console.log(
-			"getHistory:",
-			globalDate.toString(),
-			instancesHistory,
-			isThereAny,
-		);
+		// console.log(
+		// 	"getHistory:",
+		// 	globalDate.toString(),
+		// 	instancesHistory,
+		// 	isThereAny,
+		// );
 		// isLoading = true;
 		getHistory({ variables })
 			.then(({ data: { PlanInstanceHistoryAtDate } }) => {

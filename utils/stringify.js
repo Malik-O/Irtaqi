@@ -2,7 +2,7 @@ let cons = { lang: {} };
 const versesPerPage = require("../store/quran/states/versesPerPage");
 const surahAdj = require("../store/quran/states/surahAdj");
 
-const setConstants = ({ localLang, translate }) => {
+export const setConstants = ({ localLang, translate }) => {
 	cons.lang.isAr = localLang === "ar";
 	cons.lang.translate = translate;
 	cons.localLang = localLang;

@@ -17,12 +17,16 @@ export default function () {
 		useMutation(UpdateAttendance);
 
 	return async (variables) => {
-		variables = { ...variables, date: extractISODate(globalDate) };
+		variables = {
+			...variables,
+			date: extractISODate({ date: globalDate }),
+		};
 		// add locally (optimist)
 		addToAttendanceStore(dispatch, [variables]);
 		// mutate the database
 		try {
 			let returnData = await UpdateAttendanceMutation({ variables });
+			console.log("returnData:", returnData);
 			returnData = { ...variables, ...returnData.data.updateAttendance };
 			// locally
 			addToAttendanceStore(dispatch, [returnData]);

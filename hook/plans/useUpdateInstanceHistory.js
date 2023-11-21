@@ -1,9 +1,9 @@
 // graphQL
 import { useMutation } from "@apollo/client";
-import graphQl from "../graphQl";
+import graphQl from "../../graphQl";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { plansActions } from "../store/plans";
+import { plansActions } from "../../store/plans";
 
 export default function () {
 	const dispatch = useDispatch();
@@ -18,7 +18,10 @@ export default function () {
 		dispatch(plansActions.addInstancesHistory(variables));
 		// mutate the database
 		try {
-			await updateHistoryMutation({ variables });
+			const {
+				data: { updateHistory },
+			} = await updateHistoryMutation({ variables });
+			dispatch(plansActions.addInstancesHistory(updateHistory));
 		} catch (e) {
 			console.log("e:", e);
 		}

@@ -3,20 +3,25 @@ import { useLocalSearchParams } from "expo-router";
 // graphQL
 import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
 import { useLazyQuery } from "@apollo/client";
-import graphQl from "../graphQl";
+import graphQl from "../../graphQl";
 // redux
 import { useSelector } from "react-redux";
 // hook
-import connectToPlansStore from "./useConnectToStore/instants/connectToPlansStore";
+import connectToPlansStore from "../useConnectToStore/instants/connectToPlansStore";
 // import connectToPlansStore from "./useConnectToStore/instants/connectToPlansStore";
 
+// export default async function () {
+// 	const [isLoading, setIsLoading] = useState(false);
+
+// 	return { isLoading };
+// }
 export default async function () {
 	loadDevMessages();
 	loadErrorMessages();
 	// connect with plan store
 	const PlanStoreConnectionsInstance = connectToPlansStore();
 	// redux
-	const { groups } = useSelector((state) => state.groups);
+	// const { groups } = useSelector((state) => state.groups);
 	//
 	const { courseID, studentID } = useLocalSearchParams();
 	const [isLoading, setIsLoading] = useState(false);

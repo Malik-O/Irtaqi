@@ -1,17 +1,23 @@
 import { View, StyleSheet } from "react-native";
 import { useState, useEffect, useMemo } from "react";
-import { Card } from "react-native-paper";
 // redux
 import { useSelector } from "react-redux";
 // utils
 import sameHistoryCondition from "../../../utils/sameHistoryCondition";
 import { versesKeysArr, verseName } from "../../../utils/verse";
+import extractISODate from "../../../utils/extractISODate";
+import Debouncer from "../../../utils/Debouncer";
 // components
 import ScreenText from "../../ScreenText";
-import FeedBack from "./FeedBack";
+import CoolCardSlider from "../../CoolCardSlider";
+import { useCallback } from "react";
+// hook
+import useInstanceHistory from "../../../hook/plans/useInstanceHistory";
+import useUpdateInstanceHistory from "../../../hook/plans/useUpdateInstanceHistory";
 
 export default function ({ plan }) {
-	const [amountDone, setAmountDone] = useState(1);
+	const selectedAmountDoneState = useState(1);
+	const [amountDone, setAmountDone] = selectedAmountDoneState;
 	// redux states
 	const { instancesHistory } = useSelector((state) => state.plans);
 	const { globalDate } = useSelector((state) => state.globalDate);
@@ -21,36 +27,44 @@ export default function ({ plan }) {
 	// get the current day history
 	useEffect(() => {
 		const currentDayHistory = instancesHistory.filter((instance) =>
-			sameHistoryCondition(instance, null, plan.day),
+			sameHistoryCondition(instance, plan.day),
 		)?.[0];
 		if (currentDayHistory) setAmountDone(currentDayHistory.amount_done);
 		else setAmountDone(1);
-	}, [instancesHistory, globalDate]);
+	}, [instancesHistory, globalDate, plan]);
+	// load history data
+	const isHistoryLoading = useInstanceHistory(plan.day);
+	// update history action
+	const updateInstanceHistory = useUpdateInstanceHistory();
+	// Change Amount Event handler
+	const changeAmountEvent = useCallback((newAmountDone) => {
+		// console.log("newAmountDone:", newAmountDone, allVerses);
+		// setAmountDone(newAmountDone);
+		const variables = {
+			plan_instance_id: plan.day.id,
+			amount_done: newAmountDone + 1,
+			date: extractISODate({ date: globalDate }),
+		};
+		// console.log({ variables });
+		Debouncer(() => updateInstanceHistory(variables));
+	}, []);
 
 	return (
-		<View style={styles.advancedAreaContainer}>
-			<Card style={{ marginTop: 20 }} mode="contained">
-				<Card.Content style={styles.advancedCardContent}>
-					<ScreenText variant="bodyLarge">
-						{verseName(allVerses, amountDone)}
-					</ScreenText>
-					<FeedBack
-						allVerses={allVerses}
-						amountDone={amountDone}
-						setAmountDone={setAmountDone}
-						plan={plan}
-					/>
-				</Card.Content>
-			</Card>
-		</View>
+		<CoolCardSlider
+			style={styles.advancedAreaContainer}
+			selectedNumberState={selectedAmountDoneState}
+			onSlide={changeAmountEvent}
+			list={[0, 1, 2, 3, 4, 5]}
+		>
+			<ScreenText variant="bodyLarge">
+				{verseName(allVerses, amountDone + 1)} {amountDone}
+			</ScreenText>
+		</CoolCardSlider>
 	);
 }
 
 const styles = StyleSheet.create({
 	advancedAreaContainer: {
-		paddingHorizontal: 30,
-	},
-	advancedCardContent: {
 		marginTop: 20,
 	},
 });

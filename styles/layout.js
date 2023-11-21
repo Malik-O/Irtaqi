@@ -13,7 +13,7 @@ export default StyleSheet.create({
 		// right: 10,
 		bottom: 40,
 		borderRadius: 30,
-		backgroundColor: "red",
+		// backgroundColor: "red",
 		// shadowOpacity: 0,
 	}),
 	barBackground: (theme) => ({
@@ -23,4 +23,10 @@ export default StyleSheet.create({
 		color: theme === "light" || reverse ? "black" : "white",
 	}),
 	tabBarActiveTintColor: "blue",
+	navigationBackButton: {
+		flex: 1,
+		marginTop: 10,
+		alignItems: "flex-start",
+		paddingHorizontal,
+	},
 });

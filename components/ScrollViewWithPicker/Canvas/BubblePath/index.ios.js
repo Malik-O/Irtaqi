@@ -3,7 +3,8 @@ import { Dimensions } from "react-native";
 import { useDerivedValue, useSharedValue } from "react-native-reanimated";
 import { Path, Skia } from "@shopify/react-native-skia";
 // styles
-import { MAGIC_NUM, navigateHight } from "../../styles";
+import { MAGIC_NUM, navigateHight, stateZeroPaddingBottom } from "../../styles";
+import useTheme from "../../../../hook/useTheme";
 // utils
 import { vec2 } from "../../../../utils/pathPoints";
 import interpolateBubbleShift from "../../utils/interpolateBubbleShift";
@@ -12,13 +13,22 @@ import clamp from "../../../../utils/clamp";
 const { width } = Dimensions.get("window");
 
 export default function ({ translateY, zero, inputRange, collapseOpen }) {
+	const COLORS = useTheme();
 	// radius shared values
 	const R = useRef(useSharedValue(1)).current;
 	// bubble shapes
 	const bubblePath = useCallback((pathHeight, translateY) => {
 		"worklet";
-		const _bubbleShift = interpolateBubbleShift(pathHeight, inputRange);
-		const animatedZero = -clamp(translateY.value, -navigateHight, 0) + zero;
+		const _bubbleShift = interpolateBubbleShift(
+			pathHeight,
+			inputRange.value,
+		);
+		const animatedZero =
+			-clamp(
+				translateY.value,
+				-navigateHight,
+				_bubbleShift - stateZeroPaddingBottom,
+			) + zero;
 		const path = Skia.Path.Make();
 		const C = R.value * MAGIC_NUM;
 		const middlePoint = vec2(
@@ -37,15 +47,15 @@ export default function ({ translateY, zero, inputRange, collapseOpen }) {
 		return path;
 	}, []);
 	const startShape = useDerivedValue(
-		() => bubblePath(inputRange[0], translateY),
+		() => bubblePath(inputRange.value[0], translateY),
 		[translateY],
 	);
 	const endShape = useDerivedValue(
-		() => bubblePath(inputRange[1], translateY),
+		() => bubblePath(inputRange.value[1], translateY),
 		[translateY],
 	);
 	const bubbleShape = useDerivedValue(() => {
 		return endShape.value.interpolate(startShape.value, collapseOpen.value);
 	}, [collapseOpen]);
-	return <Path color="#88B9F2" path={bubbleShape} />;
+	return <Path color={COLORS.primary} path={bubbleShape} />;
 }

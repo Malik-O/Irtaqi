@@ -9,12 +9,14 @@ import Animated, {
 	Easing,
 	withTiming,
 	useDerivedValue,
+	runOnJS,
 } from "react-native-reanimated";
 import {
 	Gesture,
 	GestureDetector,
 	GestureHandlerRootView,
 } from "react-native-gesture-handler";
+import * as Haptics from "expo-haptics";
 
 const { height, width } = Dimensions.get("screen");
 export default function ScrollGesture({
@@ -26,6 +28,7 @@ export default function ScrollGesture({
 	translateX,
 	animatedStyle,
 	navigationArea,
+	onRefresh,
 }) {
 	// calc zero
 	const insets = useSafeAreaInsets();
@@ -33,12 +36,16 @@ export default function ScrollGesture({
 	// some shared values
 	const contentHeight = useRef(useSharedValue(0)).current;
 	const onLayout = (event) => {
-		contentHeight.value = event.nativeEvent.layout.height;
+		// console.log("event:", event.nativeEvent.layout.height);
+		if (contentHeight.value !== event.nativeEvent.layout.height)
+			contentHeight.value = event.nativeEvent.layout.height;
 	};
 	const clamp_range = useDerivedValue(
-		() => [0, contentHeight.value - scrollHeight],
+		() => [0, contentHeight.value - height / 4],
 		[contentHeight, scrollHeight],
 	);
+	const onRefreshWrapper = (args) => onRefresh(args);
+
 	const pan = Gesture.Pan()
 		.onTouchesDown(() => {
 			// stop scrolling
@@ -50,7 +57,15 @@ export default function ScrollGesture({
 			// }
 		})
 		.onChange((event) => {
-			translateY.value -= event.changeY;
+			console.log(
+				"i:",
+				translateY.value - event.changeY,
+				clamp_range.value[1],
+				scrollHeight / 2,
+			);
+			if (translateY.value - event.changeY < clamp_range.value[1]) {
+				translateY.value -= event.changeY;
+			}
 			if (translateY.value <= -navigateHight / 2) {
 				translateX.value += event.changeX;
 			}
@@ -58,10 +73,18 @@ export default function ScrollGesture({
 		})
 		.onFinalize((event) => {
 			// console.log("clamp_range:", clamp_range);
-			if (translateY.value < clamp_range.value[0])
+			if (translateY.value < clamp_range.value[0]) {
+				if (translateY.value <= -navigateHight && onRefresh) {
+					runOnJS(Haptics.notificationAsync)(
+						Haptics.NotificationFeedbackType.Success,
+					);
+					runOnJS(onRefresh)();
+				}
 				translateY.value = withTiming(clamp_range.value[0]);
-			else if (translateY.value > clamp_range.value[1])
-				translateY.value = withTiming(clamp_range.value[1]);
+			}
+
+			// else if (translateY.value < clamp_range.value[1])
+			// 	translateY.value = withTiming(clamp_range.value[1]);
 			else
 				translateY.value = withDecay({
 					velocity: -event.velocityY,
@@ -72,37 +95,37 @@ export default function ScrollGesture({
 		});
 	const contentStyle = useAnimatedStyle(
 		() => ({
-			// paddingTop: zero,
 			transform: [{ translateY: -translateY.value }],
 		}),
 		[translateY],
 	);
-	//
-	const singleTap = Gesture.Tap()
-		.maxDuration(250)
-		.onStart(() => {
-			console.log("Single tap!");
-		});
+	const navigateStyle = useAnimatedStyle(
+		() => ({ opacity: !!(translateY.value < 0) }),
+		[translateY],
+	);
 
 	return (
 		<View>
-			<View
-				style={{
-					backgroundColor: "cyan",
-					width: "100%",
-					height: navigateHight,
-					justifyContent: "center",
-					alignItems: "center",
-					// zIndex: 10,
-					position: "absolute",
-					top: zero,
-					left: 0,
-				}}
+			<Animated.View
+				style={[
+					navigateStyle,
+					{
+						// backgroundColor: "cyan",
+						width: "100%",
+						height: navigateHight,
+						justifyContent: "center",
+						alignItems: "center",
+						// zIndex: 10,
+						position: "absolute",
+						top: zero,
+						left: 0,
+					},
+				]}
 			>
 				{navigationArea}
-			</View>
+			</Animated.View>
 			<GestureHandlerRootView style={styles.container}>
-				<GestureDetector gesture={Gesture.Exclusive(pan)}>
+				<GestureDetector gesture={pan}>
 					<Animated.View
 						style={[
 							animatedStyle,
@@ -116,7 +139,13 @@ export default function ScrollGesture({
 					>
 						{headerComponent}
 						<Animated.View
-							style={[contentStyle, { backgroundColor: "green" }]}
+							style={[
+								contentStyle,
+								{
+									paddingTop: 40,
+									// backgroundColor: "green",
+								},
+							]}
 							onLayout={onLayout}
 						>
 							{children}

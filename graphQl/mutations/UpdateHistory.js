@@ -12,6 +12,12 @@ export default gql`
 			amount_done: $amount_done
 			grade: $grade
 			date: $date
-		)
+		) {
+			id
+			plan_instance_id
+			date
+			grade
+			amount_done
+		}
 	}
 `;

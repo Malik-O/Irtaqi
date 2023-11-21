@@ -6,7 +6,8 @@ function extractID(instance) {
 }
 
 export default function (instance1, instance2) {
-	if (instance1.id === instance2.id) return true;
+	// if same instance id
+	if (instance1?.id === instance2?.id) return true;
 	// prepare instances
 	instance1 = { ...instance1, id: extractID(instance1) };
 	instance2 = { ...instance2, id: extractID(instance2) };

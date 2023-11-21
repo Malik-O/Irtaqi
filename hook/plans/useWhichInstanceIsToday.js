@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 // utils
-import extractISODate from "../utils/extractISODate";
+import extractISODate from "../../utils/extractISODate";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { plansActions } from "../store/plans";
+import { plansActions } from "../../store/plans";
 
 // get this day plans
 function addPlanOfTheDay(plans, selectedDate) {
