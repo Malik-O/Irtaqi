@@ -5,6 +5,7 @@ import GetPlans from "./queries/GetPlans";
 import GetPlanInstanceHistoryAtDate from "./queries/GetPlanInstanceHistoryAtDate";
 import groupAttendance from "./queries/groupAttendance";
 //* Mutations
+import CreateUser from "./mutations/CreateUser";
 import AddPlan from "./mutations/AddPlan";
 import UpdateHistory from "./mutations/UpdateHistory";
 import UpdateAttendance from "./mutations/UpdateAttendance";
@@ -17,5 +18,5 @@ export default {
 		GetPlanInstanceHistoryAtDate,
 		groupAttendance,
 	},
-	mutations: { AddPlan, UpdateHistory, UpdateAttendance },
+	mutations: { CreateUser, AddPlan, UpdateHistory, UpdateAttendance },
 };

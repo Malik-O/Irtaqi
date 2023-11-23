@@ -5,6 +5,7 @@ import { Path, Skia, Canvas, Group } from "@shopify/react-native-skia";
 import styles, { navigateHight, MAX_BUBBLE_SHIFT } from "../styles";
 // hook
 import useTheme from "../../../hook/useTheme";
+import useZero from "../../../hook/useZero";
 // utils
 import clamp from "../../../utils/clamp";
 // component
@@ -14,7 +15,8 @@ import BubblePath from "./BubblePath/index.ios";
 
 const { width } = Dimensions.get("window");
 
-export default function ({ translateY, collapseOpen, inputRange, zero }) {
+export default function ({ translateY, collapseOpen, inputRange }) {
+	const zero = useZero();
 	const COLORS = useTheme();
 	// navigate shapes
 	const navigateTopShape = useDerivedValue(() => {

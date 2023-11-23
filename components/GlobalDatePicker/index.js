@@ -11,15 +11,18 @@ import Animated, {
 import ScreenText from "../ScreenText";
 import DayButton from "./DayButton";
 import DayText from "./DayText";
-import styles, { dayButtonTextInnerHight } from "./styles";
-import { paddingHorizontal } from "../../styles/layout";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { globalDateActions } from "../../store/globalDate";
+// utils
+import capitalize from "../../utils/capitalize";
 // hook
 import useTranslate from "../../hook/useTranslate";
 import useWeeks from "../../hook/globalDatePicker/useWeeks";
 import useFormattedDate from "../../hook/globalDatePicker/useFormattedDate";
+//
+import styles, { dayButtonTextInnerHight } from "./styles";
+import { paddingHorizontal } from "../../styles/layout";
 
 function Days() {
 	const { monthWeeks, selectedRow } = useWeeks();
@@ -45,7 +48,8 @@ export default function ({ collapseOpen }) {
 	const { monthWeeks, selectedRow } = useWeeks();
 	// language support
 	const formattedDate = useFormattedDate();
-	//
+	const titleDay = translate(formattedDate.titleDay);
+	// animated styles
 	const containerAnimatedStyle = useAnimatedStyle(
 		() => ({
 			height:
@@ -68,29 +72,20 @@ export default function ({ collapseOpen }) {
 		}),
 		[selectedRow, collapseOpen],
 	);
-	// close the calendar
-	// function collapseOpen() {
-	// 	translateY.value = 0;
-	// 	height.value = dayButtonTextInnerHight * monthWeeks.length;
-	// }
-	// function collapseClose() {
-	// 	translateY.value = -dayButtonTextInnerHight * selectedRow;
-	// 	height.value = dayButtonTextInnerHight;
-	// }
-
 	return (
 		<View style={{ paddingHorizontal }}>
-			{/* <Button
-				title="collapse"
-				onPress={() => collapseOpen(!isCollapseOpen)}
-			/> */}
-			<ScreenText
-				reverse
-				variant="headlineSmall"
-				// style={{ backgroundColor: "blue", height: 200 }}
-			>
-				{formattedDate.subtitleDate}
-			</ScreenText>
+			<View style={styles.dateHeadContainer}>
+				<ScreenText reverse variant="headlineLarge" style={{}}>
+					{capitalize(titleDay)}
+				</ScreenText>
+				<ScreenText
+					reverse
+					variant="titleMedium"
+					style={styles.subtitleDate}
+				>
+					{formattedDate.subtitleDate}
+				</ScreenText>
+			</View>
 			{/* <ScreenText reverse>{subtitleDate?.join(" ")}</ScreenText> */}
 			{/* days titles */}
 			<View style={styles.calendarRow}>

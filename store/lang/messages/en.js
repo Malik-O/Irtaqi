@@ -23,7 +23,13 @@ export default {
 	name: "name",
 	first_name: "first name",
 	parent_name: "parent name",
+	last_name: "last name",
+	rest_of_name: "rest of the name",
 	phone: "phone",
+	parentPhone: "parent phone",
+	nationalID: "national ID",
+	dateOfBirth: "date of birth",
+	assignToGroup: "assign to group",
 	// dialogs
 	newCenter: "new center",
 	newTeacher: "new teacher",
@@ -110,7 +116,9 @@ export default {
 	confirmForceRemoveMsg: "do you want to force delete ### plan?",
 	forceRemove: "force remove",
 	noPlansMsg: "there is no plans",
+	yesterday: "yesterday",
 	today: "today",
+	tomorrow: "tomorrow",
 	plan: "plan",
 	// admin
 	groups: "groups",

@@ -22,7 +22,7 @@ export default StyleSheet.create({
 		height: "100%",
 	},
 	headerButtons: {
-		width: 50,
+		// width: 50,
 		height: "100%",
 		flex: 2,
 		paddingHorizontal: containerPaddingHorizontal,

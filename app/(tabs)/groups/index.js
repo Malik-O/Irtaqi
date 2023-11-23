@@ -1,21 +1,41 @@
 import React from "react";
-import { Button, Text, ActivityIndicator } from "react-native";
-import { useRouter, useLocalSearchParams } from "expo-router";
+import { Text, ActivityIndicator } from "react-native";
+import {
+	useRouter,
+	useLocalSearchParams,
+	usePathname,
+	useFocusEffect,
+} from "expo-router";
 // redux
 import { useSelector } from "react-redux";
+// capitalize
+import capitalize from "../../../utils/capitalize";
 // hooks
 import useGroups from "../../../hook/useGroups";
 import useTranslate from "../../../hook/useTranslate";
 // components
 import Card from "../../../components/Card";
 import ScreenView from "../../../components/ScreenView";
-import { ScrollView } from "react-native-gesture-handler";
-import CoolScrollView from "../../../components/CoolScrollView";
+import ScreenText from "../../../components/ScreenText";
+//
+import { paddingHorizontal } from "../../../styles/layout";
 
 // resolvers
-function resolveRouter({ id }) {
+function resolveRouter({ id, as }) {
+	console.log(id, as);
+	let pathname;
+	switch (as) {
+		case "teacher":
+			pathname = "/groups/[id]/asTeacher";
+			break;
+		case "organization_owner":
+		case "center_admin":
+		case "group_admin":
+			pathname = "/groups/[id]/asAdmin";
+			break;
+	}
 	return {
-		pathname: "/groups/[id]",
+		pathname,
 		params: { id },
 	};
 }
@@ -28,13 +48,9 @@ function Content() {
 	// elements
 	if (isLoading) return <ActivityIndicator />;
 	if (error) return <Text>{error}</Text>;
-	return (
-		<ScrollView>
-			{groups.map((group, i) => (
-				<Card item={group} key={i} href={resolveRouter(group)} />
-			))}
-		</ScrollView>
-	);
+	return groups.map((group, i) => (
+		<Card item={group} key={i} href={resolveRouter(group)} />
+	));
 }
 
 export default function () {
@@ -46,9 +62,13 @@ export default function () {
 	};
 	return (
 		<ScreenView>
-			<CoolScrollView props={scrollViewProps}>
-				<Content />
-			</CoolScrollView>
+			<ScreenText
+				variant="displayMedium"
+				style={{ paddingHorizontal, marginVertical: paddingHorizontal }}
+			>
+				{capitalize(translate("groups"))}
+			</ScreenText>
+			<Content />
 		</ScreenView>
 	);
 }

@@ -11,6 +11,8 @@ import clamp from "../../utils/clamp";
 // Components
 import Canvas from "./Canvas";
 import NavigationHeader from "./NavigationHeader";
+// hook
+import useZero from "../../hook/useZero";
 
 export default function ({
 	hasNavigationHeader,
@@ -20,11 +22,8 @@ export default function ({
 	inputRange,
 	navigationData,
 }) {
-	// lang store
-	const { locale, rtl } = useSelector((state) => state.lang);
 	// calc zero
-	const insets = useSafeAreaInsets();
-	const zero = insets.top + StatusBar.currentHeight;
+	const zero = useZero();
 	// animated style
 	const datePickerStyle = useAnimatedStyle(() => {
 		const transformTranslateY = clamp(translateY.value, -navigateHight, 0);
@@ -48,7 +47,6 @@ export default function ({
 				translateY={translateY}
 				collapseOpen={collapseOpen}
 				inputRange={inputRange}
-				zero={zero}
 			/>
 		</View>
 	);

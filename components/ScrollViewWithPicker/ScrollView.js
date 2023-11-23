@@ -7,14 +7,14 @@ import Animated, {
 	runOnJS,
 	useDerivedValue,
 } from "react-native-reanimated";
-//
+// styles
 import { navigateHight } from "./styles";
+import useZero from "../../hook/useZero";
 
 export default function ({ children, animatedStyle, translateY }) {
 	const scrollRef = useRef(null);
-	const insets = useSafeAreaInsets();
 	const isScrolling = useRef(useSharedValue(false)).current;
-	const zero = insets.top + StatusBar.currentHeight;
+	const zero = useZero();
 	useEffect(() => {
 		setTimeout(() => {
 			scrollRef.current?.scrollTo({ y: navigateHight, animated: false });

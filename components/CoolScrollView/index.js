@@ -10,7 +10,7 @@ import { titlePaddingVertical } from "./styles";
 // components
 import AnimatedHeader from "./AnimatedHeader";
 
-export default function ({ children, props }) {
+export default function ({ children, props, onScrollEvent }) {
 	const insets = useSafeAreaInsets();
 	const zero = insets.top + StatusBar.currentHeight;
 	const translateY = useRef(useSharedValue(zero)).current;
@@ -18,6 +18,11 @@ export default function ({ children, props }) {
 	// update translateY on scroll
 	function onScroll(e) {
 		translateY.value = e.nativeEvent.contentOffset.y + zero;
+		// console.log(
+		// 	"e.nativeEvent.contentOffset.y:",
+		// 	e.nativeEvent.contentOffset.y,
+		// );
+		onScrollEvent && onScrollEvent(e.nativeEvent.contentOffset.y);
 	}
 	function onScrollStop(e) {
 		const titleHight = titleDim.value.height + titlePaddingVertical * 2;

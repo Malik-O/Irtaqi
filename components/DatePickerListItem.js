@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import ListItemRipple from "./ListItemRipple";
 
 export default function DatePickerListItem({
+	style,
 	title,
 	storeAction,
 	datePickerState,
@@ -29,7 +30,7 @@ export default function DatePickerListItem({
 	};
 
 	return (
-		<View>
+		<View style={style}>
 			<ListItemRipple
 				title={title}
 				datePickerState={datePickerState}

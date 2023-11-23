@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import ScreenView from "../../../../components/ScreenView";
 import ScreenText from "../../../../components/ScreenText";
 import GlobalDatePicker from "../../../../components/GlobalDatePicker";
-import UserCard from "../../../../components/UserCard";
+import AttendanceCard from "../../../../components/AttendanceCard";
 import ScrollViewWithPicker from "../../../../components/ScrollViewWithPicker";
 //* hook
 import useGroupAttendance from "../../../../hook/attendance/useGroupAttendance";
@@ -44,10 +44,10 @@ export default function () {
 			</ScreenText> */}
 			{/* <Button title="refresh" onPress={refetchGroupAttendance} /> */}
 			{isLoading ? (
-				<ActivityIndicator />
+				<ActivityIndicator style={{ marginTop: 20 }} size="large" />
 			) : (
 				students.map((student, i) => (
-					<UserCard key={i} student={student} />
+					<AttendanceCard key={i} student={student} />
 				))
 			)}
 		</ScrollViewWithPicker>

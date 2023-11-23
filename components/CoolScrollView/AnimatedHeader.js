@@ -1,83 +1,33 @@
-import { Platform, View, StatusBar } from "react-native";
-import { Stack } from "expo-router";
-import { BlurView } from "expo-blur";
+import { Platform } from "react-native";
+import { Stack, useLocalSearchParams } from "expo-router";
 import Animated, {
 	useAnimatedStyle,
 	interpolate,
-	useAnimatedProps,
 } from "react-native-reanimated";
 // redux
 import { useSelector } from "react-redux";
+// hook
+import useZero from "../../hook/useZero";
 // components
-import ScreenText from "../ScreenText";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import styles, { titlePaddingVertical, iconSize } from "./styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
-const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
-// const titlePaddingVertical = 20;
-// const containerPaddingHorizontal = 20;
-
-// paddingTop: iconSize/2,
-
-function ExistView({ isExists, style, titleHeight, children }) {
-	return (
-		<Animated.View style={style}>
-			{isExists ? children : null}
-		</Animated.View>
-	);
-}
-function BG({ titleDim, translateY }) {
-	const insets = useSafeAreaInsets();
-	const zero = insets.top + StatusBar.currentHeight;
-	const bgStyle = useAnimatedStyle(() => {
-		const transform = [];
-		if (Platform.OS === "ios")
-			transform.push({ translateY: -titleDim.value.height || 0 });
-		return {
-			transform,
-			height: titleDim.value.height + zero + titlePaddingVertical || 0,
-		};
-	});
-	const intensity = useAnimatedProps(() => {
-		const titleHeight = titleDim.value.height + titlePaddingVertical * 2;
-		const inputRange = [zero, titleHeight || zero];
-		const extrapolations = {
-			extrapolateRight: "clamp",
-			extrapolateLeft: "clamp",
-		};
-		const interpolateCustom = (out) =>
-			interpolate(translateY.value, inputRange, out, extrapolations);
-		return { intensity: interpolateCustom([0, 100]) };
-	});
-	if (Platform.OS === "ios")
-		return (
-			<AnimatedBlurView
-				animatedProps={intensity}
-				// intensity={100}
-				tint="dark"
-				style={[styles.blurView, bgStyle]}
-			/>
-		);
-	else
-		return (
-			<Animated.View
-				style={[styles.blurView, { backgroundColor: "red" }, bgStyle]}
-			/>
-		);
-}
+import ScreenText from "../ScreenText";
+import HeaderButton from "../HeaderButton";
+import ExistView from "./ExistView";
+import BG from "./BG";
+// styles
+import styles, { titlePaddingVertical } from "./styles";
 
 export default function ({
 	translateY,
 	props: { title, more, back },
 	titleDim,
 }) {
+	const { groupID } = useLocalSearchParams();
+	const zero = useZero();
 	// lang store
 	const { locale, rtl } = useSelector((state) => state.lang);
 	const isRTL = rtl[locale];
-	// safe area spacing
-	const insets = useSafeAreaInsets();
-	const zero = insets.top + StatusBar.currentHeight;
-
+	// animated styles
 	const titleAnimatedStyle = useAnimatedStyle(() => {
 		const titleHeight = titleDim.value.height + titlePaddingVertical;
 		const inputRange = [zero, titleHeight || zero];
@@ -91,10 +41,12 @@ export default function ({
 			transform: [
 				{ scale: interpolateCustom([1, 0.8]) },
 				{
-					translateX: interpolateCustom([
-						-titleDim.value.x + titlePaddingVertical || 0,
-						0,
-					]),
+					translateX:
+						interpolateCustom([
+							titlePaddingVertical - titleDim.value.x || 0,
+							0,
+						]) *
+						(-1) ** isRTL,
 				},
 				{ translateY: interpolateCustom([titleHeight || 0, 0]) },
 			],
@@ -121,18 +73,7 @@ export default function ({
 		>
 			<Stack.Screen options={{ headerShown: false }} />
 			<BG titleDim={titleDim} translateY={translateY} />
-			<ExistView
-				titleHeight={titleDim.value.height}
-				isExists={back}
-				style={[styles.headerButtons, { alignItems: "flex-start" }]}
-			>
-				<Ionicons
-					name={isRTL ? "chevron-forward" : "chevron-back"}
-					size={30}
-					color="white"
-					style={{ marginTop: 10 }}
-				/>
-			</ExistView>
+			<HeaderButton isExists={back} back />
 			<Animated.View
 				style={titleAnimatedStyle}
 				onLayout={(event) =>
@@ -141,17 +82,12 @@ export default function ({
 			>
 				<ScreenText variant="displayMedium">{title}</ScreenText>
 			</Animated.View>
-			<ExistView
+			<HeaderButton
+				iconName="checkmark-done"
+				href={`groups/${groupID}/attendance`}
 				isExists={more}
-				style={[styles.headerButtons, { alignItems: "flex-end" }]}
-			>
-				<Ionicons
-					name="settings-outline"
-					size={30}
-					color="white"
-					style={{ marginTop: 10 }}
-				/>
-			</ExistView>
+				style={{ alignItems: "flex-end" }}
+			/>
 		</Animated.View>
 	);
 }

@@ -28,4 +28,14 @@ export default StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 	},
+	// date head
+	dateHeadContainer: {
+		// flexDirection: "row",
+		// alignItems: "flex-end",
+		marginBottom: dayButtonTextPaddingVertical,
+	},
+	subtitleDate: {
+		opacity: 0.6,
+		// marginHorizontal: 10
+	},
 });

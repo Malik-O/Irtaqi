@@ -17,6 +17,8 @@ import {
 	GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
+// hook
+import useZero from "../hook/useZero";
 
 const { height, width } = Dimensions.get("screen");
 export default function ScrollGesture({
@@ -30,9 +32,7 @@ export default function ScrollGesture({
 	navigationArea,
 	onRefresh,
 }) {
-	// calc zero
-	const insets = useSafeAreaInsets();
-	const zero = insets.top + StatusBar.currentHeight;
+	const zero = useZero();
 	// some shared values
 	const contentHeight = useRef(useSharedValue(0)).current;
 	const onLayout = (event) => {
@@ -57,22 +57,14 @@ export default function ScrollGesture({
 			// }
 		})
 		.onChange((event) => {
-			console.log(
-				"i:",
-				translateY.value - event.changeY,
-				clamp_range.value[1],
-				scrollHeight / 2,
-			);
 			if (translateY.value - event.changeY < clamp_range.value[1]) {
 				translateY.value -= event.changeY;
 			}
 			if (translateY.value <= -navigateHight / 2) {
 				translateX.value += event.changeX;
 			}
-			// console.log("0:", translateY.value);
 		})
 		.onFinalize((event) => {
-			// console.log("clamp_range:", clamp_range);
 			if (translateY.value < clamp_range.value[0]) {
 				if (translateY.value <= -navigateHight && onRefresh) {
 					runOnJS(Haptics.notificationAsync)(
@@ -82,7 +74,6 @@ export default function ScrollGesture({
 				}
 				translateY.value = withTiming(clamp_range.value[0]);
 			}
-
 			// else if (translateY.value < clamp_range.value[1])
 			// 	translateY.value = withTiming(clamp_range.value[1]);
 			else
@@ -100,7 +91,7 @@ export default function ScrollGesture({
 		[translateY],
 	);
 	const navigateStyle = useAnimatedStyle(
-		() => ({ opacity: !!(translateY.value < 0) }),
+		() => ({ opacity: +(translateY.value < 0) }),
 		[translateY],
 	);
 

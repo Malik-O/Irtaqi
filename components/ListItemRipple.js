@@ -78,11 +78,15 @@ function ListContentComponent({ props, isRTL }) {
 		);
 	// date picker list item
 	if (datePickerState) {
+		const { locale } = useSelector((state) => state.lang);
 		const [datePickerStateValue, datePickerStateObj] = datePickerState;
+		const formattedDate = new Intl.DateTimeFormat(locale).format(
+			datePickerStateValue,
+		);
 		return (
 			<View style={styles.text(isRTL)}>
 				<ScreenText style={{ paddingHorizontal: 4 }} numberOfLines={1}>
-					{JSON.stringify(datePickerStateValue)}
+					{formattedDate}
 				</ScreenText>
 				<DateTimePickerModal
 					isVisible={isDatePickerVisible}
@@ -127,7 +131,7 @@ const styles = StyleSheet.create({
 		flexDirection: rtl ? "row" : "row-reverse",
 		alignItems: "center",
 		justifyContent: "space-between",
-		paddingHorizontal: 20,
+		// paddingHorizontal: 20,
 		paddingVertical: 10,
 	}),
 	text: (rtl) => ({

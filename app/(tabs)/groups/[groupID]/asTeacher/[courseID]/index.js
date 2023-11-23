@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Card from "../../../../../../components/Card";
 import ScreenView from "../../../../../../components/ScreenView";
 import ScreenText from "../../../../../../components/ScreenText";
-import CoolTabsView from "../../../../../../components/CoolTabsView";
+import CoolScrollView from "../../../../../../components/CoolScrollView";
 // paper
 import {
 	Button as PaperButton,
@@ -25,6 +25,42 @@ function fullName(entity) {
 function resolveRouter(pathname, studentID) {
 	return { pathname: `${pathname}/[studentID]`, params: { studentID } };
 }
+export default function () {
+	const { groupID, courseID } = useLocalSearchParams();
+	// const router = useRouter();
+	const pathname = usePathname();
+	// redux
+	const { groups } = useSelector((state) => state.groups);
+	const selectedGroup = groups.filter((group) => group.id === groupID)[0];
+	const selectedCourse = selectedGroup.courses.filter(
+		(course) => course.id === courseID,
+	)[0];
+	const tabsProps = {
+		title: selectedGroup.title,
+		tabs: selectedGroup.courses,
+		back: true,
+		more: true,
+	};
+	return (
+		<ScreenView hasScrollView={false} paddingTop={false}>
+			<CoolScrollView props={tabsProps}>
+				{/* <CoolTabsView props={tabsProps}> */}
+				{/* <ScreenText variant="displayMedium" style={{ textAlign: "center" }}>
+				{selectedGroup.title}
+			</ScreenText> */}
+				{selectedCourse.floatingStudents.map((student, i) => (
+					<Card
+						key={i}
+						item={{ ...student, title: fullName(student) }}
+						href={resolveRouter(pathname, student.id)}
+					/>
+				))}
+				{/* </CoolTabsView> */}
+			</CoolScrollView>
+		</ScreenView>
+	);
+}
+
 // const groups = [
 // 	{
 // 		__typename: "Group",
@@ -76,33 +112,3 @@ function resolveRouter(pathname, studentID) {
 // 		courses: [],
 // 	},
 // ];
-export default function () {
-	const { groupID, courseID } = useLocalSearchParams();
-	// const router = useRouter();
-	const pathname = usePathname();
-	// redux
-	const { groups } = useSelector((state) => state.groups);
-	const selectedGroup = groups.filter((group) => group.id === groupID)[0];
-	const selectedCourse = selectedGroup.courses.filter(
-		(course) => course.id === courseID,
-	)[0];
-	const tabsProps = {
-		title: selectedGroup.title,
-		tabs: selectedGroup.courses,
-		back: true,
-		more: true,
-	};
-	return (
-		<ScreenView>
-			{/* <CoolTabsView props={tabsProps}> */}
-			{selectedCourse.floatingStudents.map((student, i) => (
-				<Card
-					key={i}
-					item={{ ...student, title: fullName(student) }}
-					href={resolveRouter(pathname, student.id)}
-				/>
-			))}
-			{/* </CoolTabsView> */}
-		</ScreenView>
-	);
-}

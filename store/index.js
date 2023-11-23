@@ -1,5 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./user";
+import { addUserSlice } from "./addUser";
+
 import { langSlice } from "./lang";
 import { groupsSlice } from "./groups";
 import { themeSlice } from "./theme";
@@ -11,6 +13,8 @@ import { globalDateSlice } from "./globalDate";
 export const Store = configureStore({
 	reducer: {
 		user: userSlice.reducer,
+		addUser: addUserSlice.reducer,
+
 		lang: langSlice.reducer,
 		groups: groupsSlice.reducer,
 		theme: themeSlice.reducer,

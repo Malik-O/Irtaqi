@@ -1,6 +1,10 @@
 import { StyleSheet } from "react-native";
 
 export const paddingHorizontal = 20;
+export const tabBarBubbleShift = 20;
+export const tabBarHeight = 300;
+export const MAGIC_NUM = 0.5522847498;
+
 export default StyleSheet.create({
 	screenView: (theme) => ({
 		flex: 1,
@@ -11,9 +15,12 @@ export default StyleSheet.create({
 		position: "absolute",
 		// left: 10,
 		// right: 10,
-		bottom: 40,
+		bottom: 0,
 		borderRadius: 30,
+		// paddingTop: 40,
+		overflow: "visible",
 		// backgroundColor: "red",
+		borderTopWidth: 0,
 		// shadowOpacity: 0,
 	}),
 	barBackground: (theme) => ({
@@ -24,9 +31,24 @@ export default StyleSheet.create({
 	}),
 	tabBarActiveTintColor: "blue",
 	navigationBackButton: {
-		flex: 1,
-		marginTop: 10,
+		// width: 50,
+		height: "100%",
+		flex: 2,
 		alignItems: "flex-start",
+		// backgroundColor: "red",
 		paddingHorizontal,
 	},
+	canvas: {
+		width: "100%",
+		height: tabBarHeight,
+		position: "absolute",
+		top: -30,
+	},
+	planCardContainer: (backgroundColor) => ({
+		margin: paddingHorizontal,
+		backgroundColor,
+		paddingHorizontal,
+		paddingVertical: paddingHorizontal,
+		borderRadius: 15,
+	}),
 });

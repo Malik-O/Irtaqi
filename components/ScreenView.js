@@ -13,6 +13,7 @@ export default function ({
 	children,
 	hasScrollView = true,
 	paddingTop = true,
+	style,
 }) {
 	const colorScheme = useColorScheme();
 	const insets = useSafeAreaInsets();

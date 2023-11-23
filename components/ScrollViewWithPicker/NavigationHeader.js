@@ -9,7 +9,7 @@ import styles, { navigateHight } from "./styles";
 import clamp from "../../utils/clamp";
 // Components
 import Avatar from "../Avatar";
-import BackButton from "../BackButton";
+import HeaderButton from "../HeaderButton";
 
 export default function ({ hasNavigationHeader, translateY, navigationData }) {
 	if (!hasNavigationHeader) return <View />;
@@ -36,7 +36,7 @@ export default function ({ hasNavigationHeader, translateY, navigationData }) {
 	});
 	return (
 		<Animated.View style={[styles.navigationHeader]}>
-			<BackButton style={backButtonStyle} />
+			<HeaderButton style={backButtonStyle} back />
 			<View
 				style={{
 					flex: 10,

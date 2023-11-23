@@ -13,6 +13,7 @@ import { dayButtonTextInnerHight } from "../GlobalDatePicker/styles";
 import { MIN_BUBBLE_HEIGHT, MAX_BUBBLE_SHIFT, navigateHight } from "./styles";
 // hook
 import useWeeks from "../../hook/globalDatePicker/useWeeks";
+import useZero from "../../hook/useZero";
 // Components
 import ScrollGesture from "../ScrollGesture";
 import ScreenView from "../ScreenView";
@@ -25,9 +26,7 @@ export default function ({
 	hasNavigationHeader = true,
 	onRefresh,
 }) {
-	// calc zero
-	const insets = useSafeAreaInsets();
-	const zero = insets.top + StatusBar.currentHeight;
+	const zero = useZero();
 	// some shared values
 	const CalendarDim = useRef(useSharedValue({})).current;
 	const translateY = useRef(useSharedValue(0)).current;

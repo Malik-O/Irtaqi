@@ -1,21 +1,20 @@
-import {
-	useColorScheme,
-	StyleSheet,
-	TouchableWithoutFeedback,
-} from "react-native";
+import { TouchableWithoutFeedback } from "react-native";
 import Animated, {
 	useSharedValue,
 	useAnimatedStyle,
 	withSpring,
 	interpolate,
 } from "react-native-reanimated";
-import React, { useEffect } from "react";
+import React, { Children, useEffect } from "react";
 import { useRouter } from "expo-router";
 // components
 import ScreenText from "./ScreenText";
+// styles
+import styles from "../styles/layout";
+import useTheme from "../hook/useTheme";
 
-export default function ({ item: { title }, href }) {
-	const colorScheme = useColorScheme();
+export default function ({ item: { title } = {}, href, children }) {
+	const theme = useTheme();
 	// router
 	const router = useRouter();
 	// animation
@@ -26,6 +25,7 @@ export default function ({ item: { title }, href }) {
 	const config = { duration: 300 };
 	return (
 		<TouchableWithoutFeedback
+			disabled={!href}
 			onPressIn={() => {
 				isPressIn.value = withSpring(1, config);
 			}}
@@ -37,20 +37,14 @@ export default function ({ item: { title }, href }) {
 			}}
 		>
 			<Animated.View
-				style={[styles.planCardContainer(colorScheme), cardStyle]}
+				style={[styles.planCardContainer(theme.cardColor), cardStyle]}
 			>
-				<ScreenText variant="bodyLarge">{title}</ScreenText>
+				{title ? (
+					<ScreenText variant="bodyLarge">{title}</ScreenText>
+				) : (
+					children
+				)}
 			</Animated.View>
 		</TouchableWithoutFeedback>
 	);
 }
-
-const styles = StyleSheet.create({
-	planCardContainer: (theme) => ({
-		margin: 20,
-		backgroundColor: theme === "light" ? "#ffffff" : "#1F2C33",
-		paddingHorizontal: 20,
-		paddingVertical: 20,
-		borderRadius: 15,
-	}),
-});

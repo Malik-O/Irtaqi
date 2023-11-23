@@ -1,25 +1,52 @@
 import React from "react";
 import { Tabs } from "expo-router";
-import { View, useColorScheme } from "react-native";
-
+import { View, useColorScheme, Dimensions } from "react-native";
+// component
+import { Path, Skia, Canvas, Group } from "@shopify/react-native-skia";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import Svg, { Circle, Path } from "react-native-svg";
+//utils
+import { vec2 } from "../../utils/pathPoints";
+// hook
+import useTheme from "../../hook/useTheme";
+// styles
+import styles, {
+	tabBarBubbleShift,
+	MAGIC_NUM,
+	tabBarHeight,
+} from "../../styles/layout";
+const { width } = Dimensions.get("window");
+// const height = 200;
 
-import styles from "../../styles/layout";
-
+function TabBarBG() {
+	const theme = useTheme();
+	const path = Skia.Path.Make();
+	const R = 1;
+	// calc point
+	const C = R * MAGIC_NUM;
+	const middlePoint = vec2(width / 2, 0);
+	const endPoint = vec2(width, tabBarBubbleShift);
+	const c1 = vec2(middlePoint.x - C, middlePoint.y);
+	const c2 = vec2(endPoint.x, endPoint.y);
+	// add points
+	path.moveTo(0, tabBarBubbleShift);
+	path.cubicTo(c1.x, c1.y, c2.x, c2.y, endPoint.x, endPoint.y);
+	// path.lineTo(width / 2, 0);
+	// path.lineTo(width, tabBarBubbleShift);
+	path.lineTo(width, tabBarHeight);
+	path.lineTo(0, tabBarHeight);
+	path.close();
+	return (
+		<Canvas style={styles.canvas}>
+			<Path path={path} color={theme.secondary} />
+		</Canvas>
+	);
+}
 export default function () {
 	const colorScheme = useColorScheme();
 	return (
 		<Tabs
 			screenOptions={{
-				tabBarBackground: () => (
-					<Svg width="375" height="108" viewBox="0 0 375 108">
-						<Path
-							d="M0 41.3909C0 24.0835 13.0013 9.57048 30.2379 8.00636C66.1347 4.74894 128.577 -0.000481195 187.5 3.65675e-08C246.423 0.000481266 308.865 4.74956 344.762 8.00665C361.998 9.57064 375 24.0837 375 41.3914V74C375 92.7777 359.778 108 341 108H34C15.2223 108 0 92.7777 0 74V41.3909Z"
-							fill="#0D171C"
-						/>
-					</Svg>
-				),
+				tabBarBackground: TabBarBG,
 				// tabBarActiveTintColor: styles.tabBarActiveTintColor,
 				// tabBarLabelStyle: styles.text(colorScheme),
 				tabBarStyle: styles.tabBarStyle(colorScheme),

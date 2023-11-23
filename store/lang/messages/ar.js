@@ -40,7 +40,13 @@ export default {
 	name: "الاسم",
 	first_name: "الاسم الاول",
 	parent_name: "اسم الاب",
+	last_name: "الاسم الاخير",
+	rest_of_name: "بقية الاسم",
 	phone: "رقم الهاتف",
+	parentPhone: "رقم هاتف ولي الامر",
+	nationalID: "الرقم القومي",
+	dateOfBirth: "تاريخ الميلاد",
+	assignToGroup: "تعيين في مجموعة",
 	// dialogs
 	newCenter: "مركز جديد",
 	newTeacher: "معلم جديد",
@@ -128,7 +134,9 @@ export default {
 		"هل انت متأكد من رغبتك في حذف التقدم المحفوظ مع الخطة؟",
 	forceRemove: "حذف اجباري",
 	noPlansMsg: "لا يوجد خطط",
+	yesterday: "الامس",
 	today: "اليوم",
+	tomorrow: "غدا",
 	plan: "الخطة",
 	// admin
 	groups: "المجموعات",

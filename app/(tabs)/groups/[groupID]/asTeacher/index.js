@@ -1,5 +1,10 @@
 import { Button } from "react-native";
-import { useLocalSearchParams, usePathname, useRouter } from "expo-router";
+import {
+	useLocalSearchParams,
+	usePathname,
+	useRouter,
+	Redirect,
+} from "expo-router";
 // redux
 import { useSelector } from "react-redux";
 // components
@@ -17,6 +22,7 @@ export default function id() {
 	// redux
 	const { groups } = useSelector((state) => state.groups);
 	const selectedGroup = groups.filter((group) => group.id === groupID)[0];
+	return <Redirect href={`${pathname}/${selectedGroup.courses[0].id}`} />;
 	return (
 		<ScreenView>
 			<Button
