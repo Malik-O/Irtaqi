@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 // graphQL
 import { useMutation } from "@apollo/client";
 import graphQl from "../graphQl";
@@ -5,14 +6,15 @@ import graphQl from "../graphQl";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function () {
+	const router = useRouter();
 	const dispatch = useDispatch();
 	const { formData } = useSelector((state) => state.addUser);
 	// mutation
 	const CreateUser = graphQl.mutations.CreateUser;
 	const [CreateUserMutation, { data, loading, error }] =
 		useMutation(CreateUser);
-
-	return async (variables) => {
+	// mutation action
+	async function mutationAction(variables) {
 		variables = {
 			// name
 			first_name: formData.first_name,
@@ -34,11 +36,14 @@ export default function () {
 		try {
 			let returnData = await CreateUserMutation({ variables });
 			// returnData = { ...variables, ...returnData.data };
-			console.log("returnData:", returnData);
+			// console.log("returnData:", returnData)/;
 			// locally
 			// addToAttendanceStore(dispatch, [returnData]);
 		} catch (e) {
 			console.log("e:", e);
 		}
-	};
+		//
+		router.back();
+	}
+	return { mutationAction, loading };
 }

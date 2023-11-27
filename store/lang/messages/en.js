@@ -30,6 +30,11 @@ export default {
 	nationalID: "national ID",
 	dateOfBirth: "date of birth",
 	assignToGroup: "assign to group",
+	// form hints
+	wordHint: "this field must be filled in with letters only",
+	requiredHint: "this field must be filled in",
+	emailHint: "email must be filled correctly",
+	nationalIDHint: "this field must be filled in with 14 numbers",
 	// dialogs
 	newCenter: "new center",
 	newTeacher: "new teacher",

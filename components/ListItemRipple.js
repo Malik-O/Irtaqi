@@ -80,9 +80,9 @@ function ListContentComponent({ props, isRTL }) {
 	if (datePickerState) {
 		const { locale } = useSelector((state) => state.lang);
 		const [datePickerStateValue, datePickerStateObj] = datePickerState;
-		const formattedDate = new Intl.DateTimeFormat(locale).format(
-			datePickerStateValue,
-		);
+		const formattedDate = datePickerStateValue
+			? new Intl.DateTimeFormat(locale).format(datePickerStateValue)
+			: "--/--/----";
 		return (
 			<View style={styles.text(isRTL)}>
 				<ScreenText style={{ paddingHorizontal: 4 }} numberOfLines={1}>

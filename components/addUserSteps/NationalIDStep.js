@@ -16,22 +16,28 @@ export default function (isStepValidName) {
 	// is valid
 	const isValidStateNames = {
 		nationalID: "nationalID_isValid",
+		dateOfBirth: "dateOfBirth_isValid",
 	};
 	useAddUserValidate(isValidStateNames, isStepValidName);
 
 	return (
 		<Card>
 			<DatePickerListItem
+				isValidStateName={isValidStateNames.dateOfBirth}
 				style={{ marginTop: 10 }}
 				title={translate("dateOfBirth")}
 				storeAction={addUserActions}
 				datePickerState={[formData.dateOfBirth, "dateOfBirth"]}
+				formData={formData}
+				errorHint={translate("requiredHint")}
 			/>
 			<TextInput
 				stateName="nationalID"
 				isValidStateName={isValidStateNames.nationalID}
 				keyboardType="number-pad"
-				regex={/\d+/}
+				regex={/^[\u0660-\u06690-9]{14}$/}
+				storeAction={addUserActions}
+				errorHint={translate("nationalIDHint")}
 			/>
 		</Card>
 	);

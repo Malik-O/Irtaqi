@@ -1,6 +1,7 @@
 {
 	"expo": {
 		"name": "IrtaqiV2",
+		"scheme": "acme",
 		"slug": "IrtaqiV2",
 		"version": "1.0.0",
 		"orientation": "portrait",

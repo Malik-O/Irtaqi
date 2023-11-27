@@ -13,7 +13,7 @@ export default function () {
 				name="addUser"
 				options={{
 					header: () => null,
-					// presentation: "modal",
+					presentation: "modal",
 					headerBackButtonMenuEnabled: true,
 				}}
 			/>

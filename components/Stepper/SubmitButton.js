@@ -1,4 +1,4 @@
-import { TouchableOpacity, Dimensions } from "react-native";
+import { TouchableOpacity, Dimensions, ActivityIndicator } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	withTiming,
@@ -23,7 +23,10 @@ import { buttonsSize } from "./styles";
 
 const { width } = Dimensions.get("screen");
 
-export default function ({ isStepValid, submitEvent }) {
+export default function ({
+	isStepValid,
+	submitEvent: { mutationAction, loading },
+}) {
 	const translate = useTranslate();
 	const theme = useTheme();
 	// redux
@@ -31,12 +34,16 @@ export default function ({ isStepValid, submitEvent }) {
 		opacity: isStepValid ? withTiming(1) : withTiming(0.4),
 	}));
 	return (
-		<TouchableOpacity onPress={submitEvent}>
-			<Animated.Text
-				style={[styles.actionButton(theme.primary), opacityStyle]}
-			>
-				{translate("add")}
-			</Animated.Text>
+		<TouchableOpacity onPress={mutationAction}>
+			{loading ? (
+				<ActivityIndicator />
+			) : (
+				<Animated.Text
+					style={[styles.actionButton(theme.primary), opacityStyle]}
+				>
+					{translate("add")}
+				</Animated.Text>
+			)}
 		</TouchableOpacity>
 	);
 }

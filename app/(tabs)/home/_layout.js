@@ -18,7 +18,7 @@ export default function () {
 				name="anotherInHome"
 				options={{
 					presentation: "transparentModal",
-					animation: "fade",
+					// animation: "fade",
 					headerShown: false,
 				}}
 			/>

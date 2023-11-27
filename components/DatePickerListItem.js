@@ -4,30 +4,46 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 // components
 import ListItemRipple from "./ListItemRipple";
+import ScreenText from "./ScreenText";
+//
+import useTheme from "../hook/useTheme";
 
 export default function DatePickerListItem({
 	style,
 	title,
 	storeAction,
 	datePickerState,
+	isValidStateName,
+	formData,
+	errorHint,
 }) {
+	const theme = useTheme();
 	const [datePickerStateValue, datePickerStateObj] = datePickerState;
 	// redux
 	const dispatch = useDispatch();
 	// datepicker
 	const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-	const showDatePicker = () => {
+	// actions
+	function validate(val) {
+		const isValid = !!(val || datePickerStateValue);
+		console.log("s:", val, datePickerStateValue);
+		dispatch(storeAction.setState([isValidStateName, isValid]));
+	}
+	function showDatePicker() {
 		setDatePickerVisibility(true);
-	};
-	const hideDatePicker = () => {
+	}
+	function hideDatePicker() {
 		setDatePickerVisibility(false);
-	};
-	const setDate = (val) =>
+		validate();
+	}
+	function setDate(val) {
 		dispatch(storeAction.setState([datePickerStateObj, val]));
-	const handleConfirm = (date) => {
+	}
+	function handleConfirm(date) {
 		setDate(date);
 		hideDatePicker();
-	};
+		validate(date);
+	}
 
 	return (
 		<View style={style}>
@@ -39,6 +55,11 @@ export default function DatePickerListItem({
 				hideDatePicker={hideDatePicker}
 				handleConfirm={handleConfirm}
 			/>
+			{formData[isValidStateName] === false ? (
+				<ScreenText style={{ color: theme.error }}>
+					{errorHint}
+				</ScreenText>
+			) : null}
 		</View>
 	);
 }

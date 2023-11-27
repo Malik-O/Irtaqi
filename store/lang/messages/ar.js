@@ -47,6 +47,11 @@ export default {
 	nationalID: "الرقم القومي",
 	dateOfBirth: "تاريخ الميلاد",
 	assignToGroup: "تعيين في مجموعة",
+	// form hints
+	wordHint: "يجب ملئ هذا الحقل باحرف فقط",
+	requiredHint: "يجب ملئ هذا الحقل",
+	emailHint: "يجب ملئ الايميل بشكل صحيح",
+	nationalIDHint: "يجب ملئ هذا الحقل بـ14 رقم",
 	// dialogs
 	newCenter: "مركز جديد",
 	newTeacher: "معلم جديد",

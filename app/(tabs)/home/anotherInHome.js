@@ -1,32 +1,25 @@
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import { useRouter } from "expo-router";
-import { BlurView } from "expo-blur";
+import { SafeAreaView, StyleSheet, Pressable } from "react-native";
 import Animated from "react-native-reanimated";
+import { useRouter } from "expo-router";
+import React from "react";
 
-export default function anotherInHome() {
+export default function index() {
 	const router = useRouter();
 	return (
-		<BlurView
-			intensity={20}
-			style={{
-				justifyContent: "center",
-				alignItems: "center",
-				position: "absolute",
-				top: 0,
-				left: 0,
-				width: "100%",
-				height: "100%",
-			}}
+		<SafeAreaView
+			style={[
+				StyleSheet.absoluteFill,
+				{ backgroundColor: "rgba(0, 0, 0, 0.4)" },
+			]}
 		>
-			<Pressable onPress={() => router.back()}>
+			<Pressable onPress={() => router.push("/home")}>
 				<Animated.Text
-					style={{ color: "white", fontSize: 40 }}
+					style={{ fontSize: 30, marginTop: 200 }}
 					sharedTransitionTag="sharedTag"
 				>
 					Shard Element
 				</Animated.Text>
 			</Pressable>
-		</BlurView>
+		</SafeAreaView>
 	);
 }
