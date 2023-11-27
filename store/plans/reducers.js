@@ -13,7 +13,7 @@ export default {
 		state.plans = null;
 	},
 	addInstancesHistory(state, action) {
-		console.log("addInstancesHistory:");
+		// console.log("addInstancesHistory:");
 		let newInstancesHistory = [];
 		//* at the first we dump all the instances history from DB
 		if (action.payload instanceof Array) {

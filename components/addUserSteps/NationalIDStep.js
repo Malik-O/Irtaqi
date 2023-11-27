@@ -1,5 +1,5 @@
 // components
-import TextInput from "./TextInput";
+import TextInput from "../TextInput";
 import DatePickerListItem from "../DatePickerListItem";
 import Card from "../Card";
 // redux
@@ -18,7 +18,12 @@ export default function (isStepValidName) {
 		nationalID: "nationalID_isValid",
 		dateOfBirth: "dateOfBirth_isValid",
 	};
-	useAddUserValidate(isValidStateNames, isStepValidName);
+	useAddUserValidate(
+		isValidStateNames,
+		isStepValidName,
+		addUserActions,
+		formData,
+	);
 
 	return (
 		<Card>
@@ -33,6 +38,7 @@ export default function (isStepValidName) {
 			/>
 			<TextInput
 				stateName="nationalID"
+				formData={formData}
 				isValidStateName={isValidStateNames.nationalID}
 				keyboardType="number-pad"
 				regex={/^[\u0660-\u06690-9]{14}$/}

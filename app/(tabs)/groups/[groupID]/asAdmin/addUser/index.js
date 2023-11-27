@@ -37,6 +37,7 @@ export default function () {
 			activeIndex={activeIndex}
 			setActiveIndex={setActiveIndex}
 			submitEvent={{ mutationAction, loading }}
+			formData={formData}
 		/>
 	);
 }

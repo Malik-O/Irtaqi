@@ -1,7 +1,7 @@
 import { View } from "react-native";
 // components
 import { Text } from "react-native-paper";
-import TextInput from "./TextInput";
+import TextInput from "../TextInput";
 import Card from "../Card";
 // redux
 import { useSelector } from "react-redux";

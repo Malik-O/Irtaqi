@@ -1,23 +1,18 @@
 import { View, StyleSheet } from "react-native";
 import { useState, useEffect, useMemo } from "react";
+import { Card } from "react-native-paper";
 // redux
 import { useSelector } from "react-redux";
 // utils
 import sameHistoryCondition from "../../../utils/sameHistoryCondition";
 import { versesKeysArr, verseName } from "../../../utils/verse";
-import extractISODate from "../../../utils/extractISODate";
-import Debouncer from "../../../utils/Debouncer";
 // components
 import ScreenText from "../../ScreenText";
-import CoolCardSlider from "../../CoolCardSlider";
-import { useCallback } from "react";
-// hook
-import useInstanceHistory from "../../../hook/plans/useInstanceHistory";
-import useUpdateInstanceHistory from "../../../hook/plans/useUpdateInstanceHistory";
+import FeedBack from "./FeedBack";
 
 export default function ({ plan }) {
-	const selectedAmountDoneState = useState(1);
-	const [amountDone, setAmountDone] = selectedAmountDoneState;
+	const [amountDone, setAmountDone] = useState(1);
+	const [grade, setGrade] = useState(0);
 	// redux states
 	const { instancesHistory } = useSelector((state) => state.plans);
 	const { globalDate } = useSelector((state) => state.globalDate);
@@ -26,45 +21,47 @@ export default function ({ plan }) {
 	const allVerses = useMemo(() => versesKeysArr(plan, surahAdj), [plan]);
 	// get the current day history
 	useEffect(() => {
-		const currentDayHistory = instancesHistory.filter((instance) =>
-			sameHistoryCondition(instance, plan.day),
-		)?.[0];
-		if (currentDayHistory) setAmountDone(currentDayHistory.amount_done);
-		else setAmountDone(1);
+		const currentDayHistory = instancesHistory.filter((instance) => {
+			return sameHistoryCondition(instance, plan.day);
+		})?.[0];
+		// console.log(
+		// 	"currentDayHistory:",
+		// 	[instancesHistory, plan.day],
+		// 	currentDayHistory,
+		// );
+		if (currentDayHistory) {
+			setAmountDone(currentDayHistory.amount_done);
+			setGrade(currentDayHistory.grade);
+		} else setAmountDone(1);
 	}, [instancesHistory, globalDate, plan]);
-	// load history data
-	const isHistoryLoading = useInstanceHistory(plan.day);
-	// update history action
-	const updateInstanceHistory = useUpdateInstanceHistory();
-	// Change Amount Event handler
-	const changeAmountEvent = useCallback((newAmountDone) => {
-		// console.log("newAmountDone:", newAmountDone, allVerses);
-		// setAmountDone(newAmountDone);
-		const variables = {
-			plan_instance_id: plan.day.id,
-			amount_done: newAmountDone + 1,
-			date: extractISODate({ date: globalDate }),
-		};
-		// console.log({ variables });
-		Debouncer(() => updateInstanceHistory(variables));
-	}, []);
 
 	return (
-		<CoolCardSlider
-			style={styles.advancedAreaContainer}
-			selectedNumberState={selectedAmountDoneState}
-			onSlide={changeAmountEvent}
-			list={[0, 1, 2, 3, 4, 5]}
-		>
-			<ScreenText variant="bodyLarge">
-				{verseName(allVerses, amountDone + 1)} {amountDone}
-			</ScreenText>
-		</CoolCardSlider>
+		<View style={styles.advancedAreaContainer}>
+			<Card style={{ marginTop: 20 }} mode="contained">
+				<Card.Content style={styles.advancedCardContent}>
+					<ScreenText variant="bodyLarge">
+						{amountDone} {grade}
+					</ScreenText>
+					<ScreenText variant="bodyLarge">
+						{verseName(allVerses, amountDone)}
+					</ScreenText>
+					<FeedBack
+						allVerses={allVerses}
+						amountDone={[amountDone, setAmountDone]}
+						grade={[grade, setGrade]}
+						plan={plan}
+					/>
+				</Card.Content>
+			</Card>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	advancedAreaContainer: {
+		paddingHorizontal: 30,
+	},
+	advancedCardContent: {
 		marginTop: 20,
 	},
 });

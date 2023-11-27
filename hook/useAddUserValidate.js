@@ -3,9 +3,14 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addUserActions } from "../store/addUser";
 
-export default function (isValidStateNames, isStepValidName) {
+export default function (
+	isValidStateNames,
+	isStepValidName,
+	storeAction,
+	formData,
+) {
 	// redux
-	const { formData } = useSelector((state) => state.addUser);
+	// const { formData } = useSelector((state) => state.addUser);
 	const dispatch = useDispatch();
 	// is valid
 	useEffect(() => {
@@ -13,8 +18,6 @@ export default function (isValidStateNames, isStepValidName) {
 			.map((v) => formData[v])
 			.every((v) => v);
 		if (newIsValidValue !== formData[isStepValidName])
-			dispatch(
-				addUserActions.setState([isStepValidName, newIsValidValue]),
-			);
+			dispatch(storeAction.setState([isStepValidName, newIsValidValue]));
 	}, [formData]);
 }

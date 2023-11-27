@@ -5,6 +5,7 @@ export const addPlanSlice = createSlice({
 	name: "addPlan",
 	initialState: {
 		loading: false,
+		formData: {},
 		startingAt: new Date(),
 		// type
 		typeDialog: false,

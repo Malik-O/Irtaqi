@@ -3,15 +3,15 @@ import { View, Text } from "react-native";
 import { TextInput } from "react-native-paper";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { addUserActions } from "../../store/addUser";
+import { addUserActions } from "../store/addUser";
 // components
 import Ionicons from "@expo/vector-icons/Ionicons";
-import ScreenText from "../ScreenText";
+import ScreenText from "./ScreenText";
 // hook
-import useTranslate from "../../hook/useTranslate";
-import useTheme from "../../hook/useTheme";
+import useTranslate from "../hook/useTranslate";
+import useTheme from "../hook/useTheme";
 // utils
-import capitalize from "../../utils/capitalize";
+import capitalize from "../utils/capitalize";
 
 export default function ({
 	stateName,
@@ -21,13 +21,12 @@ export default function ({
 	isValidStateName,
 	errorHint,
 	storeAction,
+	formData,
 }) {
+	const dispatch = useDispatch();
 	const translate = useTranslate();
 	const theme = useTheme();
 	label = label || capitalize(translate(stateName), false);
-	// redux
-	const { formData } = useSelector((state) => state.addUser);
-	const dispatch = useDispatch();
 	// validate
 	function validate() {
 		if (!isValidStateName) return;

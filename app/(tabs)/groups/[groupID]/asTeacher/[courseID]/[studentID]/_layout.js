@@ -18,8 +18,9 @@ export default function () {
 			<Stack.Screen
 				name="addPlan"
 				options={{
-					presentation: "formSheet",
+					presentation: "modal",
 					headerBackButtonMenuEnabled: true,
+					header: () => null,
 				}}
 			/>
 		</Stack>

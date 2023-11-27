@@ -29,7 +29,7 @@ export default function () {
 			phone: formData.phone,
 			parentPhone: formData.parentPhone,
 		};
-		console.log("variables:", variables);
+		// console.log("variables:", variables);
 		// add locally (optimist)
 		// addToAttendanceStore(dispatch, [variables]);
 		// mutate the database

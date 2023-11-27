@@ -21,6 +21,7 @@ export default function () {
 			const {
 				data: { updateHistory },
 			} = await updateHistoryMutation({ variables });
+			console.log("updateHistory:", updateHistory, variables);
 			dispatch(plansActions.addInstancesHistory(updateHistory));
 		} catch (e) {
 			console.log("e:", e);

@@ -5,6 +5,8 @@ import Animated, {
 	interpolateColor,
 	useSharedValue,
 } from "react-native-reanimated";
+// redux
+import { useSelector } from "react-redux";
 // component
 import ScreenText from "../ScreenText";
 import { TouchableRipple } from "react-native-paper";
@@ -25,6 +27,9 @@ function Option(optionData) {
 			[theme.cardColor, "transparent"],
 		),
 	}));
+	// redux
+	const { formData } = useSelector((state) => state.addUser);
+
 	return (
 		<Pressable
 			style={{

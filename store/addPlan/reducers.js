@@ -1,6 +1,6 @@
 export default {
-	setState(state, action, g) {
+	setState(state, action) {
 		const [arg, val] = action.payload;
-		state[arg] = val;
+		state.formData[arg] = val;
 	},
 };

@@ -12,7 +12,7 @@ import {
 } from "react-native-paper";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { addPlanActions } from "../store/addPlans";
+import { addPlanActions } from "../store/addPlan";
 // components
 import PickerWithSearch from "./PickerWithSearch";
 import ScreenText from "./ScreenText";

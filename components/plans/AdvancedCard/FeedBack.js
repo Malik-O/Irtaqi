@@ -13,7 +13,12 @@ import { Slider } from "@miblanchard/react-native-slider";
 import GradeInput from "./GradeInput";
 // import GradeInput from "../../CoolCardSlider";
 
-export default function ({ amountDone, setAmountDone, allVerses, plan }) {
+export default function ({
+	amountDone: [amountDone, setAmountDone],
+	grade: [grade, setGrade],
+	allVerses,
+	plan,
+}) {
 	// redux states
 	const { globalDate } = useSelector((state) => state.globalDate);
 	// load history data
@@ -21,11 +26,13 @@ export default function ({ amountDone, setAmountDone, allVerses, plan }) {
 	// update history action
 	const updateInstanceHistory = useUpdateInstanceHistory();
 	// Change Amount Event handler
-	const changeAmountEvent = useCallback(([amount_done]) => {
+	const onchangeEvent = useCallback((amount_done, gradeNewValue) => {
+		amount_done ||= amountDone;
 		setAmountDone(amount_done);
 		const variables = {
 			plan_instance_id: plan.day.id,
 			amount_done,
+			grade: gradeNewValue,
 			date: extractISODate({ date: globalDate }),
 		};
 		// console.log({ variables });
@@ -42,11 +49,16 @@ export default function ({ amountDone, setAmountDone, allVerses, plan }) {
 				maximumValue={allVerses.length}
 				minimumValue={1}
 				containerStyle={styles.advancedSlider}
-				onValueChange={changeAmountEvent}
+				onValueChange={onchangeEvent}
 				// maximumTrackTintColor="red"
 				minimumTrackTintColor="green"
 			/>
-			<GradeInput amountDone={amountDone} allVerses={allVerses} />
+			<GradeInput
+				onchangeEvent={onchangeEvent}
+				amountDone={amountDone}
+				grade={[grade, setGrade]}
+				allVerses={allVerses}
+			/>
 		</>
 	);
 }

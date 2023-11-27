@@ -1,11 +1,4 @@
-import { View, Dimensions } from "react-native";
-import Animated, {
-	useAnimatedStyle,
-	withTiming,
-} from "react-native-reanimated";
-// redux
-import { useSelector, useDispatch } from "react-redux";
-import { addUserActions } from "../../store/addUser";
+import { View } from "react-native";
 // Components
 import ScreenView from "../ScreenView";
 import StepHead from "./Step";
@@ -18,18 +11,15 @@ import styles from "./styles";
 import { paddingHorizontal } from "../../styles/layout";
 //hook
 import useTranslate from "../../hook/useTranslate";
-import useTheme from "../../hook/useTheme";
-// styles
-import { buttonsSize } from "./styles";
 
-const { width } = Dimensions.get("screen");
-
-export default function ({ steps, activeIndex, setActiveIndex, submitEvent }) {
+export default function ({
+	steps,
+	activeIndex,
+	setActiveIndex,
+	submitEvent,
+	formData,
+}) {
 	const translate = useTranslate();
-	const theme = useTheme();
-	// redux
-	const { formData } = useSelector((state) => state.addUser);
-	const dispatch = useDispatch();
 	// is valid
 	const isStepValidValue = formData[steps[activeIndex]?.isStepValid];
 

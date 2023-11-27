@@ -5,7 +5,7 @@ import { addUserSlice } from "./addUser";
 import { langSlice } from "./lang";
 import { groupsSlice } from "./groups";
 import { themeSlice } from "./theme";
-import { addPlanSlice } from "./addPlans";
+import { addPlanSlice } from "./addPlan";
 import { quranSlice } from "./quran";
 import { plansSlice } from "./plans";
 import { globalDateSlice } from "./globalDate";
