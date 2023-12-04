@@ -5,11 +5,13 @@ import getId from "./actions/getId";
 import fetchUserInfo from "./actions/fetchUserInfo";
 // hook
 import connectToUserStore from "../useConnectToStore/instants/connectToUserStore";
+import usePush from "../notifications/usePush";
 // graphQL
 import { useLazyQuery } from "@apollo/client";
 import graphQl from "../../graphQl";
 
 export default function (userLoginInfo) {
+	const pushNotification = usePush();
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
 	// graphQL
@@ -22,8 +24,12 @@ export default function (userLoginInfo) {
 		// get user id
 		try {
 			var userId = await getId(userLoginInfo);
-		} catch (error) {
-			axiosErrorHandler(error, setError);
+		} catch (err) {
+			axiosErrorHandler(err, setError);
+			pushNotification({
+				type: "error",
+				message: err.code,
+			});
 		}
 		//! graphQl fetch (error catching)
 		try {
@@ -32,8 +38,12 @@ export default function (userLoginInfo) {
 				lazyQuery,
 				StoreConnectionsInstance,
 			});
-		} catch (error) {
-			console.log(error);
+		} catch (err) {
+			pushNotification({
+				type: "error",
+				message: "QueryError",
+				error: JSON.stringify(err),
+			});
 		}
 	}
 	async function loginWrapper() {

@@ -13,8 +13,8 @@ export default function ({ advancedDays }) {
 				<ScreenText variant="headlineLarge">
 					{translate("rating")}
 				</ScreenText>
-				{advancedDays?.map((plan) => (
-					<AdvancedCard plan={plan} key={plan.id} />
+				{advancedDays?.map((plan, i) => (
+					<AdvancedCard plan={plan} key={i} />
 				))}
 			</View>
 		);

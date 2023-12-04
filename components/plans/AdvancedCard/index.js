@@ -33,15 +33,13 @@ export default function ({ plan }) {
 			setAmountDone(currentDayHistory.amount_done);
 			setGrade(currentDayHistory.grade);
 		} else setAmountDone(1);
-	}, [instancesHistory, globalDate, plan]);
+	}, [instancesHistory, globalDate, plan.day]);
 
 	return (
 		<View style={styles.advancedAreaContainer}>
 			<Card style={{ marginTop: 20 }} mode="contained">
 				<Card.Content style={styles.advancedCardContent}>
-					<ScreenText variant="bodyLarge">
-						{amountDone} {grade}
-					</ScreenText>
+					<ScreenText variant="bodyLarge">{plan.title}</ScreenText>
 					<ScreenText variant="bodyLarge">
 						{verseName(allVerses, amountDone)}
 					</ScreenText>

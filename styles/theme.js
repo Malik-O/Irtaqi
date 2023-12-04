@@ -6,14 +6,16 @@ const theme = {
 		cardColor: "#ffffff",
 		error: "#AB4F4F",
 		success: "#4FAB52",
+		warning: "#ACC83E",
 	},
 	dark: {
-		primary: "#88B9F2",
+		primary: "#207EAC",
 		secondary: "#0D171C",
 		tertiary: "#101D24",
 		cardColor: "#1f2c34",
-		error: "#AB4F4F",
-		success: "#4FAB52",
+		error: "#D66363",
+		success: "#4DCC52",
+		warning: "#BCDD37",
 	},
 };
 export default {

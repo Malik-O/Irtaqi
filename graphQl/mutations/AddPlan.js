@@ -1,47 +1,55 @@
 import { gql } from "@apollo/client";
 
 export default gql`
-	mutation (
+	mutation Mutation(
 		$entityId: ID
 		$entityType: String
-		$from: Int
 		$title: String
+		$color: String
+		$orderReversed: Boolean
+		$from: Int
 		$amount: Int
 		$weeks: Int
+		$rabtAmount: Int
 		$workingDays: [Int]
-		$orderReversed: Boolean
 		$startingAt: String
+		$note: String
 	) {
-		addPlan(
+		addPlan0(
 			entity_id: $entityId
 			entity_type: $entityType
-			from: $from
 			title: $title
+			color: $color
+			order_reversed: $orderReversed
+			from: $from
 			amount: $amount
 			weeks: $weeks
+			rabt_amount: $rabtAmount
 			working_days: $workingDays
-			order_reversed: $orderReversed
 			starting_at: $startingAt
+			note: $note
 		) {
 			id
-			amount
-			from
-			order_reversed
-			note
-			weeks
+			rabt_for_plan_id
+			entity_id
+			entity_type
 			title
+			color
+			order_reversed
+			from
+			amount
+			weeks
+			rabt_amount
 			working_days
 			starting_at
-			rabt_for_plan_id
-			rabt_amount
-			entity_type
-			entity_id
-			color
+			custom
+			note
 			Plans_instances {
-				id
-				from
-				to
 				date
+				from
+				id
+				note
+				to
 			}
 		}
 	}

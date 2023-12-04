@@ -1,4 +1,4 @@
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
 import Animated, {
@@ -7,7 +7,10 @@ import Animated, {
 	useSharedValue,
 	Extrapolation,
 	useAnimatedStyle,
+	withTiming,
 } from "react-native-reanimated";
+// redux
+import { useSelector } from "react-redux";
 // styles
 import { dayButtonTextInnerHight } from "../GlobalDatePicker/styles";
 import { MIN_BUBBLE_HEIGHT, MAX_BUBBLE_SHIFT, navigateHight } from "./styles";
@@ -31,6 +34,11 @@ export default function ({
 	const CalendarDim = useRef(useSharedValue({})).current;
 	const translateY = useRef(useSharedValue(0)).current;
 	const translateX = useRef(useSharedValue(0)).current;
+	// redux
+	const { globalDate } = useSelector((state) => state.globalDate);
+	useEffect(() => {
+		translateY.value = withTiming(0);
+	}, [globalDate]);
 	// const navHeaderHight = useRef(useSharedValue({})).current;
 	// calc month weeks
 	const { monthWeeks } = useWeeks();

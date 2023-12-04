@@ -2,6 +2,7 @@ import { View } from "react-native";
 // components
 import { Text } from "react-native-paper";
 import TextInput from "../TextInput";
+import Hr from "../Hr";
 import Card from "../Card";
 // redux
 import { useSelector } from "react-redux";
@@ -12,21 +13,6 @@ import ListItemRipple from "../ListItemRipple";
 import { useState } from "react";
 //
 import { paddingHorizontal } from "../../styles/layout";
-
-function Hr() {
-	const theme = useTheme();
-	return (
-		<View
-			style={{
-				height: 1,
-				width: "100%",
-				backgroundColor: theme.reverse.secondary,
-				opacity: 0.3,
-				borderRadius: 10,
-			}}
-		/>
-	);
-}
 
 export default function (isStepValidName) {
 	const translate = useTranslate();

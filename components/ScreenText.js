@@ -9,12 +9,19 @@ export default function ({
 	reverse = false,
 	variant = "bodyMedium",
 	style = {},
+	textOverflow = false,
 }) {
 	let colorScheme = useColorScheme();
+	if (textOverflow)
+		textOverflow = {
+			numberOfLines: 1,
+			ellipsizeMode: "tail",
+		};
 	return (
 		<Text
 			variant={variant}
 			style={[styles.text(colorScheme, reverse), style]}
+			{...textOverflow}
 		>
 			{children}
 		</Text>

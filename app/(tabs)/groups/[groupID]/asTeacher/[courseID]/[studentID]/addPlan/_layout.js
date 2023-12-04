@@ -13,7 +13,19 @@ export default function () {
 				headerTitleStyle: styles.text(colorScheme),
 			}}
 		>
-			<Stack.Screen name="index" />
+			<Stack.Screen
+				name="index"
+				options={{
+					header: () => null,
+				}}
+			/>
+			<Stack.Screen
+				name="surah"
+				options={{
+					presentation: "card",
+					header: () => null,
+				}}
+			/>
 		</Stack>
 	);
 }

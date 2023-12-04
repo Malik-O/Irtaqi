@@ -15,7 +15,7 @@ import useTheme from "../../hook/useTheme";
 // style
 import style from "../../styles/layout";
 
-function Option(optionData) {
+function Option({ optionData }) {
 	const theme = useTheme();
 	// animated style
 	const cardColorProgress = useSharedValue(0);
@@ -79,7 +79,9 @@ export default function (
 				},
 			]}
 		>
-			{options.map(Option)}
+			{options.map((option, i) => (
+				<Option key={i} optionData={option} />
+			))}
 		</View>
 	);
 }

@@ -7,8 +7,11 @@ import { useLazyQuery } from "@apollo/client";
 import graphQl from "../../graphQl";
 // utils
 import sameHistoryCondition from "../../utils/sameHistoryCondition";
+// hooks
+import usePush from "../notifications/usePush";
 
 export default function (planInstance) {
+	const pushNotification = usePush();
 	// redux states
 	const { instancesHistory } = useSelector((state) => state.plans);
 	const { globalDate } = useSelector((state) => state.globalDate);
@@ -24,19 +27,11 @@ export default function (planInstance) {
 		date: planInstance.date,
 	};
 	useEffect(() => {
-		// let isLoading = false;
 		// check if there existing history do not make request
 		const isThereAny = instancesHistory.some((instance) => {
-			// console.log("instance:", { instance, planInstance });
 			return sameHistoryCondition(instance, planInstance);
 		});
 		if (isThereAny) return;
-		// console.log(
-		// 	"getHistory:",
-		// 	globalDate.toString(),
-		// 	instancesHistory,
-		// 	isThereAny,
-		// );
 		// isLoading = true;
 		getHistory({ variables })
 			.then(({ data: { PlanInstanceHistoryAtDate } }) => {
@@ -46,7 +41,13 @@ export default function (planInstance) {
 				// isLoading = false;
 				// console.log("isLoading:", isLoading);
 			})
-			.catch((err) => console.log({ err }));
+			.catch((err) =>
+				pushNotification({
+					type: "error",
+					message: "QueryError",
+					error: JSON.stringify(err),
+				}),
+			);
 	}, [globalDate]);
 	return loading;
 }

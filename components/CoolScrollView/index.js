@@ -1,18 +1,27 @@
-import { Platform, StatusBar } from "react-native";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { Platform, Dimensions, RefreshControl, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, {
 	useSharedValue,
 	withTiming,
 	useAnimatedStyle,
 } from "react-native-reanimated";
-import { titlePaddingVertical } from "./styles";
+import { titlePaddingVertical, containerPaddingHorizontal } from "./styles";
 // components
 import AnimatedHeader from "./AnimatedHeader";
+// hooks
+import useZero from "../../hook/useZero";
 
-export default function ({ children, props, onScrollEvent }) {
-	const insets = useSafeAreaInsets();
-	const zero = insets.top + StatusBar.currentHeight;
+const { height, width } = Dimensions.get("screen");
+export default function ({
+	children,
+	props,
+	onScrollEvent,
+	paddingTop = true,
+	onRefresh,
+}) {
+	const [refreshing, setRefreshing] = useState(false);
+	const zero = paddingTop ? useZero() : 0;
 	const translateY = useRef(useSharedValue(zero)).current;
 	const titleDim = useRef(useSharedValue({})).current;
 	// update translateY on scroll
@@ -37,7 +46,7 @@ export default function ({ children, props, onScrollEvent }) {
 	}
 	const scrollViewStyle = useAnimatedStyle(() => ({
 		paddingTop:
-			zero + titleDim.value.height + titlePaddingVertical * 2 || zero,
+			zero + titleDim.value.height + titlePaddingVertical * 3 || zero,
 	}));
 	// return Platform dependent
 	if (Platform.OS === "ios")
@@ -47,19 +56,35 @@ export default function ({ children, props, onScrollEvent }) {
 				onScrollEndDrag={onScrollStop}
 				onMomentumEnd={onScrollStop}
 				scrollEventThrottle={16}
+				refreshControl={
+					onRefresh ? (
+						<RefreshControl
+							refreshing={refreshing}
+							progressViewOffset={-30}
+							onRefresh={async () => {
+								setRefreshing(true);
+								onRefresh();
+								setRefreshing(false);
+							}}
+						/>
+					) : null
+				}
 			>
 				<AnimatedHeader
+					zero={zero}
 					props={props}
 					translateY={translateY}
 					titleDim={titleDim}
 				/>
 				{children}
+				<View style={{ height: height / 2, width: "100%" }} />
 			</Animated.ScrollView>
 		);
 	else
 		return (
 			<>
 				<AnimatedHeader
+					zero={zero}
 					props={props}
 					translateY={translateY}
 					titleDim={titleDim}
@@ -72,6 +97,7 @@ export default function ({ children, props, onScrollEvent }) {
 					style={scrollViewStyle}
 				>
 					{children}
+					<View style={{ height: height / 2, width: "100%" }} />
 				</Animated.ScrollView>
 			</>
 		);

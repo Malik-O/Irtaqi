@@ -19,8 +19,8 @@ export default function ({ plans }) {
 		return (
 			<View>
 				<ScrollView horizontal>
-					{plans.map((plan) => (
-						<PlanCard plan={plan} key={plan.id} />
+					{plans.map((plan, i) => (
+						<PlanCard plan={plan} key={i} />
 					))}
 				</ScrollView>
 			</View>

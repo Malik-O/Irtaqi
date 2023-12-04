@@ -2,8 +2,7 @@ import { View, Text } from "react-native";
 // components
 import { TextInput } from "react-native-paper";
 // redux
-import { useSelector, useDispatch } from "react-redux";
-import { addUserActions } from "../store/addUser";
+import { useDispatch } from "react-redux";
 // components
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ScreenText from "./ScreenText";
@@ -12,6 +11,7 @@ import useTranslate from "../hook/useTranslate";
 import useTheme from "../hook/useTheme";
 // utils
 import capitalize from "../utils/capitalize";
+import { useEffect } from "react";
 
 export default function ({
 	stateName,
@@ -22,16 +22,18 @@ export default function ({
 	errorHint,
 	storeAction,
 	formData,
+	defaultValue,
+	placeholder,
 }) {
 	const dispatch = useDispatch();
 	const translate = useTranslate();
 	const theme = useTheme();
 	label = label || capitalize(translate(stateName), false);
 	// validate
-	function validate() {
+	function validate(text = formData[stateName]?.trim()) {
 		if (!isValidStateName) return;
 		regex = new RegExp(regex);
-		const text = formData[stateName]?.trim();
+		// console.log("0:", text, regex.exec(text), isValid);
 		const isValid = !!(text && regex.exec(text));
 		dispatch(storeAction.setState([isValidStateName, isValid]));
 	}
@@ -40,20 +42,28 @@ export default function ({
 		formData[isValidStateName] === undefined ||
 		formData[isValidStateName] !== false
 			? ""
-			: "red";
+			: theme.error;
+	//
+	function assignValueToState(text) {
+		dispatch(storeAction.setState([stateName, text]));
+		validate(text);
+	}
+	// set default value
+	useEffect(() => {
+		if (defaultValue) assignValueToState(defaultValue);
+	}, []);
 	return (
 		<View>
 			<TextInput
 				label={label}
 				value={formData[stateName]}
-				onChangeText={(text) =>
-					dispatch(addUserActions.setState([stateName, text]))
-				}
-				onBlur={validate}
+				onChangeText={assignValueToState}
+				onBlur={() => validate()}
 				style={{ backgroundColor: "transparent" }}
 				keyboardType={keyboardType}
 				underlineColor={underlineColor}
 				right={0}
+				placeholder={placeholder}
 			/>
 			<View
 				style={{
@@ -71,7 +81,10 @@ export default function ({
 				) : null}
 			</View>
 			{formData[isValidStateName] === false ? (
-				<ScreenText style={{ color: theme.error, marginTop: 10 }}>
+				<ScreenText
+					style={{ color: theme.error, marginTop: 10 }}
+					variant="bodySmall"
+				>
 					{errorHint}
 				</ScreenText>
 			) : null}

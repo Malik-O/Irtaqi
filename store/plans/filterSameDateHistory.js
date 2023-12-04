@@ -1,15 +1,11 @@
 // utils
-import extractISODate from "../../utils/extractISODate";
+import sameHistoryCondition from "../../utils/sameHistoryCondition";
 
 export default function (instancesHistory) {
 	return instancesHistory
 		.reverse()
 		.filter(
 			(value, index, self) =>
-				self.findIndex(
-					(v) =>
-						extractISODate({ date: v.date }) ===
-						extractISODate({ date: value.date }),
-				) === index,
+				self.findIndex((v) => sameHistoryCondition(v, value)) === index,
 		);
 }

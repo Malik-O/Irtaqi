@@ -1,7 +1,7 @@
 import React from "react";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { addPlanActions } from "../../../../../../../../store/addPlans";
+import { addPlanActions } from "../../../../../../../../store/addPlan";
 // components
 import PickerWithSearch from "../../../../../../../../components/PickerWithSearch";
 import ScreenView from "../../../../../../../../components/ScreenView";

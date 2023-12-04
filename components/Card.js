@@ -7,6 +7,7 @@ import Animated, {
 } from "react-native-reanimated";
 import React, { Children, useEffect } from "react";
 import { useRouter } from "expo-router";
+import * as Haptics from "expo-haptics";
 // components
 import ScreenText from "./ScreenText";
 // styles
@@ -34,6 +35,7 @@ export default function ({ item: { title } = {}, href, children }) {
 			}}
 			onPress={() => {
 				router.push(href);
+				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 			}}
 		>
 			<Animated.View

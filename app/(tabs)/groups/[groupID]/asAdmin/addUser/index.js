@@ -6,6 +6,7 @@ import { addUserActions } from "../../../../../../store/addUser";
 import Stepper from "../../../../../../components/Stepper";
 // hook
 import useCreateUser from "../../../../../../hook/useCreateUser";
+import useTranslate from "../../../../../../hook/useTranslate";
 // steps components
 import NameStep from "../../../../../../components/addUserSteps/NameStep";
 import NationalIDStep from "../../../../../../components/addUserSteps/NationalIDStep";
@@ -14,6 +15,7 @@ import AddToGroupStep from "../../../../../../components/addUserSteps/AddToGroup
 import GenderStep from "../../../../../../components/addUserSteps/GenderStep";
 
 export default function () {
+	const translate = useTranslate();
 	const [activeIndex, setActiveIndex] = useState(0);
 	const steps = [
 		{ ele: GenderStep, isStepValid: "GenderStep_isValid" },
@@ -33,6 +35,7 @@ export default function () {
 
 	return (
 		<Stepper
+			title={translate("addUser")}
 			steps={steps}
 			activeIndex={activeIndex}
 			setActiveIndex={setActiveIndex}

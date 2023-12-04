@@ -1,9 +1,9 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, useColorScheme, ScrollView, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import React from "react";
-import { useColorScheme } from "react-native";
-
+// styles
 import styles from "../styles/layout";
+// components
+import Snackbar from "./notifications/Snackbar";
 
 function ScrollViewExists({ condition, children }) {
 	if (condition) return <ScrollView>{children}</ScrollView>;
@@ -18,19 +18,22 @@ export default function ({
 	const colorScheme = useColorScheme();
 	const insets = useSafeAreaInsets();
 	return (
-		<View
-			style={[
-				styles.screenView(colorScheme),
-				{
-					paddingTop: paddingTop ? insets.top : 0,
-					paddingBottom: insets.bottom,
-				},
-			]}
-		>
-			{/* <Text>{JSON.stringify(colorScheme)}</Text> */}
-			<ScrollViewExists condition={hasScrollView}>
-				{children}
-			</ScrollViewExists>
+		<View style={StyleSheet.absoluteFill}>
+			<Snackbar />
+			<View
+				style={[
+					styles.screenView(colorScheme),
+					{
+						paddingTop: paddingTop ? insets.top : 0,
+						paddingBottom: insets.bottom,
+					},
+				]}
+			>
+				{/* <Text>{JSON.stringify(colorScheme)}</Text> */}
+				<ScrollViewExists condition={hasScrollView}>
+					{children}
+				</ScrollViewExists>
+			</View>
 		</View>
 	);
 }

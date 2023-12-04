@@ -9,10 +9,11 @@ import graphQl from "../../graphQl";
 // utils
 import extractISODate from "../../utils/extractISODate";
 import addToAttendanceStore from "./addToAttendanceStore";
+// hooks
+import usePush from "../notifications/usePush";
 
 export default function () {
-	loadDevMessages();
-	loadErrorMessages();
+	const pushNotification = usePush();
 	const [isLoading, setIsLoading] = useState(false);
 	// redux states
 	const dispatch = useDispatch();
@@ -40,15 +41,26 @@ export default function () {
 			})
 			.catch((err) => {
 				setIsLoading(false);
-				console.log("rrrrrrrr0", { err });
+				pushNotification({
+					type: "error",
+					message: "QueryError",
+					error: JSON.stringify(err),
+				});
 			});
 	}, []);
 	// refetch data
 	const refetchGroupAttendance = async () => {
 		setIsLoading(true);
-		const { data } = await refetch(variables);
-		console.log("refetchGroupAttendance:", { variables, data });
-		addToAttendanceStore(dispatch, data.groupAttendance);
+		try {
+			const { data } = await refetch(variables);
+			addToAttendanceStore(dispatch, data.groupAttendance);
+		} catch (err) {
+			pushNotification({
+				type: "error",
+				message: "QueryError",
+				error: JSON.stringify(err),
+			});
+		}
 		setIsLoading(false);
 	};
 	// first fetch

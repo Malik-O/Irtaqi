@@ -52,6 +52,7 @@ export default {
 	requiredHint: "يجب ملئ هذا الحقل",
 	emailHint: "يجب ملئ الايميل بشكل صحيح",
 	nationalIDHint: "يجب ملئ هذا الحقل بـ14 رقم",
+	digitsHint: "يجب ملئ هذا الحقل بارقام فقط",
 	// dialogs
 	newCenter: "مركز جديد",
 	newTeacher: "معلم جديد",
@@ -91,7 +92,13 @@ export default {
 	grade: "الدرجة",
 	from: "من",
 	to: "الى",
+	startingFrom: "البداية من",
+	endingTo: "الانتهاء الى",
+	toAl_nas: "من الفاتحة الى الناس",
+	toAl_fatihah: "من الناس الى الفاتحة",
 	//
+	planTitle: "اسم الخطة",
+	planTitlePlaceholder: "حفظ ,مراجعة",
 	pagesPerDay: "عدد الاوجه في اليوم",
 	hasRabt: "الخطة تحتوي على الربط",
 	rabtPages: "عدد اوجه الربط اليومي",
@@ -159,4 +166,10 @@ export default {
 	addTeacher: "اضف معلم جديد",
 	assignExistingTeacher: "تعيين معلم موجود",
 	manageGroup: "ادارة المجموعة",
+	// notifications
+	notifications: "الاشعارات",
+	ERR_BAD_REQUEST: "بيانات الدخول غير صحيحة",
+	ERR_NETWORK: "اتصل بالانترنت ثم اعد المحاولة",
+	QueryError: "خطأ غير متوقع برجاء اعادة المحاولة في وقت لاحق",
+	MutationError: "لم يتم حفظ البيانات برجاء اعادة المحاولة في وقت لاحق",
 };

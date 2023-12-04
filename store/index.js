@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./user";
+import { notificationsSlice } from "./notifications";
 import { addUserSlice } from "./addUser";
 
 import { langSlice } from "./lang";
@@ -14,6 +15,7 @@ export const Store = configureStore({
 	reducer: {
 		user: userSlice.reducer,
 		addUser: addUserSlice.reducer,
+		notifications: notificationsSlice.reducer,
 
 		lang: langSlice.reducer,
 		groups: groupsSlice.reducer,

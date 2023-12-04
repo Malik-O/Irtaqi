@@ -42,7 +42,7 @@ export default function ({
 	// animated mask style
 	const starMaskLengthPercent = useRef(useSharedValue(0)).current;
 	useEffect(() => {
-		starMaskLengthPercent.value = (100 * grade) / stars.length;
+		starMaskLengthPercent.value = (100 * (grade || 0)) / stars.length;
 	}, [grade]);
 	const maskWidth = useAnimatedStyle(() => ({
 		width: starMaskLengthPercent.value + "%",
@@ -90,7 +90,7 @@ export default function ({
 			starMaskLengthPercent.value = withTiming(closestStarPercent);
 			runOnJS(onchangeEvent)(null, gradeNewValue);
 		});
-
+	// console.log("amountDone:", amountDone, allVerses.length);
 	if (amountDone !== allVerses.length) return;
 	return (
 		<View>

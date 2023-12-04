@@ -1,7 +1,8 @@
 import React from "react";
 import { Stack } from "expo-router";
-// apollo
+// components
 import ApolloProvider from "../components/ApolloProvider";
+import Snackbar from "../components/notifications/Snackbar";
 // redux
 import { Provider } from "react-redux";
 import { Store } from "../store";

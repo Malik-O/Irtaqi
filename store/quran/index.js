@@ -15,9 +15,9 @@ export const quranSlice = createSlice({
 		versesPerPage,
 		surahNames: surahAdj.chapters
 			.map((s) => s.name_arabic)
-			.reduce((acc, value, index) => {
-				return [...acc, value];
-				// return [...acc, { value, index }];
+			.reduce((acc, text, index) => {
+				// return [...acc, text];
+				return [...acc, { text, value: index }];
 			}, []),
 	},
 	reducers,

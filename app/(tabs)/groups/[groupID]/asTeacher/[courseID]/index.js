@@ -48,7 +48,7 @@ export default function () {
 				{/* <ScreenText variant="displayMedium" style={{ textAlign: "center" }}>
 				{selectedGroup.title}
 			</ScreenText> */}
-				{selectedCourse.floatingStudents.map((student, i) => (
+				{selectedCourse?.floatingStudents?.map((student, i) => (
 					<Card
 						key={i}
 						item={{ ...student, title: fullName(student) }}

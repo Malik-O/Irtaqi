@@ -1,6 +1,8 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import { View, useColorScheme, Dimensions } from "react-native";
+// redux
+import { useSelector, useDispatch } from "react-redux";
 // component
 import { Path, Skia, Canvas, Group } from "@shopify/react-native-skia";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -8,6 +10,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { vec2 } from "../../utils/pathPoints";
 // hook
 import useTheme from "../../hook/useTheme";
+import useSeenAll from "../../hook/notifications/useSeenAll";
+import useGetNotifications from "../../hook/notifications/useGetNotifications";
 // styles
 import styles, {
 	tabBarBubbleShift,
@@ -42,7 +46,16 @@ function TabBarBG() {
 	);
 }
 export default function () {
+	const seeAll = useSeenAll();
 	const colorScheme = useColorScheme();
+	const { isLoading, refetchGroupAttendance, subscribe } =
+		useGetNotifications();
+	const { notifications } = useSelector((state) => state.notifications);
+	// console.log("notifications:", notifications);
+	const countUnseen = notifications?.reduce(
+		(acc, notification) => acc + !notification.seen,
+		0,
+	);
 	return (
 		<Tabs
 			screenOptions={{
@@ -58,7 +71,6 @@ export default function () {
 				name="home"
 				options={{
 					headerShown: false,
-					tabBarBadge: 3,
 					tabBarIcon: ({ color, size, focused }) => (
 						<Ionicons
 							name={`home${!focused ? "-outline" : ""}`}
@@ -106,7 +118,14 @@ export default function () {
 			/>
 			<Tabs.Screen
 				name="notifications"
+				listeners={({ navigation, route }) => ({
+					blur: (e) => {
+						seeAll();
+					},
+				})}
 				options={{
+					header: () => null,
+					tabBarBadge: countUnseen || null,
 					tabBarIcon: ({ color, size, focused }) => (
 						<Ionicons
 							name={`notifications${!focused ? "-outline" : ""}`}

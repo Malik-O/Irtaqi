@@ -8,16 +8,10 @@ import graphQl from "../../graphQl";
 import { useSelector } from "react-redux";
 // hook
 import connectToPlansStore from "../useConnectToStore/instants/connectToPlansStore";
-// import connectToPlansStore from "./useConnectToStore/instants/connectToPlansStore";
+import usePush from "../notifications/usePush";
 
-// export default async function () {
-// 	const [isLoading, setIsLoading] = useState(false);
-
-// 	return { isLoading };
-// }
 export default async function () {
-	loadDevMessages();
-	loadErrorMessages();
+	const pushNotification = usePush();
 	// connect with plan store
 	const PlanStoreConnectionsInstance = connectToPlansStore();
 	// redux
@@ -40,10 +34,15 @@ export default async function () {
 				PlanStoreConnectionsInstance.init(data.plans);
 				setIsLoading(false);
 			})
-			.catch((error) => {
+			.catch((err) => {
 				setError(
 					"there is a problem loading the groups, please try again later.",
 				);
+				pushNotification({
+					type: "error",
+					message: "QueryError",
+					error: JSON.stringify(err),
+				});
 			});
 	}, []);
 	// get the stored Plans

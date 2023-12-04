@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import useInstanceHistory from "../../../hook/plans/useInstanceHistory";
 import useUpdateInstanceHistory from "../../../hook/plans/useUpdateInstanceHistory";
 // utils
-import extractISODate from "../../../utils/extractISODate";
 import Debouncer from "../../../utils/Debouncer";
 // components
 import { Slider } from "@miblanchard/react-native-slider";
@@ -27,17 +26,18 @@ export default function ({
 	const updateInstanceHistory = useUpdateInstanceHistory();
 	// Change Amount Event handler
 	const onchangeEvent = useCallback((amount_done, gradeNewValue) => {
-		amount_done ||= amountDone;
+		amount_done = amount_done?.[0] || amountDone;
 		setAmountDone(amount_done);
 		const variables = {
 			plan_instance_id: plan.day.id,
 			amount_done,
 			grade: gradeNewValue,
-			date: extractISODate({ date: globalDate }),
+			date: globalDate,
 		};
 		// console.log({ variables });
 		Debouncer(() => updateInstanceHistory(variables));
 	});
+	// console.log("0:", allVerses, amountDone);
 	// return
 	if (isHistoryLoading) return <ActivityIndicator />;
 	return (

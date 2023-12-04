@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import reducers from "./reducers";
 
+const today = new Date();
 export const globalDateSlice = createSlice({
 	name: "globalDate",
-	initialState: { globalDate: new Date() },
+	initialState: { globalDate: today, selectedMonth: today },
 	reducers,
 });
 

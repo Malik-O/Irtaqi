@@ -10,12 +10,12 @@ const themeStyles = (theme) => ({
 	itemStyle: { color: theme === "light" ? "#000000" : "#ffffff" },
 });
 
-export default function searchPicker({
+export default function ({
 	enableSearch,
 	items,
+	isReversed,
 	selectedItem,
 	setSelectedItem,
-	dialogVisible,
 }) {
 	const colorScheme = useColorScheme();
 	const [search, setSearch] = useState("");
@@ -27,17 +27,17 @@ export default function searchPicker({
 		const searchForReg = new RegExp(search.replace(/\s/g, "")),
 			cleanReg = new RegExp("[^\u0621-\u063A^\u0641-\u064A]", "g");
 		// get results
-		let results = items.filter((item) => item.match(searchForReg));
-		console.log({ results });
-		// reversed
-		// if (this.direction) results = results.reverse();
+		let results = items.filter((item) => item.text.match(searchForReg));
 		if (results.length) setSearchResult(results);
 	}
 	// when opening the dialog reset search
+	// useEffect(() => {
+	// 	setSelectedItem(searchResult[0].value);
+	// }, []);
 	useEffect(() => {
-		setSearch("");
-		onSearchChange("");
-	}, [dialogVisible]);
+		setSelectedItem(items[0].value);
+		setSearchResult(items);
+	}, [isReversed]);
 	// styles
 	const styles = themeStyles(colorScheme);
 
@@ -54,12 +54,15 @@ export default function searchPicker({
 			<Picker
 				selectedValue={selectedItem}
 				onValueChange={setSelectedItem}
-				mode="dialog"
 				selectionColor={styles.selectionColor}
 				itemStyle={styles.itemStyle}
 			>
 				{searchResult?.map((item) => (
-					<Picker.Item label={item} value={item} key={item} />
+					<Picker.Item
+						label={item.text}
+						value={item.value}
+						key={item}
+					/>
 				))}
 			</Picker>
 		</View>

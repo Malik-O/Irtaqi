@@ -1,7 +1,7 @@
 import React from "react";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { addPlanActions } from "../../../../../../../../store/addPlans";
+import { addPlanActions } from "../../../../../../../../store/addPlan";
 // components
 import PickerWithSearch from "../../../../../../../../components/PickerWithSearch";
 import ScreenView from "../../../../../../../../components/ScreenView";
@@ -14,10 +14,6 @@ export default function () {
 	// select item
 	const setSelectedItem = (val) =>
 		dispatch(addPlanActions.setState(["selectedSurah", val]));
-
-	// useEffect(() => {
-	// 	setSelectedItem(typeItems[0]);
-	// }, []);
 
 	return (
 		<ScreenView>

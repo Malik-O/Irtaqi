@@ -1,4 +1,4 @@
-import { View, Button } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import { useEffect, useMemo, useState } from "react";
 import Animated, {
 	useAnimatedStyle,
@@ -8,9 +8,11 @@ import Animated, {
 	useDerivedValue,
 } from "react-native-reanimated";
 // components
+import Ionicons from "@expo/vector-icons/Ionicons";
 import ScreenText from "../ScreenText";
-import DayButton from "./DayButton";
-import DayText from "./DayText";
+import Days from "./Days";
+import DayText from "./Days/DayText";
+import MonthsNav from "./MonthsNav";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { globalDateActions } from "../../store/globalDate";
@@ -20,32 +22,21 @@ import capitalize from "../../utils/capitalize";
 import useTranslate from "../../hook/useTranslate";
 import useWeeks from "../../hook/globalDatePicker/useWeeks";
 import useFormattedDate from "../../hook/globalDatePicker/useFormattedDate";
+import useTheme from "../../hook/useTheme";
 //
 import styles, { dayButtonTextInnerHight } from "./styles";
 import { paddingHorizontal } from "../../styles/layout";
 
-function Days() {
-	const { monthWeeks, selectedRow } = useWeeks();
-	const { globalDate } = useSelector((state) => state.globalDate);
-	const dispatch = useDispatch();
-	// handle button events
-	const handlePress = (day) => {
-		const date = globalDate.setDate(day);
-		dispatch(globalDateActions.set(new Date(date)));
-	};
-
-	return monthWeeks.map((week, i) => (
-		<View key={i} style={styles.calendarRow}>
-			{week.map((day, i) => (
-				<DayButton handlePress={handlePress} day={day} key={i} />
-			))}
-		</View>
-	));
-}
-
 export default function ({ collapseOpen }) {
 	const translate = useTranslate();
-	const { monthWeeks, selectedRow } = useWeeks();
+	const theme = useTheme();
+	const textColor = theme.reverse.secondary;
+	// date
+	const { monthWeeks, selectedRow, changeMonth } = useWeeks();
+	const { selectedMonth, globalDate } = useSelector(
+		(state) => state.globalDate,
+	);
+	const { locale } = useSelector((state) => state.lang);
 	// language support
 	const formattedDate = useFormattedDate();
 	const titleDay = translate(formattedDate.titleDay);
@@ -74,23 +65,34 @@ export default function ({ collapseOpen }) {
 	);
 	return (
 		<View style={{ paddingHorizontal }}>
-			<View style={styles.dateHeadContainer}>
-				<ScreenText reverse variant="headlineLarge" style={{}}>
-					{capitalize(titleDay)}
-				</ScreenText>
-				<ScreenText
-					reverse
-					variant="titleMedium"
-					style={styles.subtitleDate}
-				>
-					{formattedDate.subtitleDate}
-				</ScreenText>
+			<View
+				style={{
+					flexDirection: "row",
+					justifyContent: "space-between",
+				}}
+			>
+				<View style={styles.dateHeadContainer}>
+					<ScreenText
+						style={{ color: textColor }}
+						variant="headlineLarge"
+					>
+						{capitalize(titleDay)}
+					</ScreenText>
+					<ScreenText
+						variant="titleMedium"
+						style={[styles.subtitleDate, { color: textColor }]}
+					>
+						{formattedDate.subtitleDate}
+					</ScreenText>
+				</View>
+				{/* navigate throw months */}
+				<MonthsNav color={textColor} />
 			</View>
 			{/* <ScreenText reverse>{subtitleDate?.join(" ")}</ScreenText> */}
 			{/* days titles */}
 			<View style={styles.calendarRow}>
 				{translate("weekDaysShort").map((day, i) => (
-					<DayText day={day} key={i} />
+					<DayText day={day} key={i} isThisMonth color={textColor} />
 				))}
 			</View>
 			{/* weeks rows */}
@@ -98,7 +100,7 @@ export default function ({ collapseOpen }) {
 				<Animated.View
 					style={[contentAnimatedStyle, { flexDirection: "column" }]}
 				>
-					<Days />
+					<Days color={textColor} />
 				</Animated.View>
 			</Animated.View>
 		</View>

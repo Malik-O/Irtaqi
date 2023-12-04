@@ -32,6 +32,7 @@ export default {
 	assignToGroup: "assign to group",
 	// form hints
 	wordHint: "this field must be filled in with letters only",
+	digitsHint: "this field must be filled in with digits only",
 	requiredHint: "this field must be filled in",
 	emailHint: "email must be filled correctly",
 	nationalIDHint: "this field must be filled in with 14 numbers",
@@ -74,7 +75,13 @@ export default {
 	grade: "grade",
 	from: "from",
 	to: "to",
+	startingFrom: "starting from",
+	endingTo: "ending to",
+	toAl_nas: "from al-fatihah to an-nas",
+	toAl_fatihah: "from an-nas to al-fatihah",
 	//
+	planTitle: "plan title",
+	planTitlePlaceholder: "memorization, revision",
 	pagesPerDay: "pages per day",
 	hasRabt: "the plan has Rabt",
 	rabtPages: "Rabt pages per day",
@@ -141,4 +148,10 @@ export default {
 	addTeacher: "create new teacher",
 	assignExistingTeacher: "assign existing teacher",
 	manageGroup: "manage group",
+	// notifications
+	notifications: "notifications",
+	ERR_BAD_REQUEST: "Invalid user email or password",
+	ERR_NETWORK: "Reconnect to the internet then try again.",
+	QueryError: "Unexpected error happened, please try again later.",
+	MutationError: "The data was not saved, please try again later",
 };

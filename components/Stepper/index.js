@@ -13,6 +13,7 @@ import { paddingHorizontal } from "../../styles/layout";
 import useTranslate from "../../hook/useTranslate";
 
 export default function ({
+	title,
 	steps,
 	activeIndex,
 	setActiveIndex,
@@ -29,7 +30,7 @@ export default function ({
 				variant="headlineLarge"
 				style={{ marginBottom: paddingHorizontal, paddingHorizontal }}
 			>
-				{translate("addUser")}
+				{title}
 			</Text>
 			<View style={styles.dashesContainer}>
 				{steps.map((s, i) => (

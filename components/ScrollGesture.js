@@ -36,7 +36,6 @@ export default function ScrollGesture({
 	// some shared values
 	const contentHeight = useRef(useSharedValue(0)).current;
 	const onLayout = (event) => {
-		// console.log("event:", event.nativeEvent.layout.height);
 		if (contentHeight.value !== event.nativeEvent.layout.height)
 			contentHeight.value = event.nativeEvent.layout.height;
 	};

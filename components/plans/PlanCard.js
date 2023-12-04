@@ -71,8 +71,8 @@ export default function ({ plan }) {
 				>
 					<Dialog.Title>{translate(plan.title)}</Dialog.Title>
 					<Dialog.Content>
-						{plan.Plans_instances?.map((instance) => (
-							<Text variant="bodyMedium" key={instance.id}>
+						{plan.Plans_instances?.map((instance, i) => (
+							<Text variant="bodyMedium" key={i}>
 								{new Intl.DateTimeFormat("en-GB").format(
 									new Date(+instance.date),
 								)}

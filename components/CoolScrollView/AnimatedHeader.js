@@ -7,12 +7,9 @@ import Animated, {
 // redux
 import { useSelector } from "react-redux";
 // hook
-import useZero from "../../hook/useZero";
 // components
-import Ionicons from "@expo/vector-icons/Ionicons";
 import ScreenText from "../ScreenText";
 import HeaderButton from "../HeaderButton";
-import ExistView from "./ExistView";
 import BG from "./BG";
 // styles
 import styles, { titlePaddingVertical } from "./styles";
@@ -21,9 +18,9 @@ export default function ({
 	translateY,
 	props: { title, more, back },
 	titleDim,
+	zero,
 }) {
 	const { groupID } = useLocalSearchParams();
-	const zero = useZero();
 	// lang store
 	const { locale, rtl } = useSelector((state) => state.lang);
 	const isRTL = rtl[locale];
@@ -72,7 +69,7 @@ export default function ({
 			style={[styles.headerContainer, headerContainerAnimatedStyle]}
 		>
 			<Stack.Screen options={{ headerShown: false }} />
-			<BG titleDim={titleDim} translateY={translateY} />
+			<BG titleDim={titleDim} translateY={translateY} zero={zero} />
 			<HeaderButton isExists={back} back />
 			<Animated.View
 				style={titleAnimatedStyle}

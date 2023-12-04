@@ -7,8 +7,11 @@ import { groupsActions } from "../../store/groups";
 // utils
 import addToAttendanceStore from "./addToAttendanceStore";
 import extractISODate from "../../utils/extractISODate";
+// hooks
+import usePush from "../notifications/usePush";
 
 export default function () {
+	const pushNotification = usePush();
 	const dispatch = useDispatch();
 	const { globalDate } = useSelector((state) => state.globalDate);
 	// mutation
@@ -21,17 +24,21 @@ export default function () {
 			...variables,
 			date: extractISODate({ date: globalDate }),
 		};
+		// console.log('variables:', variables)
 		// add locally (optimist)
 		addToAttendanceStore(dispatch, [variables]);
 		// mutate the database
 		try {
 			let returnData = await UpdateAttendanceMutation({ variables });
-			console.log("returnData:", returnData);
 			returnData = { ...variables, ...returnData.data.updateAttendance };
 			// locally
 			addToAttendanceStore(dispatch, [returnData]);
-		} catch (e) {
-			console.log("e:", e);
+		} catch (err) {
+			pushNotification({
+				type: "error",
+				message: "MutationError",
+				error: JSON.stringify(err),
+			});
 		}
 	};
 }

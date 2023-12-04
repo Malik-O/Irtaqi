@@ -103,18 +103,6 @@ export default function ListItemRipple(props) {
 	// redux
 	const { locale, rtl } = useSelector((state) => state.lang);
 	const isRTL = rtl[locale];
-	// date picker
-	// if (props.datePickerState) {
-	// 	console.log(props);
-	// 	const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-	// 	props.isDatePickerVisible = isDatePickerVisible;
-	// 	props.action = () => {
-	// 		setDatePickerVisibility(true);
-	// 	};
-	// 	props.hideDatePicker = () => {
-	// 		setDatePickerVisibility(false);
-	// 	};
-	// }
 
 	return (
 		<TouchableRipple onPress={props.action}>
