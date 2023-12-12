@@ -20,7 +20,11 @@ export default function ({
 	return (
 		<Text
 			variant={variant}
-			style={[styles.text(colorScheme, reverse), style]}
+			style={[
+				styles.text(colorScheme, reverse),
+				style,
+				{ fontFamily: "Quicksand" },
+			]}
 			{...textOverflow}
 		>
 			{children}

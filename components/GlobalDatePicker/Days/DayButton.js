@@ -19,7 +19,7 @@ export default function ({ handlePress, day, color }) {
 	return (
 		<Pressable onPress={() => handlePress(day)}>
 			<DayText
-				day={day.getDate()}
+				day={+extractISODate({ date: day, iso: false }).split("-")[0]}
 				isThisMonth={selectedMonth.getMonth() === day.getMonth()}
 				isToday={
 					extractISODate({ iso: false }) ===

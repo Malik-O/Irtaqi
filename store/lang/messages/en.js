@@ -150,8 +150,11 @@ export default {
 	manageGroup: "manage group",
 	// notifications
 	notifications: "notifications",
-	ERR_BAD_REQUEST: "Invalid user email or password",
-	ERR_NETWORK: "Reconnect to the internet then try again.",
+	invalidLoginData: "Invalid user email or password",
+	networkError: "Reconnect to the internet then try again.",
 	QueryError: "Unexpected error happened, please try again later.",
 	MutationError: "The data was not saved, please try again later",
+	// sittings
+	darkTheme: "dark theme",
+	language: "language",
 };

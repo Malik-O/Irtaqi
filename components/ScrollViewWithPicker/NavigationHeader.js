@@ -2,21 +2,26 @@ import { View } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	withTiming,
+	BounceIn,
 } from "react-native-reanimated";
 // styles
 import styles, { navigateHight } from "./styles";
 // utils
 import clamp from "../../utils/clamp";
+//hook
+import useTheme from "../../hook/useTheme";
 // Components
 import Avatar from "../Avatar";
 import HeaderButton from "../HeaderButton";
+//
+import { paddingHorizontal } from "../../styles/layout";
 
 export default function ({ hasNavigationHeader, translateY, navigationData }) {
-	if (!hasNavigationHeader) return <View />;
+	const theme = useTheme();
 	//
-	const selectedEntity = navigationData.filter(
-		(entity) => entity.selected,
-	)?.[0];
+	// const selectedEntity = navigationData.filter(
+	// 	(entity) => entity.selected,
+	// )?.[0];
 	// animated styles
 	const backButtonStyle = useAnimatedStyle(() => ({
 		opacity: translateY.value < 0 ? withTiming(0) : withTiming(1),
@@ -34,30 +39,48 @@ export default function ({ hasNavigationHeader, translateY, navigationData }) {
 			transform: [{ translateY: translateY.value < 0 ? newValue : 0 }],
 		};
 	});
+	if (!hasNavigationHeader) return <View />;
 	return (
-		<Animated.View style={[styles.navigationHeader]}>
+		<Animated.View
+			style={[
+				styles.navigationHeader,
+				{ justifyContent: "space-between" },
+			]}
+		>
 			<HeaderButton style={backButtonStyle} back />
-			<View
+			<Animated.View
+				style={[avatarStyle, { paddingHorizontal }]}
+				entering={BounceIn.duration(700)}
+			>
+				<Avatar />
+			</Animated.View>
+			{/* <View
 				style={{
 					flex: 10,
 					flexDirection: "row",
 					justifyContent: "center",
 					alignItems: "center",
 					marginBottom: 10,
+					alignSelf: "flex-end",
+					backgroundColor: "red",
 				}}
-			>
-				<Animated.View style={avatarStyle}>
-					<Avatar />
-				</Animated.View>
-				<Animated.Text
-					style={[{ fontSize: 20, marginHorizontal: 10 }, nameStyle]}
+			> */}
+			{/* <Animated.Text
+					style={[
+						{
+							fontSize: 20,
+							marginHorizontal: 10,
+							color: theme.reverse.secondary,
+						},
+						nameStyle,
+					]}
 					numberOfLines={1}
 					ellipsizeMode="tail"
 				>
 					{selectedEntity.first_name}
-				</Animated.Text>
-			</View>
-			<View style={styles.navigationBackButton} />
+				</Animated.Text> */}
+			{/* </View> */}
+			{/* <View style={styles.navigationBackButton} /> */}
 		</Animated.View>
 	);
 }

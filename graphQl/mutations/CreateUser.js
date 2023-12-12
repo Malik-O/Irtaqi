@@ -12,7 +12,7 @@ export default gql`
 		$phone: String
 		$parentPhone: String
 	) {
-		createUser0(
+		createUser(
 			first_name: $first_name
 			parent_name: $parent_name
 			rest_of_name: $rest_of_name

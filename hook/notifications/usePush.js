@@ -17,14 +17,15 @@ export default function () {
 		useMutation(PushNotification);
 	return async (variables) => {
 		try {
-			variables = { ...variables, userID: userData.id };
+			variables = { ...variables, userID: userData?.id };
+			// fire snackbar
+			dispatch(notificationsActions.setSnackbarVisible(true));
+			dispatch(notificationsActions.setSnackbarData(variables));
+			// save the notification in DB
+			if (userData?.id) return;
 			const {
 				data: { pushNotification },
 			} = await PushNotificationMutation({ variables });
-			console.log("PushNotification:", pushNotification);
-			// fire snackbar
-			dispatch(notificationsActions.setSnackbarVisible(true));
-			dispatch(notificationsActions.setSnackbarData(pushNotification));
 			// add to store locally
 			StoreConnectionsInstance.init([pushNotification]);
 		} catch (e) {

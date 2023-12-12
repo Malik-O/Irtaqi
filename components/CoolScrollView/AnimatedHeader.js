@@ -66,7 +66,11 @@ export default function ({
 	});
 	return (
 		<Animated.View
-			style={[styles.headerContainer, headerContainerAnimatedStyle]}
+			style={[
+				styles.headerContainer,
+				headerContainerAnimatedStyle,
+				// { overflow: "visible", backgroundColor: "red" },
+			]}
 		>
 			<Stack.Screen options={{ headerShown: false }} />
 			<BG titleDim={titleDim} translateY={translateY} zero={zero} />

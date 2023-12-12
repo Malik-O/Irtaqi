@@ -22,6 +22,7 @@ export default function ({
 }) {
 	const [refreshing, setRefreshing] = useState(false);
 	const zero = paddingTop ? useZero() : 0;
+	const insets = useSafeAreaInsets();
 	const translateY = useRef(useSharedValue(zero)).current;
 	const titleDim = useRef(useSharedValue({})).current;
 	// update translateY on scroll
@@ -69,6 +70,7 @@ export default function ({
 						/>
 					) : null
 				}
+				style={{ paddingTop: insets.top }}
 			>
 				<AnimatedHeader
 					zero={zero}

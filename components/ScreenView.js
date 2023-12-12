@@ -18,7 +18,7 @@ export default function ({
 	const colorScheme = useColorScheme();
 	const insets = useSafeAreaInsets();
 	return (
-		<View style={StyleSheet.absoluteFill}>
+		<View style={[StyleSheet.absoluteFill]}>
 			<Snackbar />
 			<View
 				style={[
@@ -27,6 +27,7 @@ export default function ({
 						paddingTop: paddingTop ? insets.top : 0,
 						paddingBottom: insets.bottom,
 					},
+					style,
 				]}
 			>
 				{/* <Text>{JSON.stringify(colorScheme)}</Text> */}

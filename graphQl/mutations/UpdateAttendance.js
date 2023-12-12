@@ -8,7 +8,7 @@ export default gql`
 		$note: String
 		$updated_by: ID
 	) {
-		updateAttendance0(
+		updateAttendance(
 			user_id: $user_id
 			status: $status
 			date: $date

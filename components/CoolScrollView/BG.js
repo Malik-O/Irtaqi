@@ -56,7 +56,7 @@ export default function BG({ titleDim, translateY }) {
 	});
 	// intensity prop
 	const intensity = useAnimatedProps(() => {
-		return { intensity: interpolateCustom(translateY.value, [0, 100]) };
+		return { intensity: interpolateCustom(translateY.value, [0, 50]) };
 	});
 	if (Platform.OS === "ios")
 		return (

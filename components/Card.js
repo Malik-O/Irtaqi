@@ -14,7 +14,7 @@ import ScreenText from "./ScreenText";
 import styles from "../styles/layout";
 import useTheme from "../hook/useTheme";
 
-export default function ({ item: { title } = {}, href, children }) {
+export default function ({ item: { title } = {}, href, children, style }) {
 	const theme = useTheme();
 	// router
 	const router = useRouter();
@@ -39,7 +39,11 @@ export default function ({ item: { title } = {}, href, children }) {
 			}}
 		>
 			<Animated.View
-				style={[styles.planCardContainer(theme.cardColor), cardStyle]}
+				style={[
+					styles.planCardContainer(theme.cardColor),
+					cardStyle,
+					// style,
+				]}
 			>
 				{title ? (
 					<ScreenText variant="bodyLarge">{title}</ScreenText>

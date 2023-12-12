@@ -3,7 +3,7 @@ import {
 	useLocalSearchParams,
 	usePathname,
 	useRouter,
-	Redirect,
+	useFocusEffect,
 } from "expo-router";
 // redux
 import { useSelector } from "react-redux";
@@ -22,7 +22,11 @@ export default function id() {
 	// redux
 	const { groups } = useSelector((state) => state.groups);
 	const selectedGroup = groups.filter((group) => group.id === groupID)[0];
-	return <Redirect href={`${pathname}/${selectedGroup.courses[0].id}`} />;
+	// redirect
+	useFocusEffect(() => {
+		router.replace(`${pathname}/${selectedGroup.courses[0].id}`);
+	});
+	return <></>;
 	return (
 		<ScreenView>
 			<Button

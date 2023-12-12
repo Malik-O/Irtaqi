@@ -1,9 +1,9 @@
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { View, StatusBar } from "react-native";
-import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import { View } from "react-native";
+import Animated, {
+	useAnimatedStyle,
+	withTiming,
+} from "react-native-reanimated";
 import GlobalDatePicker from "../../components/GlobalDatePicker";
-// redux
-import { useSelector } from "react-redux";
 // styles
 import styles, { navigateHight } from "./styles";
 // utils
@@ -16,7 +16,7 @@ import useZero from "../../hook/useZero";
 
 export default function ({
 	hasNavigationHeader,
-	CalendarDim,
+	CalendarHight,
 	translateY,
 	collapseOpen,
 	inputRange,
@@ -33,7 +33,19 @@ export default function ({
 	return (
 		<View
 			style={styles.scrollHeader(zero)}
-			onLayout={(event) => (CalendarDim.value = event.nativeEvent.layout)}
+			onLayout={(event) => {
+				if (
+					CalendarHight.value.height !==
+					event.nativeEvent.layout.height
+				) {
+					if (collapseOpen.value % 1)
+						CalendarHight.value = event.nativeEvent.layout.height;
+					else
+						CalendarHight.value = withTiming(
+							event.nativeEvent.layout.height,
+						);
+				}
+			}}
 		>
 			<NavigationHeader
 				hasNavigationHeader={hasNavigationHeader}

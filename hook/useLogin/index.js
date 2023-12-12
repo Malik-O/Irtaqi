@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // actions
 import axiosErrorHandler from "./requests/axiosErrorHandler";
 import getId from "./actions/getId";
@@ -11,9 +11,9 @@ import { useLazyQuery } from "@apollo/client";
 import graphQl from "../../graphQl";
 
 export default function (userLoginInfo) {
-	const pushNotification = usePush();
 	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState("");
+	const [isSuccess, setIsSuccess] = useState(false);
+	const pushNotification = usePush();
 	// graphQL
 	const GetUserById = graphQl.queries.GetUserById;
 	const lazyQuery = useLazyQuery(GetUserById);
@@ -21,28 +21,23 @@ export default function (userLoginInfo) {
 	const StoreConnectionsInstance = connectToUserStore();
 	// login function
 	async function login() {
+		setIsSuccess(false);
 		// get user id
 		try {
-			var userId = await getId(userLoginInfo);
-		} catch (err) {
-			axiosErrorHandler(err, setError);
-			pushNotification({
-				type: "error",
-				message: err.code,
-			});
-		}
-		//! graphQl fetch (error catching)
-		try {
-			await fetchUserInfo({
+			const userId = await getId(userLoginInfo);
+			// get user data
+			const success = await fetchUserInfo({
 				userId,
 				lazyQuery,
 				StoreConnectionsInstance,
+				pushNotification,
 			});
+			setIsSuccess(success);
 		} catch (err) {
+			const message = axiosErrorHandler(err);
 			pushNotification({
 				type: "error",
-				message: "QueryError",
-				error: JSON.stringify(err),
+				message,
 			});
 		}
 	}
@@ -52,5 +47,5 @@ export default function (userLoginInfo) {
 		setIsLoading(false);
 	}
 	// return
-	return { isLoading, error, loginWrapper };
+	return { isLoading, isSuccess, loginWrapper };
 }

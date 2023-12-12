@@ -1,4 +1,5 @@
-import { View, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
+import Animated, { FadeInLeft } from "react-native-reanimated";
 // components
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ScreenText from "../ScreenText";
@@ -16,7 +17,7 @@ function arrowIcon(direction, isRTL) {
 	return chevrons[isRTL ? +!direction : direction];
 }
 
-export default function ({ color }) {
+export default function ({ color, entering }) {
 	const dispatch = useDispatch();
 	const translate = useTranslate();
 	const { changeMonth } = useWeeks();
@@ -25,7 +26,10 @@ export default function ({ color }) {
 	const isRTL = rtl[locale];
 	// animated styles
 	return (
-		<View style={{ flexDirection: "row", alignItems: "center" }}>
+		<Animated.View
+			entering={entering}
+			style={{ flexDirection: "row", alignItems: "center" }}
+		>
 			<TouchableOpacity onPress={() => changeMonth(-1)}>
 				<Ionicons name={arrowIcon(1, isRTL)} size={30} color={color} />
 			</TouchableOpacity>
@@ -41,6 +45,6 @@ export default function ({ color }) {
 			<TouchableOpacity onPress={() => changeMonth(1)}>
 				<Ionicons name={arrowIcon(0, isRTL)} size={30} color={color} />
 			</TouchableOpacity>
-		</View>
+		</Animated.View>
 	);
 }

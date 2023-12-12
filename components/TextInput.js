@@ -24,6 +24,7 @@ export default function ({
 	formData,
 	defaultValue,
 	placeholder,
+	secureTextEntry = false,
 }) {
 	const dispatch = useDispatch();
 	const translate = useTranslate();
@@ -62,8 +63,9 @@ export default function ({
 				style={{ backgroundColor: "transparent" }}
 				keyboardType={keyboardType}
 				underlineColor={underlineColor}
-				right={0}
 				placeholder={placeholder}
+				secureTextEntry={secureTextEntry}
+				// right={<TextInput.Icon icon="eye" />}
 			/>
 			<View
 				style={{

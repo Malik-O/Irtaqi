@@ -1,4 +1,5 @@
 import { View } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
 // components
 import DayButton from "./DayButton";
 // redux
@@ -6,14 +7,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { globalDateActions } from "../../../store/globalDate";
 // hook
 import useWeeks from "../../../hook/globalDatePicker/useWeeks";
+import useAnimationBlock from "../../../hook/useAnimationBlock";
 // styles
 import styles from "../styles";
 
-export default function ({ color }) {
-	const { monthWeeks, selectedRow } = useWeeks();
-	// console.log("monthWeeks:", monthWeeks, selectedRow);
-	const { globalDate } = useSelector((state) => state.globalDate);
+export default function ({ color, animationList }) {
+	// add animation block
+	const { addAnimationBlock } = useAnimationBlock(animationList);
+	// redux
 	const dispatch = useDispatch();
+	const { monthWeeks, selectedRow } = useWeeks();
+	const { globalDate } = useSelector((state) => state.globalDate);
 	// handle button events
 	const handlePress = (day) => {
 		const date = globalDate.setDate(day);
@@ -21,7 +25,11 @@ export default function ({ color }) {
 	};
 
 	return monthWeeks.map((week, i) => (
-		<View key={i} style={styles.calendarRow}>
+		<Animated.View
+			key={i}
+			style={styles.calendarRow}
+			entering={addAnimationBlock(FadeInDown, 500, -300)}
+		>
 			{week.map((day, i) => (
 				<DayButton
 					handlePress={handlePress}
@@ -30,6 +38,6 @@ export default function ({ color }) {
 					color={color}
 				/>
 			))}
-		</View>
+		</Animated.View>
 	));
 }

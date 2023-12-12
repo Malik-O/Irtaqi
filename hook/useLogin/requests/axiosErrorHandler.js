@@ -1,13 +1,10 @@
-export default async function (error, setError) {
-	console.log("error:", error);
-	switch (error.code) {
+export default function (err) {
+	switch (err.code) {
 		case "ERR_BAD_REQUEST":
-			setError("Invalid user email or password");
-			break;
+			return "invalidLoginData";
 		case "ERR_NETWORK":
-			setError("Reconnect to the internet then try again.");
-			break;
+			return "networkError";
 		default:
-			setError("Unexpected error happened. try again later.");
+			return "QueryError";
 	}
 }

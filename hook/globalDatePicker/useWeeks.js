@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { globalDateActions } from "../../store/globalDate";
 // utils
 import getWeeksArray from "../../utils/getWeeksArray";
+import extractISODate from "../../utils/extractISODate";
 
 export default function () {
 	const dispatch = useDispatch();
@@ -21,19 +22,13 @@ export default function () {
 			),
 		[selectedMonth],
 	);
-	// console.log(
-	// 	"ddddddddddd:",
-	// 	monthWeeks.map((week) =>
-	// 		week.map((day) => day.getDate() && extractISODate({ date: day })),
-	// 	),
-	// );
 	const selectedRow = useMemo(
 		() =>
 			monthWeeks.reduce((acc, week, i) => {
 				if (
 					week
-						.map((day) => day.getDate())
-						.indexOf(selectedMonth.getDate()) !== -1
+						.map((day) => extractISODate({ date: day }))
+						.indexOf(extractISODate({ date: globalDate })) !== -1
 				)
 					return i;
 				return acc;

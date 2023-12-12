@@ -1,12 +1,9 @@
-import { View, StyleSheet, Dimensions, StatusBar } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useMemo, useRef, useState } from "react";
+import { useRef, memo } from "react";
+import { View, StyleSheet, Dimensions } from "react-native";
 import Animated, {
-	useAnimatedGestureHandler,
 	useAnimatedStyle,
 	useSharedValue,
 	withDecay,
-	Easing,
 	withTiming,
 	useDerivedValue,
 	runOnJS,
@@ -21,7 +18,7 @@ import * as Haptics from "expo-haptics";
 import useZero from "../hook/useZero";
 
 const { height, width } = Dimensions.get("screen");
-export default function ScrollGesture({
+export default memo(function ({
 	children,
 	headerComponent,
 	navigateHight,
@@ -37,7 +34,7 @@ export default function ScrollGesture({
 	const contentHeight = useRef(useSharedValue(0)).current;
 	const onLayout = (event) => {
 		if (contentHeight.value !== event.nativeEvent.layout.height)
-			contentHeight.value = event.nativeEvent.layout.height;
+			contentHeight.value = withTiming(event.nativeEvent.layout.height);
 	};
 	const clamp_range = useDerivedValue(
 		() => [0, contentHeight.value - height / 4],
@@ -47,7 +44,9 @@ export default function ScrollGesture({
 
 	const pan = Gesture.Pan()
 		.onTouchesDown(() => {
+			console.log("translateY:", translateY.value);
 			// stop scrolling
+
 			translateY.value = translateY.value;
 		})
 		.onUpdate((event) => {
@@ -145,7 +144,7 @@ export default function ScrollGesture({
 			</GestureHandlerRootView>
 		</View>
 	);
-}
+});
 
 const styles = StyleSheet.create({
 	container: {

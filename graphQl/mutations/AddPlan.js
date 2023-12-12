@@ -15,7 +15,7 @@ export default gql`
 		$startingAt: String
 		$note: String
 	) {
-		addPlan0(
+		addPlan(
 			entity_id: $entityId
 			entity_type: $entityType
 			title: $title

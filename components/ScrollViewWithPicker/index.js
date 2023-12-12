@@ -1,4 +1,4 @@
-import { useRef, useMemo, useEffect } from "react";
+import { useRef, useMemo, memo } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
 import Animated, {
@@ -31,15 +31,9 @@ export default function ({
 }) {
 	const zero = useZero();
 	// some shared values
-	const CalendarDim = useRef(useSharedValue({})).current;
-	const translateY = useRef(useSharedValue(0)).current;
-	const translateX = useRef(useSharedValue(0)).current;
-	// redux
-	const { globalDate } = useSelector((state) => state.globalDate);
-	useEffect(() => {
-		translateY.value = withTiming(0);
-	}, [globalDate]);
-	// const navHeaderHight = useRef(useSharedValue({})).current;
+	const CalendarHight = useSharedValue(0);
+	const translateY = useSharedValue(0);
+	const translateX = useSharedValue(0);
 	// calc month weeks
 	const { monthWeeks } = useWeeks();
 	const datePickerFullHeight = useMemo(
@@ -48,37 +42,40 @@ export default function ({
 	);
 	const inputRange = useDerivedValue(() => {
 		return [
-			CalendarDim.value.height || MIN_BUBBLE_HEIGHT,
-			(CalendarDim.value.height || MIN_BUBBLE_HEIGHT) + MAX_BUBBLE_SHIFT,
+			CalendarHight.value || MIN_BUBBLE_HEIGHT,
+			(CalendarHight.value || MIN_BUBBLE_HEIGHT) + MAX_BUBBLE_SHIFT,
 		];
-	}, [CalendarDim]);
+	}, [CalendarHight]);
 	// some shared values
-	const bubbleHeight = useRef(useSharedValue(inputRange.value[1])).current;
+	const bubbleHeight = useSharedValue(inputRange.value[1]);
 	// const bubbleShift = useRef(useSharedValue(0)).current;
-	const collapseOpen = useRef(useSharedValue(0)).current;
+	const collapseOpen = useSharedValue(1);
+	// console.log("updated:");
 	// bubble updates
 	useDerivedValue(() => {
+		// console.log("collapseOpen:", collapseOpen.value);
 		bubbleHeight.value = interpolate(
 			collapseOpen.value,
 			[0, 1],
 			inputRange.value,
 			Extrapolation.CLAMP,
 		);
-	}, [collapseOpen]);
+	}, [collapseOpen.value]);
 	useDerivedValue(() => {
+		// console.log("translateY:", translateY.value);
 		collapseOpen.value = interpolate(
 			translateY.value,
 			[datePickerFullHeight / 3, 0],
 			[0, 1],
 			Extrapolation.CLAMP,
 		);
-	}, [translateY]);
+	}, [translateY.value]);
 	//
 	const scrollViewStyle = useAnimatedStyle(() => {
 		return {
-			paddingTop: CalendarDim.value.height + zero + MAX_BUBBLE_SHIFT || 0,
+			paddingTop: CalendarHight.value + zero + MAX_BUBBLE_SHIFT || 0,
 		};
-	}, [CalendarDim]);
+	}, [CalendarHight]);
 	//
 	return (
 		<ScreenView paddingTop={false}>
@@ -95,7 +92,7 @@ export default function ({
 				animatedStyle={scrollViewStyle}
 				headerComponent={HeaderComponent({
 					hasNavigationHeader,
-					CalendarDim,
+					CalendarHight,
 					translateY,
 					translateX,
 					collapseOpen,

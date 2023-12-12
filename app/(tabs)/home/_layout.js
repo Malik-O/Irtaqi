@@ -11,6 +11,7 @@ export default function () {
 			screenOptions={{
 				headerStyle: styles.barBackground(colorScheme),
 				headerTitleStyle: styles.text(colorScheme),
+				headerShown: false,
 			}}
 		>
 			<Stack.Screen name="index" />

@@ -7,4 +7,8 @@ export default {
 	deleteUserDataState(state) {
 		state.userData = null;
 	},
+	setState(state, action) {
+		const [arg, val] = action.payload;
+		state.loginFormData[arg] = val;
+	},
 };

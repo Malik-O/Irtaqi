@@ -1,57 +1,62 @@
-import { View, Text, ActivityIndicator, TextInput, Button } from "react-native";
-import React, { useEffect, useCallback, useState } from "react";
-import tw from "twrnc";
+import { useEffect } from "react";
+import { View, Text, Button, ActivityIndicator } from "react-native";
+import { useRouter, Redirect } from "expo-router";
 // hooks
 import useLogin from "../hook/useLogin";
+import useTranslate from "../hook/useTranslate";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { userActions } from "../store/user";
+// components
+import ScreenView from "../components/ScreenView";
+import Card from "../components/Card";
+import TextInput from "../components/TextInput";
+import ScreenText from "../components/ScreenText";
+
 // page
-export default function login() {
-	const [email, setEmail] = useState("teacher@gmail.com");
-	const [password, setPassword] = useState("123");
+export default function () {
+	const router = useRouter();
+	const translate = useTranslate();
 	// redux
-	const { userData } = useSelector((state) => state.user); // select a slice
+	const { userData, loginFormData } = useSelector((state) => state.user); // select a slice
 	// login hook
-	var { isLoading, error, loginWrapper } = useLogin({
-		email,
-		password,
+	var { isLoading, isSuccess, loginWrapper } = useLogin({
+		email: loginFormData.email,
+		password: loginFormData.password,
+	});
+	// redirect after successful login
+	useEffect(() => {
+		console.log(isSuccess && !isLoading && userData?.id);
+		if (isSuccess && !isLoading && userData?.id) router.replace("/home");
 	});
 
 	return (
-		<View style={tw`flex-1 items-center justify-center bg-black`}>
-			{/* error message */}
-			<Text style={tw`text-red-500`}>error: {error || "none"}</Text>
-			{/* email input field */}
-			<Text style={tw`text-white`}>email</Text>
-			<TextInput
-				style={tw`border-4 border-sky-500 w-full p-3 text-white`}
-				value={email}
-				onChangeText={setEmail}
-			/>
-			{/* password input field */}
-			<Text style={tw`text-white`}>password</Text>
-			<TextInput
-				style={tw`border-4 border-sky-500 w-full p-3 text-white`}
-				value={password}
-				onChangeText={setPassword}
-				secureTextEntry={true}
-			/>
-			{/* action */}
-			<Button
-				title="login"
-				onPress={loginWrapper}
-				disabled={isLoading}
-				style={tw`w-full bg-green-500`}
-			/>
-			{/*  */}
-			{isLoading ? (
-				<ActivityIndicator />
-			) : (
-				<Text style={tw`text-white text-4xl font-bold`}>
-					User ID is: {JSON.stringify(userData)}
-				</Text>
-			)}
-		</View>
+		<ScreenView style={{ alginItems: "center", justifyContent: "center" }}>
+			<Card>
+				<TextInput
+					stateName="email"
+					storeAction={userActions}
+					formData={loginFormData}
+				/>
+				<TextInput
+					stateName="password"
+					storeAction={userActions}
+					formData={loginFormData}
+					secureTextEntry
+				/>
+				{/* action */}
+				<View style={{ marginTop: 20 }}>
+					{isLoading ? (
+						<ActivityIndicator />
+					) : (
+						<Button
+							title="login"
+							onPress={loginWrapper}
+							disabled={isLoading}
+						/>
+					)}
+				</View>
+			</Card>
+		</ScreenView>
 	);
 }

@@ -30,7 +30,7 @@ export default function notifications() {
 		more: false,
 	};
 	return (
-		<ScreenView hasScrollView={false}>
+		<ScreenView hasScrollView={false} paddingTop={false}>
 			<CoolScrollView
 				props={props}
 				paddingTop={false}

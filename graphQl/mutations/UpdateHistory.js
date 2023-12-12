@@ -7,7 +7,7 @@ export default gql`
 		$grade: Int
 		$date: String
 	) {
-		updateHistory0(
+		updateHistory(
 			plan_instance_id: $plan_instance_id
 			amount_done: $amount_done
 			grade: $grade

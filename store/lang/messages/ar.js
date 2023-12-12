@@ -80,7 +80,7 @@ export default {
 	weekDaysShort: ["ح", "ن", "ث", "ر", "خ", "ج", "س"],
 	//
 	removePlan: "احذف خطة",
-	addPlan: "اضف خطة",
+	addPlan: "خطة جديدة",
 	plans: "الخطط",
 	surah: "سورة",
 	search: "بحث",
@@ -99,10 +99,10 @@ export default {
 	//
 	planTitle: "اسم الخطة",
 	planTitlePlaceholder: "حفظ ,مراجعة",
-	pagesPerDay: "عدد الاوجه في اليوم",
-	hasRabt: "الخطة تحتوي على الربط",
-	rabtPages: "عدد اوجه الربط اليومي",
-	workingDays: "ايام العمل",
+	pagesPerDay: "عدد الصفحات في اليوم",
+	hasRabt: "الخطة تحتوي على مراجعة",
+	rabtPages: "عدد صفحات المراجعة اليومية",
+	workingDays: "ايام الحضور",
 	startingDate: "تاريخ البداية",
 	//
 	type: "النوع",
@@ -168,8 +168,12 @@ export default {
 	manageGroup: "ادارة المجموعة",
 	// notifications
 	notifications: "الاشعارات",
-	ERR_BAD_REQUEST: "بيانات الدخول غير صحيحة",
-	ERR_NETWORK: "اتصل بالانترنت ثم اعد المحاولة",
+	invalidLoginData: "بيانات الدخول غير صحيحة",
+	networkError: "اتصل بالانترنت ثم اعد المحاولة",
 	QueryError: "خطأ غير متوقع برجاء اعادة المحاولة في وقت لاحق",
 	MutationError: "لم يتم حفظ البيانات برجاء اعادة المحاولة في وقت لاحق",
+	// sittings
+	darkTheme: "الوضع الليلي",
+	language: "اللغة",
+	addPhoto: "اضف صورة",
 };

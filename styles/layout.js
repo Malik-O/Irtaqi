@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 export const paddingHorizontal = 20;
-export const tabBarBubbleShift = 20;
+export const tabBarBubbleShift = 50;
 export const tabBarHeight = 300;
 export const MAGIC_NUM = 0.5522847498;
 
@@ -42,7 +42,7 @@ export default StyleSheet.create({
 		width: "100%",
 		height: tabBarHeight,
 		position: "absolute",
-		top: -30,
+		top: -tabBarBubbleShift,
 	},
 	planCardContainer: (backgroundColor) => ({
 		margin: paddingHorizontal,

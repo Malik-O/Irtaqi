@@ -1,11 +1,16 @@
 import React from "react";
 import { Tabs } from "expo-router";
-import { View, useColorScheme, Dimensions } from "react-native";
+import { View, Image, useColorScheme, Dimensions } from "react-native";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 // component
 import { Path, Skia, Canvas, Group } from "@shopify/react-native-skia";
 import Ionicons from "@expo/vector-icons/Ionicons";
+// icons
+import HomeIcon from "../../components/icons/Home";
+import NotificationIcon from "../../components/icons/Notification";
+import Profile from "../../components/icons/Profile";
+import Groups from "../../components/icons/Groups";
 //utils
 import { vec2 } from "../../utils/pathPoints";
 // hook
@@ -33,16 +38,28 @@ function TabBarBG() {
 	const c2 = vec2(endPoint.x, endPoint.y);
 	// add points
 	path.moveTo(0, tabBarBubbleShift);
-	path.cubicTo(c1.x, c1.y, c2.x, c2.y, endPoint.x, endPoint.y);
+	// path.cubicTo(c1.x, c1.y, c2.x, c2.y, endPoint.x, endPoint.y);
 	// path.lineTo(width / 2, 0);
 	// path.lineTo(width, tabBarBubbleShift);
+	path.quadTo(width / 2, 0, width, tabBarBubbleShift);
+
 	path.lineTo(width, tabBarHeight);
 	path.lineTo(0, tabBarHeight);
 	path.close();
 	return (
-		<Canvas style={styles.canvas}>
-			<Path path={path} color={theme.secondary} />
-		</Canvas>
+		<>
+			<View
+				style={{
+					width: 10,
+					position: "absolute",
+					height: 19,
+					backgroundColor: "red",
+				}}
+			/>
+			<Canvas style={styles.canvas}>
+				<Path path={path} color={theme.secondary} />
+			</Canvas>
+		</>
 	);
 }
 export default function () {
@@ -71,49 +88,14 @@ export default function () {
 				name="home"
 				options={{
 					headerShown: false,
-					tabBarIcon: ({ color, size, focused }) => (
-						<Ionicons
-							name={`home${!focused ? "-outline" : ""}`}
-							size={size}
-							color={color}
-						/>
-					),
+					tabBarIcon: HomeIcon,
 				}}
 			/>
 			<Tabs.Screen
 				name="groups"
 				options={{
 					headerShown: false,
-					tabBarIcon: ({ color, size, focused }) => (
-						<Ionicons
-							name={`people-circle${!focused ? "-outline" : ""}`}
-							size={size}
-							color={color}
-						/>
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name="quran"
-				options={{
-					tabBarIcon: ({ color, size, focused }) => (
-						<View
-							styles={{
-								width: 50,
-								height: 50,
-								backgroundColor: "red",
-								borderRadius: 50,
-								position: "absolute",
-								top: -50,
-							}}
-						>
-							<Ionicons
-								name={`book${!focused ? "-outline" : ""}`}
-								size={size * 2}
-								color={color}
-							/>
-						</View>
-					),
+					tabBarIcon: Groups,
 				}}
 			/>
 			<Tabs.Screen
@@ -126,25 +108,14 @@ export default function () {
 				options={{
 					header: () => null,
 					tabBarBadge: countUnseen || null,
-					tabBarIcon: ({ color, size, focused }) => (
-						<Ionicons
-							name={`notifications${!focused ? "-outline" : ""}`}
-							size={size}
-							color={color}
-						/>
-					),
+					tabBarIcon: NotificationIcon,
 				}}
 			/>
 			<Tabs.Screen
 				name="profile"
 				options={{
-					tabBarIcon: ({ color, size, focused }) => (
-						<Ionicons
-							name={`person-circle${!focused ? "-outline" : ""}`}
-							size={size}
-							color={color}
-						/>
-					),
+					header: () => null,
+					tabBarIcon: Profile,
 				}}
 			/>
 		</Tabs>
