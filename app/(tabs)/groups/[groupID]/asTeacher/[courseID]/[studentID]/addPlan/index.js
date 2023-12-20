@@ -134,7 +134,7 @@ export default function () {
 	);
 	return (
 		<Stepper
-			title={capitalize(translate("addPlan"))}
+			title={translate("addPlan", true)}
 			steps={steps}
 			activeIndex={activeIndex}
 			setActiveIndex={setActiveIndex}

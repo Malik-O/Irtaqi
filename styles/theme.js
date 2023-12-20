@@ -10,9 +10,9 @@ const theme = {
 	},
 	dark: {
 		primary: "#207EAC",
-		secondary: "#0D171C",
-		tertiary: "#101D24",
-		cardColor: "#1f2c34",
+		secondary: "#2b2833",
+		tertiary: "#1d1b20",
+		cardColor: "#312b37",
 		error: "#D66363",
 		success: "#4DCC52",
 		warning: "#BCDD37",

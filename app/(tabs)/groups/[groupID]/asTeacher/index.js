@@ -15,7 +15,7 @@ function resolveRouter(pathname, courseID) {
 	return { pathname: `${pathname}/[courseID]`, params: { courseID } };
 }
 
-export default function id() {
+export default function () {
 	const { groupID } = useLocalSearchParams();
 	const pathname = usePathname();
 	const router = useRouter();

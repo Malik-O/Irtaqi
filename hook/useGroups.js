@@ -18,25 +18,38 @@ export default function () {
 	const GetUserGroups = graphQl.queries.GetUserGroups;
 	const [
 		getGroups,
-		{ graphQlLoading, error: graphQlError, data: graphQlData },
+		{ graphQlLoading, error: graphQlError, data: graphQlData, refetch },
 	] = useLazyQuery(GetUserGroups);
-
-	// const data = await getGroups({ variables: { user_id: userData.id } });
-
+	// variables
+	const variables = { user_id: userData?.id };
+	// do the request as soon as the user id loads (do not worry it wont fetch again)
 	useEffect(() => {
+		if (userData?.id) {
+			setIsLoading(true);
+			getGroups({ variables })
+				.then(({ data }) => {
+					StoreConnectionsInstance.init(data?.groups);
+					setIsLoading(false);
+				})
+				.catch((error) => {
+					setError(
+						"there is a problem loading the groups, please try again later.",
+					);
+				});
+		}
+	}, [userData]);
+	// refetch data
+	async function refetchGroups() {
 		setIsLoading(true);
-		getGroups({ variables: { user_id: userData.id } })
-			.then(({ data }) => {
-				// setGroups(data.groups);
-				StoreConnectionsInstance.init(data.groups);
-				setIsLoading(false);
-			})
-			.catch((error) => {
-				setError(
-					"there is a problem loading the groups, please try again later.",
-				);
-			});
-	}, []);
-
-	return { isLoading, error };
+		console.log("variables:", variables);
+		try {
+			const { data } = await refetch(variables);
+			console.log("data:", data?.groups);
+			StoreConnectionsInstance.init(data?.groups);
+		} catch (error) {
+			console.log("error:", error);
+		}
+		setIsLoading(false);
+	}
+	return { isLoading, error, refetchGroups };
 }

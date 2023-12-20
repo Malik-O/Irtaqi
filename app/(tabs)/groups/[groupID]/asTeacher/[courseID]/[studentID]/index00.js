@@ -1,12 +1,6 @@
 import { useState, useMemo } from "react";
-import {
-	ScrollView,
-	View,
-	StyleSheet,
-	useColorScheme,
-	TouchableOpacity,
-} from "react-native";
-import { usePathname, Stack, useRouter } from "expo-router";
+import { View, StyleSheet, useColorScheme } from "react-native";
+import { usePathname, Link } from "expo-router";
 // redux
 import { useSelector } from "react-redux";
 // components
@@ -14,9 +8,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import ScreenText from "../../../../../../../components/ScreenText";
 import AdvancedArea from "../../../../../../../components/plans/AdvancedArea";
 import PlansArea from "../../../../../../../components/plans/PlansArea";
-import ScreenView from "../../../../../../../components/ScreenView";
-import HeaderButton from "../../../../../../../components/HeaderButton";
-import MenuButton from "../../../../../../../components/CoolScrollView/MenuButton";
+import ScrollViewWithPicker from "../../../../../../../components/ScrollViewWithPicker";
 
 const list = ["one", "two", "three", "four", "five", "six"];
 // hooks
@@ -24,51 +16,55 @@ import useTranslate from "../../../../../../../hook/useTranslate";
 import useSelectedStudent from "../../../../../../../hook/useSelectedStudent";
 import useWhichInstanceIsToday from "../../../../../../../hook/plans/useWhichInstanceIsToday";
 
+const navigationData = [
+	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
+	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
+];
+
 export default function () {
 	const translate = useTranslate();
-	// router
-	const router = useRouter();
 	const pathname = usePathname();
 	const colorScheme = useColorScheme();
 	const { groups } = useSelector((state) => state.groups);
-	// selectedStudent
-	const selectedStudent = useSelectedStudent();
 	// advanced Days
 	const plans = useWhichInstanceIsToday();
 	const advancedDays = eachDay(plans);
+	// selectedStudent
+	const selectedStudent = useSelectedStudent();
+	//
+	const selectedNumberState = useState(0);
+	function onSlide(newVal) {
+		// console.log({ newVal, selectedNumber: selectedNumberState[0] });
+	}
 	return (
-		<ScreenView hasScrollView={false} paddingTop={false}>
-			<Stack.Screen
-				options={{
-					headerTitle: selectedStudent._j.first_name,
-					// headerRight: () => <MenuButton menu={props.more} />,
-					headerLeft: () => <HeaderButton isExists={true} back />,
-				}}
-			/>
-			<ScrollView style={{ marginTop: 20 }}>
-				<View style={styles.plansAreaContainer}>
-					<ScreenText variant="headlineLarge">
-						{translate("plans", true)}
-					</ScreenText>
-					<TouchableOpacity
-						onPress={() => router.push(`${pathname}/addPlan`)}
-					>
-						<Ionicons
-							name="add-circle-outline"
-							color={colorScheme === "light" ? "black" : "white"}
-							size={36}
-						/>
-					</TouchableOpacity>
-				</View>
-				{/* plans */}
-				<PlansArea plans={plans} />
-				{/* advanced cards */}
-				<AdvancedArea advancedDays={advancedDays} />
-			</ScrollView>
-		</ScreenView>
+		<ScrollViewWithPicker navigationData={navigationData}>
+			{/* <View
+				style={[styles.plansAreaContainer, { alignItems: "flex-end" }]}
+			>
+				<ScreenText variant="displayMedium">
+					{selectedStudent?.first_name}
+				</ScreenText>
+			</View> */}
+			{/* <GlobalDatePicker /> */}
+			<View style={styles.plansAreaContainer}>
+				<ScreenText variant="headlineLarge">
+					{translate("plans")}
+				</ScreenText>
+				<Link href={`${pathname}/addPlan`}>
+					<Ionicons
+						name="add-circle-outline"
+						color={colorScheme === "light" ? "black" : "white"}
+						size={36}
+					/>
+				</Link>
+			</View>
+			{/* plans */}
+			<PlansArea plans={plans} />
+			{/* advanced cards */}
+			<AdvancedArea advancedDays={advancedDays} />
+		</ScrollViewWithPicker>
 	);
 }
-
 // ![I think it's for rabt] each day advantage
 function eachDay(plans) {
 	return useMemo(

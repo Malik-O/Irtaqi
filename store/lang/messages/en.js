@@ -144,7 +144,7 @@ export default {
 	create: "create",
 	noTeacherYetMessage: "there is no teacher assigned to this group yet",
 	assignTeacher: "assign teacher",
-	noStudentsYetMessage: "there is no students in this group",
+	noStudentsYetMessage: "there is no students in this group yet",
 	addTeacher: "create new teacher",
 	assignExistingTeacher: "assign existing teacher",
 	manageGroup: "manage group",
@@ -154,7 +154,12 @@ export default {
 	networkError: "Reconnect to the internet then try again.",
 	QueryError: "Unexpected error happened, please try again later.",
 	MutationError: "The data was not saved, please try again later",
+	createUserSuccessfully: "### was successfully added",
 	// sittings
 	darkTheme: "dark theme",
 	language: "language",
+	addPhoto: "add photo",
+	chooseLang: "choose language",
+	//
+	attendance: "attendance",
 };

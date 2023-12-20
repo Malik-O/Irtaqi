@@ -48,14 +48,6 @@ function TabBarBG() {
 	path.close();
 	return (
 		<>
-			<View
-				style={{
-					width: 10,
-					position: "absolute",
-					height: 19,
-					backgroundColor: "red",
-				}}
-			/>
 			<Canvas style={styles.canvas}>
 				<Path path={path} color={theme.secondary} />
 			</Canvas>
@@ -65,6 +57,7 @@ function TabBarBG() {
 export default function () {
 	const seeAll = useSeenAll();
 	const colorScheme = useColorScheme();
+	const theme = useTheme();
 	const { isLoading, refetchGroupAttendance, subscribe } =
 		useGetNotifications();
 	const { notifications } = useSelector((state) => state.notifications);
@@ -106,7 +99,12 @@ export default function () {
 					},
 				})}
 				options={{
-					header: () => null,
+					// header: () => null,
+					headerStyle: {
+						backgroundColor: theme.secondary,
+					},
+					headerBackgroundContainerStyle: {},
+					headerTitleStyle: { color: theme.reverse.secondary },
 					tabBarBadge: countUnseen || null,
 					tabBarIcon: NotificationIcon,
 				}}

@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { View, Button } from "react-native";
+import { View, Dimensions } from "react-native";
+import Animated, {
+	useSharedValue,
+	withTiming,
+	useAnimatedStyle,
+} from "react-native-reanimated";
 // hooks
 import useGetNotifications from "../../hook/notifications/useGetNotifications";
 import useTranslate from "../../hook/useTranslate";
@@ -12,6 +17,8 @@ import { notificationsActions } from "../../store/notifications";
 import ScreenView from "../../components/ScreenView";
 import CoolScrollView from "../../components/CoolScrollView";
 import NotificationCard from "../../components/notifications/NotificationCard";
+
+const { height } = Dimensions.get("screen");
 
 export default function notifications() {
 	const pushNotification = usePush();
@@ -31,31 +38,17 @@ export default function notifications() {
 	};
 	return (
 		<ScreenView hasScrollView={false} paddingTop={false}>
-			<CoolScrollView
-				props={props}
-				paddingTop={false}
-				onRefresh={refetchGroupAttendance}
-			>
-				<View>
-					{[...notifications]
-						.sort((a, b) => b.createdAt - a.createdAt)
-						.map((notification, i) => (
-							<NotificationCard
-								notification={notification}
-								key={i}
-							/>
-						))}
-					<Button
-						title="press"
-						onPress={() =>
-							pushNotification({
-								message: "hello htere",
-								type: "warning",
-							})
-						}
-					/>
-				</View>
-			</CoolScrollView>
+			<Animated.FlatList
+				style={[{ marginBottom: 80 }]}
+				data={[...notifications].sort(
+					(a, b) => b.createdAt - a.createdAt,
+				)}
+				scrollEventThrottle={16}
+				keyExtractor={(_, i) => i}
+				renderItem={({ item, index }) => {
+					return <NotificationCard notification={item} key={index} />;
+				}}
+			/>
 		</ScreenView>
 	);
 }

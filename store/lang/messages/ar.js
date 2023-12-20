@@ -162,7 +162,7 @@ export default {
 	create: "انشئ",
 	noTeacherYetMessage: "لم يتم تعيين معلم لهذه المجموعة بعد",
 	assignTeacher: "تعيين معلم",
-	noStudentsYetMessage: "لم يتم اضافة طلاب الى هذه المجموعة",
+	noStudentsYetMessage: "لم يتم اضافة طلاب الى هذه المجموعة بعد",
 	addTeacher: "اضف معلم جديد",
 	assignExistingTeacher: "تعيين معلم موجود",
 	manageGroup: "ادارة المجموعة",
@@ -172,8 +172,12 @@ export default {
 	networkError: "اتصل بالانترنت ثم اعد المحاولة",
 	QueryError: "خطأ غير متوقع برجاء اعادة المحاولة في وقت لاحق",
 	MutationError: "لم يتم حفظ البيانات برجاء اعادة المحاولة في وقت لاحق",
+	createUserSuccessfully: "تم اضافة ### بنجاح",
 	// sittings
 	darkTheme: "الوضع الليلي",
 	language: "اللغة",
 	addPhoto: "اضف صورة",
+	chooseLang: "اختر اللغة",
+	//
+	attendance: "الحضور",
 };

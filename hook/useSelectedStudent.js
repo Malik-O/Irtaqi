@@ -18,6 +18,7 @@ export default async function () {
 		const selectedStudent = selectedCourse.floatingStudents.filter(
 			(student) => student.id === studentID,
 		)[0];
+		// console.log("selectedStudent:", selectedStudent.first_name);
 		return selectedStudent;
 	}, [groups]);
 }

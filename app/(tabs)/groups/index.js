@@ -21,12 +21,13 @@ import ScreenText from "../../../components/ScreenText";
 import { paddingHorizontal } from "../../../styles/layout";
 
 // resolvers
-function resolveRouter({ id, as }) {
-	console.log(id, as);
+function resolveRouter({ id, as }, { groups, groupID }) {
+	// console.log(id, as);
+	const selectedGroup = groups.filter((group) => group.id === groupID)[0];
 	let pathname;
 	switch (as) {
 		case "teacher":
-			pathname = "/groups/[id]/asTeacher";
+			pathname = `/groups/[id]/asTeacher/${selectedGroup.courses[0].id}`;
 			break;
 		case "organization_owner":
 		case "center_admin":
@@ -45,11 +46,16 @@ function Content() {
 	const { groups } = useSelector((state) => state.groups);
 	// graphQL
 	const { isLoading, error } = useGroups();
+	// let isLoading, error;
 	// elements
 	if (isLoading) return <ActivityIndicator />;
 	if (error) return <Text>{error}</Text>;
 	return groups.map((group, i) => (
-		<Card item={group} key={i} href={resolveRouter(group)} />
+		<Card
+			item={group}
+			key={i}
+			href={resolveRouter(group, { groups, groupID: group.id })}
+		/>
 	));
 }
 
@@ -66,7 +72,7 @@ export default function () {
 				variant="displayMedium"
 				style={{ paddingHorizontal, marginVertical: paddingHorizontal }}
 			>
-				{capitalize(translate("groups"))}
+				{translate("groups", true)}
 			</ScreenText>
 			<Content />
 		</ScreenView>

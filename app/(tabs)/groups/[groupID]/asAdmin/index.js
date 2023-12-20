@@ -1,6 +1,11 @@
-import { View, Text } from "react-native";
-import { useState } from "react";
-import { useLocalSearchParams, usePathname, useRouter } from "expo-router";
+import { View, TouchableOpacity } from "react-native";
+import {
+	useLocalSearchParams,
+	usePathname,
+	useRouter,
+	Stack,
+} from "expo-router";
+import Animated from "react-native-reanimated";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 // components
@@ -9,9 +14,12 @@ import Card from "../../../../../components/Card";
 import ScreenView from "../../../../../components/ScreenView";
 import ScreenText from "../../../../../components/ScreenText";
 import CoolScrollView from "../../../../../components/CoolScrollView";
+import HeaderButton from "../../../../../components/HeaderButton";
+import MenuButton from "../../../../../components/CoolScrollView/MenuButton";
 import FBA from "../../../../../components/FBA";
-// translate
+// hook
 import useTranslate from "../../../../../hook/useTranslate";
+import useTheme from "../../../../../hook/useTheme";
 // paper
 import {
 	Button as PaperButton,
@@ -24,50 +32,91 @@ import { useEffect } from "react";
 
 // resolvers
 function fullName(entity) {
-	return `${entity.first_name} ${entity.parent_name || ""}`;
+	return `${entity?.first_name} ${entity?.parent_name || ""} ${
+		entity?.rest_of_name || ""
+	}`;
 }
 function resolveRouter(pathname, studentID) {
 	return { pathname: `${pathname}/[studentID]`, params: { studentID } };
 }
+
+function StudentsList({ students }) {
+	const translate = useTranslate();
+	const theme = useTheme();
+	if (students?.length)
+		return (
+			<Animated.FlatList
+				style={[{ marginBottom: 80 }]}
+				data={students}
+				scrollEventThrottle={16}
+				keyExtractor={(_, i) => i}
+				renderItem={({ item, index }) => {
+					return (
+						<Card
+							key={index}
+							item={{ ...item, title: fullName(item) }}
+						/>
+					);
+				}}
+			/>
+		);
+	else
+		return (
+			<View style={{ marginTop: 20 }}>
+				<ScreenText style={{ textAlign: "center" }} variant="bodyLarge">
+					{translate("noStudentsYetMessage")}
+				</ScreenText>
+				<TouchableOpacity onPress={() => {}}>
+					<ScreenText
+						style={{
+							textAlign: "center",
+							marginTop: 10,
+							color: theme.reverse.primary,
+						}}
+						variant="bodyLarge"
+					>
+						{translate("add_student")}
+					</ScreenText>
+				</TouchableOpacity>
+			</View>
+		);
+}
+
 export default function () {
 	const translate = useTranslate();
-	// const [onScrollEvent, setOnScroll] = useState(() => {});
-	const { groupID, courseID } = useLocalSearchParams();
-	// const router = useRouter();
 	const pathname = usePathname();
+	const router = useRouter();
+	const { groupID } = useLocalSearchParams();
 	// redux
 	const { groups } = useSelector((state) => state.groups);
 	const selectedGroup = groups.filter((group) => group.id === groupID)[0];
-	const selectedCourse = selectedGroup.courses.filter(
-		(course) => course.id === courseID,
-	)[0];
-	const tabsProps = {
+	// scroll view props
+	const props = {
 		title: selectedGroup.title,
-		tabs: selectedGroup.courses,
 		back: true,
-		more: false,
-	};
-	// FBA
-	const [isExtended, setIsExtended] = useState(true);
-	const onScrollEvent = (currentScrollPosition) => {
-		console.log("currentScrollPosition:", currentScrollPosition);
-		setIsExtended(currentScrollPosition <= 0);
+		more: {
+			// icon: "",
+			items: [
+				{
+					title: translate("addUser"),
+					onPress: () => {
+						router.push(`${pathname}/addUser`);
+					},
+				},
+			],
+		},
 	};
 	return (
 		<ScreenView hasScrollView={false} paddingTop={false}>
-			<CoolScrollView props={tabsProps} onScrollEvent={onScrollEvent}>
-				{selectedGroup.courses[0].floatingStudents.map((student, i) => (
-					<Card
-						key={i}
-						item={{ ...student, title: fullName(student) }}
-						// href={resolveRouter(pathname, student.id)}
-					/>
-				))}
-			</CoolScrollView>
-			<FBA
-				isExtended={isExtended}
-				label={translate("addUser")}
-				href={`${pathname}/addUser`}
+			<Stack.Screen
+				options={{
+					headerTitle: selectedGroup.title,
+					headerRight: () => <MenuButton menu={props.more} />,
+					headerLeft: () => <HeaderButton isExists={true} back />,
+				}}
+			/>
+			<StudentsList
+				students={selectedGroup.courses[0]?.floatingStudents}
 			/>
 		</ScreenView>
 	);

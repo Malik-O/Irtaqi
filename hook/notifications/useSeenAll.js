@@ -5,11 +5,13 @@ import graphQl from "../../graphQl";
 import { useSelector } from "react-redux";
 // hooks
 import connectToNotificationStore from "../useConnectToStore/instants/connectToNotificationStore";
+import usePush from "../notifications/usePush";
 
 export default function () {
 	const StoreConnectionsInstance = connectToNotificationStore();
 	const { userData } = useSelector((state) => state.user);
 	const { notifications } = useSelector((state) => state.notifications);
+	const pushNotification = usePush();
 	// mutation
 	const SeenAllNotifications = graphQl.mutations.SeenAllNotifications;
 	const [SeenAllNotificationsMutation, { data, loading, error }] =
@@ -28,8 +30,13 @@ export default function () {
 					seen: true,
 				})),
 			);
-		} catch (e) {
-			console.log("e:", e);
+		} catch (err) {
+			pushNotification({
+				type: "error",
+				message: "MutationError",
+				error: JSON.stringify(err),
+				floatingNotification: true,
+			});
 		}
 	};
 }

@@ -22,7 +22,7 @@ export default function () {
 			dispatch(notificationsActions.setSnackbarVisible(true));
 			dispatch(notificationsActions.setSnackbarData(variables));
 			// save the notification in DB
-			if (userData?.id) return;
+			if (variables.floatingNotification || !userData?.id) return;
 			const {
 				data: { pushNotification },
 			} = await PushNotificationMutation({ variables });

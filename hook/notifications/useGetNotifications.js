@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { notificationsActions } from "../../store/notifications";
 // hooks
 import connectToNotificationStore from "../useConnectToStore/instants/connectToNotificationStore";
+import usePush from "../notifications/usePush";
 // graphQL
 import { useLazyQuery, useSubscription } from "@apollo/client";
 import graphQl from "../../graphQl";
@@ -11,6 +12,7 @@ import graphQl from "../../graphQl";
 export default function () {
 	const [isLoading, setIsLoading] = useState(false);
 	const StoreConnectionsInstance = connectToNotificationStore();
+	const pushNotification = usePush();
 	// StoreConnectionsInstance.get();
 	// redux states
 	const dispatch = useDispatch();
@@ -35,18 +37,22 @@ export default function () {
 				})
 				.catch((err) => {
 					setIsLoading(false);
-					console.log("00000000000", { err });
+					pushNotification({
+						type: "error",
+						message: "QueryError",
+						error: JSON.stringify(err),
+						floatingNotification: true,
+					});
 				});
 		}
 	}, [userData]);
 	// refetch data
-	const refetchGroupAttendance = async () => {
+	async function refetchGroupAttendance() {
 		setIsLoading(true);
 		const { data } = await refetch(variables);
-		console.log("data:", data);
 		StoreConnectionsInstance.init(data?.notifications);
 		setIsLoading(false);
-	};
+	}
 
 	return { isLoading, refetchGroupAttendance };
 }

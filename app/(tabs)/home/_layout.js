@@ -3,15 +3,16 @@ import { Stack } from "expo-router";
 import { useColorScheme, View } from "react-native";
 // styles
 import styles from "../../../styles/layout";
+import useTheme from "../../../hook/useTheme";
 
 export default function () {
-	const colorScheme = useColorScheme();
+	const theme = useTheme();
 	return (
 		<Stack
 			screenOptions={{
-				headerStyle: styles.barBackground(colorScheme),
-				headerTitleStyle: styles.text(colorScheme),
-				headerShown: false,
+				headerStyle: { backgroundColor: theme.secondary },
+				headerTitleStyle: { color: theme.reverse.secondary },
+				// headerShown: false,
 			}}
 		>
 			<Stack.Screen name="index" />

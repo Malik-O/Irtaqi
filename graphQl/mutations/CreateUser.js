@@ -11,6 +11,8 @@ export default gql`
 		$email: String
 		$phone: String
 		$parentPhone: String
+		$roleTitle: String
+		$resourceIds: [String]
 	) {
 		createUser(
 			first_name: $first_name
@@ -22,6 +24,8 @@ export default gql`
 			email: $email
 			phone: $phone
 			parentPhone: $parentPhone
+			role_title: $roleTitle
+			resource_ids: $resourceIds
 		) {
 			dateOfBirth
 			email
@@ -34,10 +38,9 @@ export default gql`
 			phone
 			rest_of_name
 			roles {
-				description
 				id
-				resource_type
 				title
+				resource_type
 				resource_id
 			}
 		}

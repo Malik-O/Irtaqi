@@ -18,11 +18,11 @@ export default function () {
 	const translate = useTranslate();
 	const [activeIndex, setActiveIndex] = useState(0);
 	const steps = [
+		{ ele: AddToGroupStep, isStepValid: "AddToGroupStep_isValid" },
 		{ ele: GenderStep, isStepValid: "GenderStep_isValid" },
 		{ ele: NameStep, isStepValid: "NameStep_isValid" },
 		{ ele: NationalIDStep, isStepValid: "NationalIDStep_isValid" },
 		{ ele: ContactStep, isStepValid: "ContactStep_isValid" },
-		{ ele: AddToGroupStep, isStepValid: "AddToGroupStep_isValid" },
 	];
 	// redux
 	const { formData } = useSelector((state) => state.addUser);

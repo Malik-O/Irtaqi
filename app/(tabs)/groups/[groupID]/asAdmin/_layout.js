@@ -2,13 +2,19 @@ import React from "react";
 import { Stack } from "expo-router";
 import { useColorScheme } from "react-native";
 
-// import styles from "../../../../../styles/layout";
+import useTheme from "../../../../../hook/useTheme";
 
 export default function () {
-	// const colorScheme = useColorScheme();
+	const theme = useTheme();
 	return (
 		<Stack>
-			<Stack.Screen name="index" options={{ header: () => null }} />
+			<Stack.Screen
+				name="index"
+				options={{
+					headerStyle: { backgroundColor: theme.secondary },
+					headerTitleStyle: { color: theme.reverse.secondary },
+				}}
+			/>
 			<Stack.Screen
 				name="addUser"
 				options={{

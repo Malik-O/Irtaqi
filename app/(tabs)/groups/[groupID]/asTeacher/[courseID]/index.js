@@ -1,6 +1,11 @@
 import { View, Text } from "react-native";
-import React from "react";
-import { useLocalSearchParams, usePathname, useRouter } from "expo-router";
+import {
+	useLocalSearchParams,
+	usePathname,
+	useRouter,
+	Stack,
+} from "expo-router";
+import Animated from "react-native-reanimated";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 // components
@@ -8,15 +13,10 @@ import Card from "../../../../../../components/Card";
 import ScreenView from "../../../../../../components/ScreenView";
 import ScreenText from "../../../../../../components/ScreenText";
 import CoolScrollView from "../../../../../../components/CoolScrollView";
+import HeaderButton from "../../../../../../components/HeaderButton";
+import MenuButton from "../../../../../../components/CoolScrollView/MenuButton";
 // paper
-import {
-	Button as PaperButton,
-	Dialog,
-	Portal,
-	PaperProvider,
-	Text as PaperText,
-} from "react-native-paper";
-import { useEffect } from "react";
+import useTranslate from "../../../../../../hook/useTranslate";
 
 // resolvers
 function fullName(entity) {
@@ -27,36 +27,55 @@ function resolveRouter(pathname, studentID) {
 }
 export default function () {
 	const { groupID, courseID } = useLocalSearchParams();
-	// const router = useRouter();
+	const router = useRouter();
 	const pathname = usePathname();
+	const translate = useTranslate();
 	// redux
 	const { groups } = useSelector((state) => state.groups);
 	const selectedGroup = groups.filter((group) => group.id === groupID)[0];
 	const selectedCourse = selectedGroup.courses.filter(
 		(course) => course.id === courseID,
 	)[0];
-	const tabsProps = {
+	const props = {
 		title: selectedGroup.title,
-		tabs: selectedGroup.courses,
+		// tabs: selectedGroup.courses,
 		back: true,
-		more: true,
+		more: {
+			// icon: "",
+			items: [
+				{
+					title: translate("attendance", true),
+					onPress: () => {
+						router.replace(`groups/${groupID}/attendance`);
+					},
+				},
+			],
+		},
 	};
 	return (
 		<ScreenView hasScrollView={false} paddingTop={false}>
-			<CoolScrollView props={tabsProps}>
-				{/* <CoolTabsView props={tabsProps}> */}
-				{/* <ScreenText variant="displayMedium" style={{ textAlign: "center" }}>
-				{selectedGroup.title}
-			</ScreenText> */}
-				{selectedCourse?.floatingStudents?.map((student, i) => (
-					<Card
-						key={i}
-						item={{ ...student, title: fullName(student) }}
-						href={resolveRouter(pathname, student.id)}
-					/>
-				))}
-				{/* </CoolTabsView> */}
-			</CoolScrollView>
+			<Stack.Screen
+				options={{
+					headerTitle: selectedGroup.title,
+					headerRight: () => <MenuButton menu={props.more} />,
+					headerLeft: () => <HeaderButton isExists={true} back />,
+				}}
+			/>
+			<Animated.FlatList
+				style={[{ marginBottom: 80 }]}
+				data={selectedCourse?.floatingStudents}
+				scrollEventThrottle={16}
+				keyExtractor={(_, i) => i}
+				renderItem={({ item, index }) => {
+					return (
+						<Card
+							key={index}
+							item={{ ...item, title: fullName(item) }}
+							href={resolveRouter(pathname, item.id)}
+						/>
+					);
+				}}
+			/>
 		</ScreenView>
 	);
 }
