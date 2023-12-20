@@ -1,4 +1,6 @@
+import { useState } from "react";
 // components
+import { ToggleButton } from "react-native-paper";
 import TextInput from "../TextInput";
 import Card from "../Card";
 // redux
@@ -7,8 +9,10 @@ import { addUserActions } from "../../store/addUser";
 // hook
 import useAddUserValidate from "../../hook/useAddUserValidate";
 import useTranslate from "../../hook/useTranslate";
+import { ImageBackgroundComponent } from "react-native";
 
 export default function (isStepValidName) {
+	const [value, setValue] = useState("left");
 	const translate = useTranslate();
 	// redux
 	const { formData } = useSelector((state) => state.addUser);
@@ -27,6 +31,13 @@ export default function (isStepValidName) {
 
 	return (
 		<Card>
+			{/* <ToggleButton.Row
+				onValueChange={(value) => setValue(value)}
+				value={value}
+			>
+				<ToggleButton icon="format-align-lefdt" value="left" />
+				<ToggleButton icon="format-align-right" value="right" />
+			</ToggleButton.Row> */}
 			<TextInput
 				stateName="first_name"
 				isValidStateName={isValidStateNames.first_name}

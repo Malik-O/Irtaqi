@@ -36,14 +36,13 @@ export default function ({
 	}
 	//
 	return (
-		<Animated.View style={[styles.navigationBackButton, style]}>
+		<Animated.View style={[style]}>
 			<TouchableOpacity onPress={onPress}>
 				{isExists ? (
 					<Ionicons
 						name={icon()}
 						size={30}
 						color={theme.reverse.secondary}
-						style={{ marginTop: 10 }}
 					/>
 				) : null}
 			</TouchableOpacity>

@@ -14,12 +14,12 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 function CheckboxComponent({ isChecked, colorScheme }) {
-	if (!isChecked) return;
 	return (
 		<Ionicons
 			name="checkmark-outline"
 			color={colorScheme === "light" ? "black" : "white"}
 			size={20}
+			style={{ opacity: +!!isChecked }}
 		/>
 	);
 }
@@ -106,8 +106,8 @@ export default function ListItemRipple(props) {
 
 	return (
 		<TouchableRipple onPress={props.action}>
-			<View style={styles.view(isRTL)}>
-				<ScreenText>{props.title}</ScreenText>
+			<View style={[styles.view(isRTL), props.style]}>
+				<ScreenText variant={props.variant}>{props.title}</ScreenText>
 				<ListContentComponent props={props} isRTL={isRTL} />
 			</View>
 		</TouchableRipple>

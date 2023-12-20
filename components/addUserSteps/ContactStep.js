@@ -31,7 +31,7 @@ export default function (isStepValidName) {
 			<TextInput
 				stateName="email"
 				isValidStateName={isValidStateNames.email}
-				label={capitalize(translate("email"), false)}
+				label={translate("email", true, false)}
 				keyboardType="email-address"
 				storeAction={addUserActions}
 				formData={formData}
@@ -50,7 +50,7 @@ export default function (isStepValidName) {
 			/>
 			<TextInput
 				stateName="parentPhone"
-				label={capitalize(translate("parentPhone"), false)}
+				label={translate("parentPhone", true, false)}
 				keyboardType="phone-pad"
 				regex={/^.*$/}
 				formData={formData}

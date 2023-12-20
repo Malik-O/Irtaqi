@@ -39,7 +39,7 @@ export default function ({ color, entering }) {
 				}}
 			>
 				<ScreenText style={{ color, marginHorizontal: 10 }}>
-					{capitalize(translate("today"))}
+					{translate("today", true)}
 				</ScreenText>
 			</TouchableOpacity>
 			<TouchableOpacity onPress={() => changeMonth(1)}>

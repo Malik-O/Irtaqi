@@ -29,7 +29,7 @@ export default function (isStepValidName) {
 	return (
 		<Card>
 			<ScreenText variant="titleLarge">
-				{capitalize(translate("direction"))}
+				{translate("direction", true)}
 			</ScreenText>
 			<PickerWithSearch
 				items={directions}

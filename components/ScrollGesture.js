@@ -44,9 +44,7 @@ export default memo(function ({
 
 	const pan = Gesture.Pan()
 		.onTouchesDown(() => {
-			console.log("translateY:", translateY.value);
 			// stop scrolling
-
 			translateY.value = translateY.value;
 		})
 		.onUpdate((event) => {
@@ -61,6 +59,7 @@ export default memo(function ({
 			if (translateY.value <= -navigateHight / 2) {
 				translateX.value += event.changeX;
 			}
+			// console.log("translateY:", clamp_range.value);
 		})
 		.onFinalize((event) => {
 			if (translateY.value < clamp_range.value[0]) {
@@ -131,7 +130,7 @@ export default memo(function ({
 							style={[
 								contentStyle,
 								{
-									paddingTop: 40,
+									// paddingTop: 40,
 									// backgroundColor: "green",
 								},
 							]}

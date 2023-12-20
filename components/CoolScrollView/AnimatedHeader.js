@@ -1,4 +1,4 @@
-import { Platform } from "react-native";
+import { Platform, Dimensions } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import Animated, {
 	useAnimatedStyle,
@@ -6,24 +6,30 @@ import Animated, {
 } from "react-native-reanimated";
 // redux
 import { useSelector } from "react-redux";
-// hook
 // components
 import ScreenText from "../ScreenText";
 import HeaderButton from "../HeaderButton";
+import MenuButton from "./MenuButton";
 import BG from "./BG";
 // styles
 import styles, { titlePaddingVertical } from "./styles";
+import { paddingHorizontal } from "../../styles/layout";
+
+const { width } = Dimensions.get("screen");
 
 export default function ({
 	translateY,
 	props: { title, more, back },
 	titleDim,
 	zero,
+	stickAlone,
+	style,
 }) {
 	const { groupID } = useLocalSearchParams();
 	// lang store
 	const { locale, rtl } = useSelector((state) => state.lang);
 	const isRTL = rtl[locale];
+	// console.log("isRTL:", isRTL);
 	// animated styles
 	const titleAnimatedStyle = useAnimatedStyle(() => {
 		const titleHeight = titleDim.value.height + titlePaddingVertical;
@@ -43,7 +49,7 @@ export default function ({
 							titlePaddingVertical - titleDim.value.x || 0,
 							0,
 						]) *
-						(-1) ** isRTL,
+						(-1) ** +!!isRTL,
 				},
 				{ translateY: interpolateCustom([titleHeight || 0, 0]) },
 			],
@@ -52,9 +58,12 @@ export default function ({
 	const headerContainerAnimatedStyle = useAnimatedStyle(() => {
 		const transform = [];
 		const bottomSpacing =
-			titleDim.value.height + titlePaddingVertical * 2 || 0;
+			titleDim.value.height +
+				titlePaddingVertical *
+					2 *
+					(Platform.OS !== "ios" || !stickAlone) || 0;
 		let paddingTop = 0;
-		if (Platform.OS === "ios")
+		if (Platform.OS === "ios" && !stickAlone)
 			transform.push({ translateY: translateY.value });
 		else paddingTop = zero;
 		return {
@@ -63,12 +72,13 @@ export default function ({
 			marginBottom: titlePaddingVertical * 2,
 			transform,
 		};
-	});
+	}, [zero]);
 	return (
 		<Animated.View
 			style={[
 				styles.headerContainer,
 				headerContainerAnimatedStyle,
+				style,
 				// { overflow: "visible", backgroundColor: "red" },
 			]}
 		>
@@ -83,12 +93,7 @@ export default function ({
 			>
 				<ScreenText variant="displayMedium">{title}</ScreenText>
 			</Animated.View>
-			<HeaderButton
-				iconName="checkmark-done"
-				href={`groups/${groupID}/attendance`}
-				isExists={more}
-				style={{ alignItems: "flex-end" }}
-			/>
+			<MenuButton menu={more} />
 		</Animated.View>
 	);
 }

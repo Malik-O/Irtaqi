@@ -1,4 +1,5 @@
-import { View, Text } from "react-native";
+import { useEffect, useState } from "react";
+import { View, TouchableOpacity } from "react-native";
 // components
 import { TextInput } from "react-native-paper";
 // redux
@@ -11,8 +12,6 @@ import useTranslate from "../hook/useTranslate";
 import useTheme from "../hook/useTheme";
 // utils
 import capitalize from "../utils/capitalize";
-import { useEffect } from "react";
-
 export default function ({
 	stateName,
 	label,
@@ -29,7 +28,8 @@ export default function ({
 	const dispatch = useDispatch();
 	const translate = useTranslate();
 	const theme = useTheme();
-	label = label || capitalize(translate(stateName), false);
+	label = label || translate(stateName, true, false);
+	const [isPasswordSecure, setIsPasswordSecure] = useState(true);
 	// validate
 	function validate(text = formData[stateName]?.trim()) {
 		if (!isValidStateName) return;
@@ -64,8 +64,18 @@ export default function ({
 				keyboardType={keyboardType}
 				underlineColor={underlineColor}
 				placeholder={placeholder}
-				secureTextEntry={secureTextEntry}
-				// right={<TextInput.Icon icon="eye" />}
+				secureTextEntry={secureTextEntry && isPasswordSecure}
+				right={
+					secureTextEntry && (
+						<TextInput.Icon
+							icon={isPasswordSecure ? "eye" : "eye-off"}
+							onPress={() =>
+								setIsPasswordSecure(!isPasswordSecure)
+							}
+						/>
+					)
+				}
+				autoCorrect={false}
 			/>
 			<View
 				style={{

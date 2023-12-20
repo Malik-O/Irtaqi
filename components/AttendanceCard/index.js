@@ -37,7 +37,7 @@ export default function ({ student, href }) {
 	const { attendanceHistory } = useSelector((state) => state.groups);
 	// filter out the history
 	const currHistory = useMemo(() => {
-		console.log("attendanceHistory:", attendanceHistory);
+		// console.log("attendanceHistory:", attendanceHistory);
 		return attendanceHistory.filter((h) =>
 			sameHistoryCondition(h, {
 				...student,

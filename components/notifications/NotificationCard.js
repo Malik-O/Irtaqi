@@ -1,4 +1,5 @@
 import { View } from "react-native";
+import Animated, { FadeInLeft } from "react-native-reanimated";
 // components
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { TouchableRipple } from "react-native-paper";
@@ -51,6 +52,7 @@ const notificationTypes = {
 		color: "error",
 	},
 };
+
 export default function ({ notification }) {
 	const translate = useTranslate();
 	const theme = useTheme();
@@ -63,7 +65,8 @@ export default function ({ notification }) {
 				marginBottom: paddingHorizontal / 2,
 			}}
 		>
-			<View
+			<Animated.View
+				entering={FadeInLeft}
 				style={{
 					flexDirection: "row",
 					gap: paddingHorizontal,
@@ -101,7 +104,7 @@ export default function ({ notification }) {
 					</ScreenText>
 				</View>
 				{SeenIndicator(notification.seen)}
-			</View>
+			</Animated.View>
 		</TouchableRipple>
 	);
 }

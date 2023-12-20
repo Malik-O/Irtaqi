@@ -25,7 +25,7 @@ import NavigationArea from "./NavigationArea";
 
 export default function ({
 	children,
-	navigationData,
+	navigationData = [],
 	hasNavigationHeader = true,
 	onRefresh,
 }) {

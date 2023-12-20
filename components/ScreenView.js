@@ -4,6 +4,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import styles from "../styles/layout";
 // components
 import Snackbar from "./notifications/Snackbar";
+//
+import useTheme from "../hook/useTheme";
 
 function ScrollViewExists({ condition, children }) {
 	if (condition) return <ScrollView>{children}</ScrollView>;
@@ -15,6 +17,7 @@ export default function ({
 	paddingTop = true,
 	style,
 }) {
+	const theme = useTheme();
 	const colorScheme = useColorScheme();
 	const insets = useSafeAreaInsets();
 	return (
@@ -26,6 +29,7 @@ export default function ({
 					{
 						paddingTop: paddingTop ? insets.top : 0,
 						paddingBottom: insets.bottom,
+						backgroundColor: theme.tertiary,
 					},
 					style,
 				]}
