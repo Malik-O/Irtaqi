@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { memo } from "react";
 import Animated, { FadeInDown } from "react-native-reanimated";
 // components
 import DayButton from "./DayButton";
@@ -11,16 +11,16 @@ import useAnimationBlock from "../../../hook/useAnimationBlock";
 // styles
 import styles from "../styles";
 
-export default function ({ color, animationList }) {
+export default memo(function ({ color, animationList, onStatusChanges }) {
 	// add animation block
-	const { addAnimationBlock } = useAnimationBlock(animationList);
+	const { addAnimationBlock } = useAnimationBlock();
 	// redux
 	const dispatch = useDispatch();
 	const { monthWeeks, selectedRow } = useWeeks();
 	const { globalDate } = useSelector((state) => state.globalDate);
 	// handle button events
 	const handlePress = (day) => {
-		const date = globalDate.setDate(day);
+		onStatusChanges(0);
 		dispatch(globalDateActions.set(day));
 	};
 
@@ -28,7 +28,7 @@ export default function ({ color, animationList }) {
 		<Animated.View
 			key={i}
 			style={styles.calendarRow}
-			entering={addAnimationBlock(FadeInDown, 500, -300)}
+			entering={addAnimationBlock(FadeInDown, 500, -500)}
 		>
 			{week.map((day, i) => (
 				<DayButton
@@ -40,4 +40,4 @@ export default function ({ color, animationList }) {
 			))}
 		</Animated.View>
 	));
-}
+});

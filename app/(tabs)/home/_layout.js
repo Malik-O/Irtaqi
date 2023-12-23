@@ -9,11 +9,13 @@ export default function () {
 	const theme = useTheme();
 	return (
 		<Stack
-			screenOptions={{
-				headerStyle: { backgroundColor: theme.secondary },
-				headerTitleStyle: { color: theme.reverse.secondary },
-				// headerShown: false,
-			}}
+			screenOptions={
+				{
+					// headerStyle: { backgroundColor: theme.secondary },
+					// headerTitleStyle: { color: theme.reverse.secondary },
+					// headerShown: false,
+				}
+			}
 		>
 			<Stack.Screen name="index" />
 			<Stack.Screen

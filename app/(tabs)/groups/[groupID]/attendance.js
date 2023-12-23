@@ -9,7 +9,7 @@ import ScreenView from "../../../../components/ScreenView";
 import ScreenText from "../../../../components/ScreenText";
 import GlobalDatePicker from "../../../../components/GlobalDatePicker";
 import AttendanceCard from "../../../../components/AttendanceCard";
-import ScrollViewWithPicker from "../../../../components/ScrollViewWithPicker";
+import DatePickerViewV2 from "../../../../components/DatePickerViewV2";
 //* hook
 import useGroupAttendance from "../../../../hook/attendance/useGroupAttendance";
 //* utils
@@ -34,7 +34,7 @@ export default function () {
 		// callBack();
 	}
 	return (
-		<ScrollViewWithPicker
+		<DatePickerViewV2
 			hasNavigationHeader={false}
 			onRefresh={refetchGroupAttendance}
 		>
@@ -50,6 +50,6 @@ export default function () {
 					<AttendanceCard key={i} student={student} />
 				))
 			)}
-		</ScrollViewWithPicker>
+		</DatePickerViewV2>
 	);
 }

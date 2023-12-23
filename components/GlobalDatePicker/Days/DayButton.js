@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Pressable, View } from "react-native";
 import styles from "../styles";
 // redux
@@ -9,10 +10,7 @@ import extractISODate from "../../../utils/extractISODate";
 
 const today = new Date().toLocaleDateString("en-GB");
 
-export default function ({ handlePress, day, color }) {
-	useEffect(() => {
-		"updated";
-	});
+export default memo(function ({ handlePress, day, color }) {
 	const { globalDate, selectedMonth } = useSelector(
 		(state) => state.globalDate,
 	);
@@ -33,4 +31,4 @@ export default function ({ handlePress, day, color }) {
 			/>
 		</Pressable>
 	);
-}
+});

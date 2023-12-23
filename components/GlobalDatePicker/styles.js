@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 export const dayButtonTextSize = 20;
 export const dayButtonTextPaddingVertical = 10;
 export const dayButtonTextInnerHight =
-	dayButtonTextSize + dayButtonTextPaddingVertical * 2;
+	dayButtonTextSize + dayButtonTextPaddingVertical * 2 + 10;
 
 export const selectedBGColor = {
 	light: "rgba(0, 0, 0, 0.2)",
@@ -15,6 +15,7 @@ export default StyleSheet.create({
 	dayButton: ({ isThisMonth, isToday, isSelected, colorScheme, color }) => ({
 		borderColor: color,
 		borderWidth: isToday ? 1 : 0,
+		marginBottom: 10,
 		transform: [{ scale: 0.9 }],
 		borderRadius: dayButtonTextSize,
 		paddingHorizontal: 10,

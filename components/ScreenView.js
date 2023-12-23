@@ -7,8 +7,18 @@ import Snackbar from "./notifications/Snackbar";
 //
 import useTheme from "../hook/useTheme";
 
-function ScrollViewExists({ condition, children }) {
-	if (condition) return <ScrollView>{children}</ScrollView>;
+function ScrollViewExists({
+	condition,
+	scrollEnabled,
+	scrollViewRef,
+	children,
+}) {
+	if (condition)
+		return (
+			<ScrollView scrollEnabled={scrollEnabled} ref={scrollViewRef}>
+				{children}
+			</ScrollView>
+		);
 	else return children;
 }
 export default function ({
@@ -16,6 +26,8 @@ export default function ({
 	hasScrollView = true,
 	paddingTop = true,
 	style,
+	scrollEnabled = true,
+	scrollViewRef,
 }) {
 	const theme = useTheme();
 	const colorScheme = useColorScheme();
@@ -35,7 +47,11 @@ export default function ({
 				]}
 			>
 				{/* <Text>{JSON.stringify(colorScheme)}</Text> */}
-				<ScrollViewExists condition={hasScrollView}>
+				<ScrollViewExists
+					condition={hasScrollView}
+					scrollEnabled={scrollEnabled}
+					scrollViewRef={scrollViewRef}
+				>
 					{children}
 				</ScrollViewExists>
 			</View>

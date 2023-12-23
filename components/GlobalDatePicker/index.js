@@ -1,5 +1,6 @@
-import { View } from "react-native";
+import { View, Button, Dimensions } from "react-native";
 import Animated, {
+	withTiming,
 	useAnimatedStyle,
 	interpolate,
 	FadeInRight,
@@ -24,7 +25,9 @@ import useAnimationBlock from "../../hook/useAnimationBlock";
 import styles, { dayButtonTextInnerHight } from "./styles";
 import { paddingHorizontal } from "../../styles/layout";
 
-export default function ({ collapseOpen }) {
+const { height } = Dimensions.get("screen");
+
+export default function ({ collapseOpen, onStatusChanges }) {
 	const translate = useTranslate();
 	const theme = useTheme();
 	const textColor = theme.reverse.secondary;
@@ -40,9 +43,11 @@ export default function ({ collapseOpen }) {
 	// animated styles
 	const containerAnimatedStyle = useAnimatedStyle(
 		() => ({
-			height:
-				dayButtonTextInnerHight *
-				monthWeeks.length ** collapseOpen.value,
+			height: interpolate(
+				collapseOpen.value,
+				[1, 0],
+				[height, dayButtonTextInnerHight],
+			),
 			overflow: "hidden",
 		}),
 		[collapseOpen, monthWeeks.length],
@@ -90,11 +95,6 @@ export default function ({ collapseOpen }) {
 						</ScreenText>
 					</Animated.View>
 				</View>
-				{/* navigate throw months */}
-				<MonthsNav
-					color={textColor}
-					entering={addAnimationBlock(FadeInLeft, 500, -300)}
-				/>
 			</View>
 			{/* <ScreenText reverse>{subtitleDate?.join(" ")}</ScreenText> */}
 			{/* days titles */}
@@ -111,7 +111,15 @@ export default function ({ collapseOpen }) {
 				<Animated.View
 					style={[contentAnimatedStyle, { flexDirection: "column" }]}
 				>
-					<Days color={textColor} animationList={animationList} />
+					<Days
+						color={textColor}
+						animationList={animationList}
+						onStatusChanges={onStatusChanges}
+					/>
+					<MonthsNav
+						color={textColor}
+						entering={addAnimationBlock(FadeInLeft, 500, -300)}
+					/>
 				</Animated.View>
 			</Animated.View>
 		</View>

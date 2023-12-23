@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { View, useColorScheme } from "react-native";
 // components
 import ScreenText from "../../ScreenText";
@@ -5,7 +6,13 @@ import styles from "../styles";
 //
 import useTheme from "../../../hook/useTheme";
 
-export default function ({ day, isThisMonth, isToday, isSelected, color }) {
+export default memo(function ({
+	day,
+	isThisMonth,
+	isToday,
+	isSelected,
+	color,
+}) {
 	const colorScheme = useColorScheme();
 	const theme = useTheme();
 	return (
@@ -25,4 +32,4 @@ export default function ({ day, isThisMonth, isToday, isSelected, color }) {
 			</ScreenText>
 		</View>
 	);
-}
+});

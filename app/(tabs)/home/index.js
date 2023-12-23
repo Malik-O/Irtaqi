@@ -6,9 +6,8 @@ import Animated, {
 	useAnimatedStyle,
 } from "react-native-reanimated";
 // components
-import AnimatedHeader from "../../../components/CoolScrollView/AnimatedHeader";
-import CoolRefreshableView from "../../../components/CoolRefreshableView";
 import ScreenView from "../../../components/ScreenView";
+import DatePickerViewV2 from "../../../components/DatePickerViewV2";
 // hook
 import useZero from "../../../hook/useZero";
 
@@ -83,10 +82,9 @@ function List() {
 	);
 }
 export default function () {
-	return <List />;
-	// return (
-	// 	<CoolRefreshableView navigationData={navigationData}>
-	// 		<Text style={{ height: 1000, color: "red" }}>index</Text>
-	// 	</CoolRefreshableView>
-	// );
+	return (
+		<DatePickerViewV2>
+			<View style={{ backgroundColor: "red", height: 1000 }} />
+		</DatePickerViewV2>
+	);
 }

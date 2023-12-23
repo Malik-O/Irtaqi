@@ -1,11 +1,11 @@
-import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import Animated, {
 	useSharedValue,
 	useAnimatedStyle,
 	withSpring,
 } from "react-native-reanimated";
-import React from "react";
-import { Card } from "react-native-paper";
+import { useRouter, usePathname } from "expo-router";
+import { useState } from "react";
 // redux
 import { useSelector } from "react-redux";
 // hook
@@ -23,6 +23,8 @@ import ScreenText from "../ScreenText";
 
 const config = { duration: 200 };
 export default function ({ plan }) {
+	const pathname = usePathname();
+	const router = useRouter();
 	const translate = useTranslate();
 	const getPlanCardString = usePlanInstanceString();
 	const isPressIn = useSharedValue(false);
@@ -36,7 +38,7 @@ export default function ({ plan }) {
 		],
 	}));
 
-	const [visible, setVisible] = React.useState(false);
+	const [visible, setVisible] = useState(false);
 
 	const showDialog = () => setVisible(true);
 
@@ -44,15 +46,16 @@ export default function ({ plan }) {
 
 	return (
 		<View>
-			<TouchableWithoutFeedback
-				onPressIn={() => {
-					isPressIn.value = true;
-				}}
-				onPressOut={() => {
-					isPressIn.value = false;
-				}}
+			<TouchableOpacity
+				// onPressIn={() => {
+				// 	isPressIn.value = true;
+				// }}
+				// onPressOut={() => {
+				// 	isPressIn.value = false;
+				// }}
 				onPress={() => {
-					setVisible(true);
+					// setVisible(true);
+					router.push(`${pathname}/${plan.id}`);
 				}}
 			>
 				<Animated.View style={[styles.planCardContainer, cardStyle]}>
@@ -61,9 +64,9 @@ export default function ({ plan }) {
 					</ScreenText>
 					<ScreenText>{getPlanCardString(plan)}</ScreenText>
 				</Animated.View>
-			</TouchableWithoutFeedback>
+			</TouchableOpacity>
 
-			<Portal>
+			{/* <Portal>
 				<Dialog
 					visible={visible}
 					onDismiss={hideDialog}
@@ -89,7 +92,7 @@ export default function ({ plan }) {
 						</Button>
 					</Dialog.Actions>
 				</Dialog>
-			</Portal>
+			</Portal> */}
 		</View>
 	);
 }

@@ -1,4 +1,4 @@
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View, useColorScheme } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 // components
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -18,6 +18,7 @@ function arrowIcon(direction, isRTL) {
 }
 
 export default function ({ color, entering }) {
+	const colorScheme = useColorScheme();
 	const dispatch = useDispatch();
 	const translate = useTranslate();
 	const { changeMonth } = useWeeks();
@@ -28,22 +29,44 @@ export default function ({ color, entering }) {
 	return (
 		<Animated.View
 			entering={entering}
-			style={{ flexDirection: "row", alignItems: "center" }}
+			style={{
+				flexDirection: "row",
+				alignItems: "center",
+				justifyContent: "space-between",
+				width: "100%",
+				marginTop: 10,
+			}}
 		>
 			<TouchableOpacity onPress={() => changeMonth(-1)}>
-				<Ionicons name={arrowIcon(1, isRTL)} size={30} color={color} />
+				<Ionicons name={arrowIcon(1, isRTL)} size={50} color={color} />
 			</TouchableOpacity>
 			<TouchableOpacity
 				onPress={() => {
 					dispatch(globalDateActions.set(new Date()));
 				}}
 			>
-				<ScreenText style={{ color, marginHorizontal: 10 }}>
-					{translate("today", true)}
-				</ScreenText>
+				<View
+					style={{
+						transform: [{ scale: 0.7 }],
+						color,
+						marginHorizontal: 10,
+						borderWidth: 1,
+						borderRadius: "50%",
+						paddingHorizontal: 70,
+						paddingVertical: 10,
+						borderColor:
+							colorScheme === "dark"
+								? "rgba(255, 255, 255,0.5)"
+								: "rgba(0, 0, 0,0.5)",
+					}}
+				>
+					<ScreenText variant="displaySmall">
+						{translate("today", true)}
+					</ScreenText>
+				</View>
 			</TouchableOpacity>
 			<TouchableOpacity onPress={() => changeMonth(1)}>
-				<Ionicons name={arrowIcon(0, isRTL)} size={30} color={color} />
+				<Ionicons name={arrowIcon(0, isRTL)} size={50} color={color} />
 			</TouchableOpacity>
 		</Animated.View>
 	);

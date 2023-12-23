@@ -180,4 +180,5 @@ export default {
 	chooseLang: "اختر اللغة",
 	//
 	attendance: "الحضور",
+	showAllCalendar: "التقويم",
 };

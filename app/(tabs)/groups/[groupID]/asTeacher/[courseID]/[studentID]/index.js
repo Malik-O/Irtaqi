@@ -17,6 +17,7 @@ import PlansArea from "../../../../../../../components/plans/PlansArea";
 import ScreenView from "../../../../../../../components/ScreenView";
 import HeaderButton from "../../../../../../../components/HeaderButton";
 import MenuButton from "../../../../../../../components/CoolScrollView/MenuButton";
+import DatePickerViewV2 from "../../../../../../../components/DatePickerViewV2";
 
 const list = ["one", "two", "three", "four", "five", "six"];
 // hooks
@@ -37,12 +38,10 @@ export default function () {
 	const plans = useWhichInstanceIsToday();
 	const advancedDays = eachDay(plans);
 	return (
-		<ScreenView hasScrollView={false} paddingTop={false}>
+		<DatePickerViewV2>
 			<Stack.Screen
 				options={{
 					headerTitle: selectedStudent._j.first_name,
-					// headerRight: () => <MenuButton menu={props.more} />,
-					headerLeft: () => <HeaderButton isExists={true} back />,
 				}}
 			/>
 			<ScrollView style={{ marginTop: 20 }}>
@@ -65,7 +64,7 @@ export default function () {
 				{/* advanced cards */}
 				<AdvancedArea advancedDays={advancedDays} />
 			</ScrollView>
-		</ScreenView>
+		</DatePickerViewV2>
 	);
 }
 

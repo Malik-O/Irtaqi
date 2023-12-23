@@ -1,4 +1,4 @@
-import { TouchableWithoutFeedback } from "react-native";
+import { TouchableOpacity } from "react-native";
 import Animated, {
 	useSharedValue,
 	useAnimatedStyle,
@@ -25,14 +25,14 @@ export default function ({ item: { title } = {}, href, children, style }) {
 	}));
 	const config = { duration: 300 };
 	return (
-		<TouchableWithoutFeedback
+		<TouchableOpacity
 			disabled={!href}
-			onPressIn={() => {
-				isPressIn.value = withSpring(1, config);
-			}}
-			onPressOut={() => {
-				isPressIn.value = withSpring(0, config);
-			}}
+			// onPressIn={() => {
+			// 	isPressIn.value = withSpring(1, config);
+			// }}
+			// onPressOut={() => {
+			// 	isPressIn.value = withSpring(0, config);
+			// }}
 			onPress={() => {
 				router.push(href);
 				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -51,6 +51,6 @@ export default function ({ item: { title } = {}, href, children, style }) {
 					children
 				)}
 			</Animated.View>
-		</TouchableWithoutFeedback>
+		</TouchableOpacity>
 	);
 }

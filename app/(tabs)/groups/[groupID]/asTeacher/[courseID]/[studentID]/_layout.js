@@ -8,10 +8,12 @@ export default function () {
 	const theme = useTheme();
 	return (
 		<Stack
-			screenOptions={{
-				headerStyle: { backgroundColor: theme.secondary },
-				headerTitleStyle: { color: theme.reverse.secondary },
-			}}
+			screenOptions={
+				{
+					// headerStyle: { backgroundColor: theme.secondary },
+					// headerTitleStyle: { color: theme.reverse.secondary },
+				}
+			}
 		>
 			<Stack.Screen name="index" />
 			<Stack.Screen
@@ -19,6 +21,14 @@ export default function () {
 				options={{
 					presentation: "modal",
 					headerBackButtonMenuEnabled: true,
+					header: () => null,
+				}}
+			/>
+			<Stack.Screen
+				name="[planID]"
+				options={{
+					presentation: "modal",
+					// headerBackButtonMenuEnabled: true,
 					header: () => null,
 				}}
 			/>

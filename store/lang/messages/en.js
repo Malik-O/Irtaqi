@@ -162,4 +162,5 @@ export default {
 	chooseLang: "choose language",
 	//
 	attendance: "attendance",
+	showAllCalendar: "calendar",
 };
