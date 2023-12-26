@@ -17,39 +17,32 @@ export default async function () {
 	// redux
 	// const { groups } = useSelector((state) => state.groups);
 	//
-	const { courseID, studentID } = useLocalSearchParams();
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState("");
+	const { studentID } = useLocalSearchParams();
+	// const [isLoading, setIsLoading] = useState(false);
 	//
 	const GetPlans = graphQl.queries.GetPlans;
-	const [
-		getPlans,
-		{ graphQlLoading, error: graphQlError, data: graphQlData },
-	] = useLazyQuery(GetPlans);
+	const [getPlans, { loading, error: graphQlError, data: graphQlData }] =
+		useLazyQuery(GetPlans);
 
 	useEffect(() => {
-		setIsLoading(true);
+		// setIsLoading(true);
 		getPlans({ variables: { entityID: studentID } })
 			.then(({ data }) => {
 				PlanStoreConnectionsInstance.init(data.plans);
-				setIsLoading(false);
+				// setIsLoading(false);
 			})
 			.catch((err) => {
-				setError(
-					"there is a problem loading the groups, please try again later.",
-				);
 				pushNotification({
 					type: "error",
 					message: "QueryError",
 					error: JSON.stringify(err),
 				});
+			})
+			.finally(() => {
+				// get the stored Plans
+				PlanStoreConnectionsInstance.get();
 			});
 	}, []);
-	// get the stored Plans
-	// const planConnectionsInstance = connectToPlansStore();
-	useEffect(() => {
-		PlanStoreConnectionsInstance.get();
-	}, []);
 
-	return { isLoading, error };
+	return { isLoading: loading };
 }

@@ -1,90 +1,17 @@
-import { View, Text, Dimensions } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
-import Animated, {
-	useSharedValue,
-	withTiming,
-	useAnimatedStyle,
-} from "react-native-reanimated";
-// components
-import ScreenView from "../../../components/ScreenView";
-import DatePickerViewV2 from "../../../components/DatePickerViewV2";
-// hook
-import useZero from "../../../hook/useZero";
+import "../../../wdyr";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { SafeAreaView, View, Text, Button } from "react-native";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import Agenda from "../../../components/Agenda";
 
-const navigationData = [
-	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
-	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
-	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
-	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
-	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
-	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
-	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
-	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
-	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
-	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
-	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
-	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
-	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
-	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
-	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
-	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
-	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
-	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
-	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
-	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
-	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
-	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
-	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
-	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
-	{ first_name: "محمد علاء", id: "6514396c1ffb2f1f855acff8", selected: true },
-	{ first_name: "زياد مصطفى", id: "6553dc479c1608ae3fbacca1" },
-];
-
-const { height } = Dimensions.get("screen");
-
-function List() {
-	const zero = useZero();
-	const translateY = useSharedValue(zero);
-	const titleDim = useSharedValue({});
-	const props = {
-		title: "notifications",
-		back: true,
-		more: false,
-	};
-
-	function onScroll(e) {
-		translateY.value = e.nativeEvent.contentOffset.y + zero;
-	}
-
-	const flatListStyle = useAnimatedStyle(() => ({
-		paddingTop: zero + 130,
-	}));
+function index() {
 	return (
-		<ScreenView hasScrollView={false} paddingTop={false}>
-			<Animated.FlatList
-				style={[{ marginBottom: 100 }]}
-				data={navigationData}
-				onScroll={onScroll}
-				scrollEventThrottle={16}
-				keyExtractor={(_, i) => i}
-				renderItem={({ item, index }) => {
-					return (
-						<Text
-							style={{ fontSize: 30, color: "red" }}
-							key={index}
-						>
-							{item.first_name}
-						</Text>
-					);
-				}}
-			/>
-		</ScreenView>
+		<SafeAreaView style={{ flex: 1 }}>
+			<Agenda />
+		</SafeAreaView>
 	);
 }
-export default function () {
-	return (
-		<DatePickerViewV2>
-			<View style={{ backgroundColor: "red", height: 1000 }} />
-		</DatePickerViewV2>
-	);
-}
+index.whyDidYouRender = {
+	logOnDifferentValues: true,
+};
+export default index;

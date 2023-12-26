@@ -1,3 +1,5 @@
+import "../../../../../../wdyr";
+import { useMemo, memo, useEffect, useState, useRef } from "react";
 import { View, Text } from "react-native";
 import {
 	useLocalSearchParams,
@@ -15,9 +17,10 @@ import ScreenText from "../../../../../../components/ScreenText";
 import CoolScrollView from "../../../../../../components/CoolScrollView";
 import HeaderButton from "../../../../../../components/HeaderButton";
 import MenuButton from "../../../../../../components/CoolScrollView/MenuButton";
+// hook
+import useTheme from "../../../../../../hook/useTheme";
 // paper
 import useTranslate from "../../../../../../hook/useTranslate";
-
 // resolvers
 function fullName(entity) {
 	return `${entity.first_name} ${entity.parent_name || ""}`;
@@ -25,33 +28,63 @@ function fullName(entity) {
 function resolveRouter(pathname, studentID) {
 	return { pathname: `${pathname}/[studentID]`, params: { studentID } };
 }
-export default function () {
+function useCurrPth() {
+	const pathnameRef = useRef(null);
+	const pathname = usePathname();
+	pathnameRef.current = pathname;
+	return "/groups/650552241bac85c6cc903432/asTeacher/651438b01ffb2f1f855acff7";
+}
+function index() {
+	// console.log("renders----------------------------------:", 0);
 	const { groupID, courseID } = useLocalSearchParams();
 	const router = useRouter();
+	// console.log("pathname:", pathname);
 	const pathname = usePathname();
+	// const pathnameRef = useRef(pathname);
+	// pathnameRef.current = pathname;
 	const translate = useTranslate();
 	// redux
 	const { groups } = useSelector((state) => state.groups);
-	const selectedGroup = groups.filter((group) => group.id === groupID)[0];
-	const selectedCourse = selectedGroup.courses.filter(
-		(course) => course.id === courseID,
-	)[0];
-	const props = {
-		title: selectedGroup.title,
-		// tabs: selectedGroup.courses,
-		back: true,
-		more: {
-			// icon: "",
-			items: [
-				{
-					title: translate("attendance", true),
-					onPress: () => {
-						router.replace(`groups/${groupID}/attendance`);
+	const groupsRef = useRef(groups);
+	groupsRef.current = groups;
+	const selectedGroup = useMemo(() => {
+		console.log("groupsRef.current:", groupsRef.current);
+		return groupsRef.current.filter((group) => group.id === groupID)[0];
+	}, []);
+	const floatingStudents = useMemo(() => {
+		console.log("selectedGroup:", selectedGroup);
+		return selectedGroup.courses.filter(
+			(course) => course.id === courseID,
+		)[0]?.floatingStudents;
+	}, []);
+	const studentList = useMemo(
+		() =>
+			floatingStudents.map((student) => ({
+				...student,
+				title: fullName(student),
+				href: resolveRouter(pathname, student.id),
+			})),
+		[],
+	);
+	const props = useMemo(
+		() => ({
+			title: selectedGroup.title,
+			// tabs: selectedGroup.courses,
+			back: true,
+			more: {
+				// icon: "",j
+				items: [
+					{
+						title: translate("attendance", true),
+						onPress: () => {
+							router.replace(`groups/${groupID}/attendance`);
+						},
 					},
-				},
-			],
-		},
-	};
+				],
+			},
+		}),
+		[],
+	);
 	return (
 		<ScreenView hasScrollView={false} paddingTop={false}>
 			<Stack.Screen
@@ -63,22 +96,20 @@ export default function () {
 			/>
 			<Animated.FlatList
 				style={[{ marginBottom: 80 }]}
-				data={selectedCourse?.floatingStudents}
+				data={studentList}
 				scrollEventThrottle={16}
 				keyExtractor={(_, i) => i}
 				renderItem={({ item, index }) => {
-					return (
-						<Card
-							key={index}
-							item={{ ...item, title: fullName(item) }}
-							href={resolveRouter(pathname, item.id)}
-						/>
-					);
+					return <Card key={index} item={item} href={item.href} />;
 				}}
 			/>
 		</ScreenView>
 	);
 }
+index.whyDidYouRender = {
+	logOnDifferentValues: true,
+};
+export default memo(index);
 
 // const groups = [
 // 	{

@@ -60,6 +60,7 @@ function Content() {
 }
 
 export default function () {
+	console.log("groups:");
 	const translate = useTranslate();
 	const scrollViewProps = {
 		title: translate("groups"),

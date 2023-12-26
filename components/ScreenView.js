@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { View, useColorScheme, ScrollView, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 // styles
@@ -21,7 +22,7 @@ function ScrollViewExists({
 		);
 	else return children;
 }
-export default function ({
+export default memo(function ({
 	children,
 	hasScrollView = true,
 	paddingTop = true,
@@ -33,7 +34,7 @@ export default function ({
 	const colorScheme = useColorScheme();
 	const insets = useSafeAreaInsets();
 	return (
-		<View style={[StyleSheet.absoluteFill]}>
+		<View style={[StyleSheet.absoluteFill, { flex: 1 }]}>
 			<Snackbar />
 			<View
 				style={[
@@ -57,4 +58,4 @@ export default function ({
 			</View>
 		</View>
 	);
-}
+});

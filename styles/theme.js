@@ -2,6 +2,7 @@ const theme = {
 	light: {
 		primary: "#88B9F2",
 		secondary: "#ffffff",
+		fadeSecondary: "rgba(255, 255, 255, 0.5)",
 		tertiary: "#dedede",
 		cardColor: "#ffffff",
 		error: "#AB4F4F",
@@ -11,6 +12,7 @@ const theme = {
 	dark: {
 		primary: "#207EAC",
 		secondary: "#2b2833",
+		fadeSecondary: "rgba(43, 40, 51, 0.5)",
 		tertiary: "#1d1b20",
 		cardColor: "#312b37",
 		error: "#D66363",

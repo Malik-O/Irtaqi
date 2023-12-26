@@ -5,6 +5,28 @@ export const tabBarBubbleShift = 50;
 export const tabBarHeight = 300;
 export const MAGIC_NUM = 0.5522847498;
 
+export const SHADOWS = {
+	small: {
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 10,
+		},
+		shadowOpacity: 0.1,
+		shadowRadius: 3.84,
+		elevation: 2,
+	},
+	medium: {
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 5.84,
+		elevation: 5,
+	},
+};
 export default StyleSheet.create({
 	screenView: (theme) => ({
 		flex: 1,
@@ -50,5 +72,6 @@ export default StyleSheet.create({
 		paddingHorizontal,
 		paddingVertical: paddingHorizontal,
 		borderRadius: 15,
+		...SHADOWS.medium,
 	}),
 });

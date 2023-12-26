@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from "react";
 import { TouchableOpacity, useColorScheme } from "react-native";
 import { useRouter } from "expo-router";
 import Animated from "react-native-reanimated";
@@ -21,26 +22,25 @@ export default function ({
 	const theme = useTheme();
 	// lang store
 	const { locale, rtl } = useSelector((state) => state.lang);
-	const isRTL = rtl[locale];
 	// displayed icon
-	function icon() {
-		if (back) return isRTL ? "chevron-forward" : "chevron-back";
+	const icon = useMemo(() => {
+		if (back) return rtl[locale] ? "chevron-forward" : "chevron-back";
 		else if (iconName) return iconName;
-	}
+	});
 	// router stuff
 	const router = useRouter();
-	function onPress() {
+	const onPress = useCallback(function () {
 		if (onPressEvent) return onPressEvent();
 		if (back) router.back();
 		else if (href) router.push(href);
-	}
+	});
 	//
 	return (
 		<Animated.View style={[style]}>
 			<TouchableOpacity onPress={onPress}>
 				{isExists ? (
 					<Ionicons
-						name={icon()}
+						name={icon}
 						size={30}
 						color={theme.reverse.secondary}
 					/>

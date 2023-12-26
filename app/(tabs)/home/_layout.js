@@ -7,6 +7,7 @@ import useTheme from "../../../hook/useTheme";
 
 export default function () {
 	const theme = useTheme();
+	console.log("home:");
 	return (
 		<Stack
 			screenOptions={

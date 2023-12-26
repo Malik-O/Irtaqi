@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 // components
@@ -7,7 +8,7 @@ import PlanCard from "../../components/plans/PlanCard";
 import usePlans from "../../hook/plans/usePlans";
 import useTranslate from "../../hook/useTranslate";
 
-export default function ({ plans }) {
+export default function ({ plans, openSheet }) {
 	const translate = useTranslate();
 	// get the plans
 	const { isLoading } = usePlans();
@@ -20,7 +21,7 @@ export default function ({ plans }) {
 			<View>
 				<ScrollView horizontal>
 					{plans.map((plan, i) => (
-						<PlanCard plan={plan} key={i} />
+						<PlanCard plan={plan} key={i} openSheet={openSheet} />
 					))}
 				</ScrollView>
 			</View>

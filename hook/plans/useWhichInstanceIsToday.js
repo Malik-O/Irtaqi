@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 // utils
 import extractISODate from "../../utils/extractISODate";
 // redux
@@ -26,13 +26,11 @@ function addPlanOfTheDay(plans, selectedDate) {
 export default function () {
 	// const dispatch = useDispatch();
 	const { plans } = useSelector((state) => state.plans);
-	const [allPlans, setAllPlans] = useState([...plans]);
+	// const [allPlans, setAllPlans] = useState([...plans]);
 	const { globalDate } = useSelector((state) => state.globalDate);
 	// update the plans when changing
-	useEffect(() => {
-		const afterAddingDay = addPlanOfTheDay(plans, globalDate);
-		// dispatch(plansActions.initPlans(afterAddingDay));
-		setAllPlans(afterAddingDay);
-	}, [globalDate, plans]);
-	return allPlans;
+	return useMemo(() => {
+		return addPlanOfTheDay(plans, globalDate);
+	});
+	// return allPlans;
 }

@@ -1,6 +1,8 @@
+import "../wdyr";
 import { Stack } from "expo-router";
 // components
 import ApolloProvider from "../components/ApolloProvider";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 // redux
 import { Provider } from "react-redux";
 import { Store } from "../store";
@@ -12,12 +14,14 @@ export default function _layout() {
 		<ApolloProvider>
 			<Provider store={Store}>
 				<PaperProvider>
-					<Stack
-						screenOptions={{
-							headerShown: false,
-							animation: "fade",
-						}}
-					></Stack>
+					<BottomSheetModalProvider>
+						<Stack
+							screenOptions={{
+								headerShown: false,
+								animation: "fade",
+							}}
+						></Stack>
+					</BottomSheetModalProvider>
 				</PaperProvider>
 			</Provider>
 		</ApolloProvider>

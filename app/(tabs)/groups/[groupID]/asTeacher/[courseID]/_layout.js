@@ -14,7 +14,7 @@ export default function () {
 				// header: () => null,
 			}}
 		>
-			<Stack.Screen name="index" />
+			<Stack.Screen name="index" options={{ animation: "fade" }} />
 			<Stack.Screen name="[studentID]" options={{ header: () => null }} />
 		</Stack>
 	);

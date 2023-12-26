@@ -1,3 +1,4 @@
+import "../wdyr";
 import { useEffect } from "react";
 import { Redirect, SplashScreen } from "expo-router";
 import { useFonts } from "expo-font";

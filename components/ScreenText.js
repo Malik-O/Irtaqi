@@ -3,8 +3,9 @@ import { useColorScheme } from "react-native";
 import styles from "../styles/layout";
 // paper
 import { Text } from "react-native-paper";
+import { useMemo, memo } from "react";
 
-export default function ({
+export default memo(function ({
 	children,
 	reverse = false,
 	variant = "bodyMedium",
@@ -13,10 +14,10 @@ export default function ({
 }) {
 	let colorScheme = useColorScheme();
 	if (textOverflow)
-		textOverflow = {
+		textOverflow = useMemo(() => ({
 			numberOfLines: 1,
 			ellipsizeMode: "tail",
-		};
+		}));
 	return (
 		<Text
 			variant={variant}
@@ -30,4 +31,4 @@ export default function ({
 			{children}
 		</Text>
 	);
-}
+});
