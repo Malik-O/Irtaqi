@@ -1,4 +1,4 @@
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, FlatList } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	withTiming,
@@ -7,20 +7,27 @@ import Animated, {
 const { width } = Dimensions.get("screen");
 
 export default function stepperContent({ steps, activeIndex }) {
-	const stepperContentStyle = useAnimatedStyle(() => ({
-		transform: [{ translateX: withTiming(width * activeIndex) }],
-	}));
+	// const stepperContentStyle = useAnimatedStyle(() => ({
+	// 	transform: [{ translateX: withTiming(width * activeIndex) }],
+	// }));
 	return (
-		<View>
-			<Animated.View
-				style={[stepperContentStyle, { flexDirection: "row" }]}
-			>
-				{steps.map((step, i) => (
-					<View style={{ width }} key={i}>
-						{step?.ele(step?.isStepValid)}
+		<FlatList
+			contentContainerStyle={[
+				{
+					// flexDirection: "row",
+				},
+			]}
+			data={steps}
+			horizontal
+			showsHorizontalScrollIndicator={false}
+			renderItem={({ item, index }) => {
+				// console.log("item:", item);
+				return (
+					<View style={{ width, backgroundColor: "red" }} key={index}>
+						<item.ele />
 					</View>
-				))}
-			</Animated.View>
-		</View>
+				);
+			}}
+		/>
 	);
 }

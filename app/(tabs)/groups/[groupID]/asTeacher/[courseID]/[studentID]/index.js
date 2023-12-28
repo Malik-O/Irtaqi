@@ -27,6 +27,7 @@ import HeaderButton from "../../../../../../../components/HeaderButton";
 import MenuButton from "../../../../../../../components/CoolScrollView/MenuButton";
 import PlanBottomSheet from "../../../../../../../components/PlanBottomSheet";
 import Agenda from "../../../../../../../components/Agenda";
+import AddPlanBottomSheet from "../../../../../../../components/AddPlanBottomSheet";
 import {
 	BottomSheetModal,
 	BottomSheetModalProvider,
@@ -70,16 +71,18 @@ function index() {
 			isLoading.value = false;
 		}, 200);
 	}, []);
-	useEffect(() => {
-		sheetRef.current?.onChange &&
-			sheetRef.current?.onChange(() => {
-				console.log("disssssssssssss");
-			});
-	}, [sheetRef.current]);
+	// useEffect(() => {
+	// 	sheetRef.current?.onChange &&
+	// 		sheetRef.current?.onChange(() => {
+	// 			console.log("disssssssssssss");
+	// 		});
+	// }, [sheetRef.current]);
+	//
+	const addPlanSheetRef = useRef(null);
 
 	return (
 		// <BottomSheetModalProvider>
-		<ScreenView paddingTop={false} hasScrollView={false}>
+		<>
 			<Stack.Screen
 				options={{
 					headerTitle: selectedStudent._j.first_name,
@@ -91,37 +94,49 @@ function index() {
 					headerLeft: () => <HeaderButton isExists={true} back />,
 				}}
 			/>
-			<Agenda>
-				<ScrollView style={{ marginTop: 20 }}>
-					<View style={styles.plansAreaContainer}>
-						<ScreenText variant="headlineLarge">
-							{translate("plans", true)}
-						</ScreenText>
-						<TouchableOpacity
-							onPress={() => router.push(`${pathname}/addPlan`)}
-						>
-							<Ionicons
-								name="add-circle-outline"
-								color={
-									colorScheme === "light" ? "black" : "white"
-								}
-								size={36}
-							/>
-						</TouchableOpacity>
-					</View>
-					{/* plans */}
-					<PlansArea plans={plans} openSheet={openSheet} />
-					{/* advanced cards */}
-					<AdvancedArea advancedDays={advancedDays} />
-				</ScrollView>
-			</Agenda>
-
-			<PlanBottomSheet
-				sheetRef={sheetRef}
-				selectedPlan={selectedPlan}
-				isLoading={isLoading}
-			/>
-		</ScreenView>
+			<ScreenView
+				paddingTop={false}
+				hasScrollView={false}
+				hasLoading={true}
+			>
+				<Agenda>
+					<ScrollView style={{ marginTop: 20 }}>
+						<View style={styles.plansAreaContainer}>
+							<ScreenText variant="headlineLarge">
+								{translate("plans", true)}
+							</ScreenText>
+							<TouchableOpacity
+								onPress={() => {
+									addPlanSheetRef.current?.snapToIndex(1);
+									// router.push(`${pathname}/addPlan`);
+								}}
+							>
+								<Ionicons
+									name="add-circle-outline"
+									color={
+										colorScheme === "light"
+											? "black"
+											: "white"
+									}
+									size={36}
+								/>
+							</TouchableOpacity>
+						</View>
+						{/* plans */}
+						<PlansArea plans={plans} openSheet={openSheet} />
+						{/* advanced cards */}
+						<AdvancedArea advancedDays={advancedDays} />
+					</ScrollView>
+				</Agenda>
+				{/* bottom sheets */}
+				{/* <AddPlanBottomSheet sheetRef={addPlanSheetRef} /> */}
+				<PlanBottomSheet
+					sheetRef={sheetRef}
+					selectedPlan={selectedPlan}
+					isLoading={isLoading}
+				/>
+			</ScreenView>
+		</>
 		// </BottomSheetModalProvider>
 	);
 }

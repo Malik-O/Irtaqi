@@ -1,26 +1,26 @@
-import { useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Button, SafeAreaView } from "react-native";
 import { useRouter, usePathname, useLocalSearchParams } from "expo-router";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { addPlanActions } from "../../../../../../../../store/addPlan";
+import { addPlanActions } from "../../store/addPlan";
 // apollo
-import graphQl from "../../../../../../../../graphQl";
+import graphQl from "../../graphQl";
 import { useMutation } from "@apollo/client";
 // components
-import Stepper from "../../../../../../../../components/Stepper";
+import Stepper from "../Stepper";
 // hook
-import connectToPlansStore from "../../../../../../../../hook/useConnectToStore/instants/connectToPlansStore";
-import useCreateUser from "../../../../../../../../hook/useCreateUser";
-import useTranslate from "../../../../../../../../hook/useTranslate";
+import connectToPlansStore from "../../hook/useConnectToStore/instants/connectToPlansStore";
+import useCreateUser from "../../hook/useCreateUser";
+import useTranslate from "../../hook/useTranslate";
+import useTheme from "../../hook/useTheme";
 // steps components
-import pageAmount from "../../../../../../../../components/addPlanSteps/pageAmount";
-import directionPicker from "../../../../../../../../components/addPlanSteps/directionPicker";
-import startingFrom from "../../../../../../../../components/addPlanSteps/startingFrom";
-import dateStep from "../../../../../../../../components/addPlanSteps/dateStep";
-import workingDays from "../../../../../../../../components/addPlanSteps/workingDays";
-// utils
-import capitalize from "../../../../../../../../utils/capitalize";
+import pageAmount from "../addPlanSteps/pageAmount";
+import directionPicker from "../addPlanSteps/directionPicker";
+import startingFrom from "../addPlanSteps/startingFrom";
+import dateStep from "../addPlanSteps/dateStep";
+import workingDays from "../addPlanSteps/workingDays";
 
 function pageNumberFromVerseKey(versesPerPage, verse_key) {
 	let pageNumber;
@@ -84,8 +84,9 @@ function useAddPlan() {
 	return { doAddPlan, loading };
 }
 
-export default function () {
+function App({ sheetRef }) {
 	const translate = useTranslate();
+	const theme = useTheme();
 	const [activeIndex, setActiveIndex] = useState(0);
 	const steps = [
 		{ ele: workingDays, isStepValid: "workingDays_isValid" },
@@ -103,14 +104,40 @@ export default function () {
 	const { pages, surahAdj, versesPerPage } = useSelector(
 		(state) => state.quran,
 	);
+	//
+	const snapPoints = useMemo(() => ["50%", "100%"], []);
+	// callbacks
+	const handleSheetChange = useCallback((index) => {
+		console.log("handleSheetChange", index);
+	}, []);
+	const handleSnapPress = useCallback((index) => {
+		sheetRef.current?.snapToIndex(index);
+	}, []);
+	const handleClosePress = useCallback(() => {
+		sheetRef.current?.close();
+	}, []);
 	return (
-		<Stepper
-			title={translate("addPlan", true)}
-			steps={steps}
-			activeIndex={activeIndex}
-			setActiveIndex={setActiveIndex}
-			submitEvent={{ mutationAction: doAddPlan, loading }}
-			formData={formData}
-		/>
+		<BottomSheet
+			ref={sheetRef}
+			index={0}
+			snapPoints={snapPoints}
+			onChange={handleSheetChange}
+			enablePanDownToClose
+			backgroundStyle={{
+				backgroundColor: theme.secondary,
+			}}
+		>
+			<BottomSheetView style={{ flex: 1 }}>
+				<Stepper
+					title={translate("addPlan", true)}
+					steps={steps}
+					activeIndex={activeIndex}
+					setActiveIndex={setActiveIndex}
+					submitEvent={{ mutationAction: doAddPlan, loading }}
+					formData={formData}
+				/>
+			</BottomSheetView>
+		</BottomSheet>
 	);
 }
+export default App;

@@ -1,6 +1,17 @@
-import { memo } from "react";
-import { View, useColorScheme, ScrollView, StyleSheet } from "react-native";
+import { memo, useState, useEffect } from "react";
+import {
+	View,
+	useColorScheme,
+	ScrollView,
+	StyleSheet,
+	ActivityIndicator,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useFocusEffect } from "expo-router";
+import Animated, {
+	useSharedValue,
+	useAnimatedStyle,
+} from "react-native-reanimated";
 // styles
 import styles from "../styles/layout";
 // components
@@ -22,6 +33,11 @@ function ScrollViewExists({
 		);
 	else return children;
 }
+function IsExists({ value, children }) {
+	if (value) return children;
+	else return null;
+}
+
 export default memo(function ({
 	children,
 	hasScrollView = true,
@@ -29,10 +45,24 @@ export default memo(function ({
 	style,
 	scrollEnabled = true,
 	scrollViewRef,
+	hasLoading = false,
 }) {
 	const theme = useTheme();
 	const colorScheme = useColorScheme();
 	const insets = useSafeAreaInsets();
+	// loading style
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		if (!isLoading) setIsLoading(true);
+		const timeout = setTimeout(() => {
+			setIsLoading(false);
+		}, 200);
+		return () => {
+			clearTimeout(timeout);
+		};
+	}, []);
+
 	return (
 		<View style={[StyleSheet.absoluteFill, { flex: 1 }]}>
 			<Snackbar />
@@ -47,13 +77,23 @@ export default memo(function ({
 					style,
 				]}
 			>
-				{/* <Text>{JSON.stringify(colorScheme)}</Text> */}
 				<ScrollViewExists
 					condition={hasScrollView}
 					scrollEnabled={scrollEnabled}
 					scrollViewRef={scrollViewRef}
 				>
-					{children}
+					<IsExists value={!isLoading}>{children}</IsExists>
+					<IsExists value={isLoading}>
+						<View
+							style={{
+								flex: 1,
+								justifyContent: "center",
+								alignItems: "center",
+							}}
+						>
+							<ActivityIndicator color="red" size={"large"} />
+						</View>
+					</IsExists>
 				</ScrollViewExists>
 			</View>
 		</View>

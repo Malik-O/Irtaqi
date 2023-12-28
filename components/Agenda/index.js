@@ -72,7 +72,7 @@ export default function ({ children }) {
 		<>
 			<View style={{ height: 100 }} />
 			<AnimatedAgenda
-				entering={SlideInUp.delay(500).duration(1000)}
+				entering={SlideInUp.duration(1000)}
 				theme={{
 					selectedDayBackgroundColor: theme.primary,
 					agendaKnobColor: theme.reverse.secondary,

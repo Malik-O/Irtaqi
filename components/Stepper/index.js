@@ -25,7 +25,7 @@ export default function ({
 	const isStepValidValue = formData[steps[activeIndex]?.isStepValid];
 
 	return (
-		<ScreenView>
+		<View>
 			<Text
 				variant="headlineLarge"
 				style={{ marginBottom: paddingHorizontal, paddingHorizontal }}
@@ -62,6 +62,6 @@ export default function ({
 					/>
 				)}
 			</View>
-		</ScreenView>
+		</View>
 	);
 }

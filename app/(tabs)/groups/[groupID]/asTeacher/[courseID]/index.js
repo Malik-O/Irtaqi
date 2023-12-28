@@ -86,7 +86,7 @@ function index() {
 		[],
 	);
 	return (
-		<ScreenView hasScrollView={false} paddingTop={false}>
+		<ScreenView hasScrollView={false} paddingTop={false} hasLoading={true}>
 			<Stack.Screen
 				options={{
 					headerTitle: selectedGroup.title,

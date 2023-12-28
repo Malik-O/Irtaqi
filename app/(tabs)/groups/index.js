@@ -68,7 +68,7 @@ export default function () {
 		more: false,
 	};
 	return (
-		<ScreenView>
+		<ScreenView hasLoading={true}>
 			<ScreenText
 				variant="displayMedium"
 				style={{ paddingHorizontal, marginVertical: paddingHorizontal }}
