@@ -36,30 +36,19 @@ export default function ({ plan }) {
 	}, [instancesHistory, globalDate, plan.day]);
 
 	return (
-		<View style={styles.advancedAreaContainer}>
-			<Card style={{ marginTop: 20 }} mode="contained">
-				<Card.Content style={styles.advancedCardContent}>
-					<ScreenText variant="bodyLarge">{plan.title}</ScreenText>
-					<ScreenText variant="bodyLarge">
-						{verseName(allVerses, amountDone)}
-					</ScreenText>
-					<FeedBack
-						allVerses={allVerses}
-						amountDone={[amountDone, setAmountDone]}
-						grade={[grade, setGrade]}
-						plan={plan}
-					/>
-				</Card.Content>
-			</Card>
-		</View>
+		<Card style={{ marginTop: 20 }} mode="contained">
+			<Card.Content style={{ marginTop: 20 }}>
+				<ScreenText variant="bodyLarge">{plan.title}</ScreenText>
+				<ScreenText variant="bodyLarge">
+					{verseName(allVerses, amountDone)}
+				</ScreenText>
+				<FeedBack
+					allVerses={allVerses}
+					amountDone={[amountDone, setAmountDone]}
+					grade={[grade, setGrade]}
+					plan={plan}
+				/>
+			</Card.Content>
+		</Card>
 	);
 }
-
-const styles = StyleSheet.create({
-	advancedAreaContainer: {
-		paddingHorizontal: 30,
-	},
-	advancedCardContent: {
-		marginTop: 20,
-	},
-});

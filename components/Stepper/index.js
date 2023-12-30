@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, FlatList, Dimensions } from "react-native";
 // Components
 import ScreenView from "../ScreenView";
 import StepHead from "./Step";
@@ -11,6 +11,8 @@ import styles from "./styles";
 import { paddingHorizontal } from "../../styles/layout";
 //hook
 import useTranslate from "../../hook/useTranslate";
+
+const { width } = Dimensions.get("screen");
 
 export default function ({
 	title,

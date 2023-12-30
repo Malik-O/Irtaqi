@@ -1,6 +1,6 @@
-import React, { useCallback, useState, useMemo } from "react";
+import { useCallback, useState, useMemo } from "react";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { Button, SafeAreaView } from "react-native";
+import { Button, SafeAreaView, Text } from "react-native";
 import { useRouter, usePathname, useLocalSearchParams } from "expo-router";
 // redux
 import { useSelector, useDispatch } from "react-redux";
@@ -15,6 +15,8 @@ import connectToPlansStore from "../../hook/useConnectToStore/instants/connectTo
 import useCreateUser from "../../hook/useCreateUser";
 import useTranslate from "../../hook/useTranslate";
 import useTheme from "../../hook/useTheme";
+// styles
+import { SHADOWS } from "../../styles/layout";
 // steps components
 import pageAmount from "../addPlanSteps/pageAmount";
 import directionPicker from "../addPlanSteps/directionPicker";
@@ -105,17 +107,12 @@ function App({ sheetRef }) {
 		(state) => state.quran,
 	);
 	//
-	const snapPoints = useMemo(() => ["50%", "100%"], []);
+	const snapPoints = useMemo(() => ["1%", "100%"], []);
 	// callbacks
 	const handleSheetChange = useCallback((index) => {
 		console.log("handleSheetChange", index);
 	}, []);
-	const handleSnapPress = useCallback((index) => {
-		sheetRef.current?.snapToIndex(index);
-	}, []);
-	const handleClosePress = useCallback(() => {
-		sheetRef.current?.close();
-	}, []);
+
 	return (
 		<BottomSheet
 			ref={sheetRef}
@@ -126,6 +123,7 @@ function App({ sheetRef }) {
 			backgroundStyle={{
 				backgroundColor: theme.secondary,
 			}}
+			style={SHADOWS.medium}
 		>
 			<BottomSheetView style={{ flex: 1 }}>
 				<Stepper

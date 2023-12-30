@@ -63,7 +63,6 @@ function index() {
 	const openSheet = useCallback((plan) => {
 		sheetRef.current?.present();
 		isLoading.value = true;
-		console.log("sheetRef:", sheetRef.current);
 		// timeout
 		clearTimeout(timeout);
 		timeout = setTimeout(() => {
@@ -123,13 +122,18 @@ function index() {
 							</TouchableOpacity>
 						</View>
 						{/* plans */}
-						<PlansArea plans={plans} openSheet={openSheet} />
+						<PlansArea
+							plans={plans}
+							openSheet={openSheet}
+							selectedPlan={selectedPlan}
+							isDetailsLoading={isLoading}
+						/>
 						{/* advanced cards */}
 						<AdvancedArea advancedDays={advancedDays} />
 					</ScrollView>
 				</Agenda>
 				{/* bottom sheets */}
-				{/* <AddPlanBottomSheet sheetRef={addPlanSheetRef} /> */}
+				<AddPlanBottomSheet sheetRef={addPlanSheetRef} />
 				<PlanBottomSheet
 					sheetRef={sheetRef}
 					selectedPlan={selectedPlan}

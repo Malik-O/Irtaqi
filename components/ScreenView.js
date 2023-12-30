@@ -91,7 +91,7 @@ export default memo(function ({
 								alignItems: "center",
 							}}
 						>
-							<ActivityIndicator color="red" size={"large"} />
+							<ActivityIndicator />
 						</View>
 					</IsExists>
 				</ScrollViewExists>

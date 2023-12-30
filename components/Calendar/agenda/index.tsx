@@ -553,8 +553,8 @@ export default class Agenda extends Component<AgendaProps, State> {
 			height: "100%",
 			width: "100%",
 			flex: 1,
-			// pointerEvents: "box-none",
-			zIndex: this.state.zStyle || "auto",
+			pointerEvents: "box-none",
+			zIndex: this.state?.zStyle || 0,
 			position: "absolute",
 			// backgroundColor: "rgba(255, 0, 255, 0.5)",
 		};

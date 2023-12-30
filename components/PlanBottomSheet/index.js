@@ -4,13 +4,15 @@ import Animated, {
 	useSharedValue,
 	useAnimatedStyle,
 } from "react-native-reanimated";
+const AnimatedBottomSheetFlatList =
+	Animated.createAnimatedComponent(BottomSheetFlatList);
 // redux
 import { useSelector } from "react-redux";
 // components
 import {
 	BottomSheetModal,
 	BottomSheetScrollView,
-	BottomSheetView,
+	BottomSheetFlatList,
 } from "@gorhom/bottom-sheet";
 import Background from "./Background";
 import ScreenText from "../ScreenText";
@@ -23,6 +25,11 @@ import useTranslate from "../../hook/useTranslate";
 import calcNotificationTime from "../../utils/calcNotificationTime";
 // styles
 import { paddingHorizontal } from "../../styles/layout";
+
+function IsExists({ value, children }) {
+	if (value) return children;
+	else return null;
+}
 
 function PlanInstance({ instance, selectedPlan }) {
 	const theme = useTheme();
@@ -110,31 +117,35 @@ function index({ sheetRef, selectedPlan, isLoading }) {
 			backgroundComponent={Background}
 			handleComponent={(params) => Handle({ selectedPlan, ...params })}
 		>
-			<BottomSheetScrollView>
-				<Animated.View
-					style={[
-						{ paddingHorizontal: paddingHorizontal },
-						contentStyle,
-					]}
-				>
-					{/* <ScreenText
-						variant="headlineMedium"
-						style={{ marginBottom: 20 }}
-					>
-						{selectedPlan.title}
-					</ScreenText> */}
-					{selectedPlan?.Plans_instances?.map((instance, i) => (
-						<PlanInstance
-							instance={instance}
-							selectedPlan={selectedPlan}
-							key={i}
-						/>
-					))}
-				</Animated.View>
-				<Animated.View style={indicatorStyle}>
-					<ActivityIndicator />
-				</Animated.View>
-			</BottomSheetScrollView>
+			<BottomSheetFlatList
+				data={[
+					{ loadingEle: true },
+					...(selectedPlan?.Plans_instances || []),
+				]}
+				renderItem={({ item, index }) => {
+					if (item.loadingEle)
+						return (
+							<Animated.View style={indicatorStyle}>
+								<ActivityIndicator />
+							</Animated.View>
+						);
+					else
+						return (
+							<Animated.View
+								style={[
+									{ paddingHorizontal: paddingHorizontal },
+									contentStyle,
+								]}
+							>
+								<PlanInstance
+									instance={item}
+									selectedPlan={selectedPlan}
+									key={index}
+								/>
+							</Animated.View>
+						);
+				}}
+			/>
 		</BottomSheetModal>
 	);
 }

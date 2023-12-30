@@ -8,7 +8,7 @@ import PlanCard from "../../components/plans/PlanCard";
 import usePlans from "../../hook/plans/usePlans";
 import useTranslate from "../../hook/useTranslate";
 
-export default function ({ plans, openSheet }) {
+export default function ({ plans, openSheet, selectedPlan, isDetailsLoading }) {
 	const translate = useTranslate();
 	// get the plans
 	const { isLoading } = usePlans();
@@ -21,7 +21,13 @@ export default function ({ plans, openSheet }) {
 			<View>
 				<ScrollView horizontal>
 					{plans.map((plan, i) => (
-						<PlanCard plan={plan} key={i} openSheet={openSheet} />
+						<PlanCard
+							plan={plan}
+							key={i}
+							openSheet={openSheet}
+							selectedPlan={selectedPlan}
+							isDetailsLoading={isDetailsLoading}
+						/>
 					))}
 				</ScrollView>
 			</View>

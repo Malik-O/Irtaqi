@@ -1,20 +1,34 @@
 import "../../wdyr";
 import React, { useCallback, useRef, useMemo } from "react";
-import Animated, { SlideInUp } from "react-native-reanimated";
-import { SafeAreaView, View, Text, Button } from "react-native";
+import Animated, {
+	SlideInUp,
+	useAnimatedGestureHandler,
+	useAnimatedStyle,
+	useSharedValue,
+} from "react-native-reanimated";
+import { SafeAreaView, View, Text, ActivityIndicator } from "react-native";
+// redux
+import { useSelector, useDispatch } from "react-redux";
+import { globalDateActions } from "../../store/globalDate";
 // components
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Agenda, LocaleConfig } from "../Calendar";
+import ScreenText from "../ScreenText";
 const AnimatedAgenda = Animated.createAnimatedComponent(Agenda);
 // hook
 import useTheme from "../../hook/useTheme";
 import useTranslate from "../../hook/useTranslate";
-// redux
-import { useSelector } from "react-redux";
+// utils
+import extractISODate from "../../utils/extractISODate";
+
+let timeout;
 
 export default function ({ children }) {
 	const theme = useTheme();
-	const translate = useTranslate();
+	// redux
+	const dispatch = useDispatch();
+	const { globalDate } = useSelector((state) => state.globalDate);
+	// agenda ar language
 	LocaleConfig.locales["ar"] = {
 		monthNames: [
 			"يناير",
@@ -64,9 +78,19 @@ export default function ({ children }) {
 		],
 		today: "اليوم",
 	};
-	//
 	const { locale } = useSelector((state) => state.lang);
 	LocaleConfig.defaultLocale = locale;
+	// loading after pressing on date
+	const isDateLoading = useSharedValue(false);
+	const contentStyle = useAnimatedStyle(
+		() => ({ display: isDateLoading.value ? "none" : "flex" }),
+		[],
+	);
+	const indicatorStyle = useAnimatedStyle(
+		() => ({ display: !isDateLoading.value ? "none" : "flex" }),
+		[],
+	);
+
 	// render
 	return (
 		<>
@@ -86,21 +110,31 @@ export default function ({ children }) {
 				}}
 				// reservationsList={children}
 				// Specify the current date
-				current={"2012-03-01"}
+				current={extractISODate({ date: globalDate })}
 				// Callback that gets called when the user selects a day
 				onDayPress={(day) => {
-					console.log("selected day", day);
+					clearTimeout(timeout);
+					isDateLoading.value = true;
+					timeout = setTimeout(() => {
+						isDateLoading.value = false;
+						dispatch(
+							globalDateActions.set(new Date(day.timestamp)),
+						);
+					}, 0);
 				}}
 				// Mark specific dates as marked
 				markedDates={{
 					"2023-12-23": {
-						selected: true,
+						// selected: true,
 						marked: true,
-						selectedColor: "blue",
+						// selectedColor: "blue",
 					},
 				}}
 			/>
-			{children}
+			<Animated.View style={contentStyle}>{children}</Animated.View>
+			<Animated.View style={[indicatorStyle, { marginTop: 30 }]}>
+				<ActivityIndicator />
+			</Animated.View>
 		</>
 	);
 }
