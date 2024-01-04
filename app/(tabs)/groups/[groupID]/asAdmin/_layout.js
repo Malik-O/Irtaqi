@@ -15,14 +15,6 @@ export default function () {
 					headerTitleStyle: { color: theme.reverse.secondary },
 				}}
 			/>
-			<Stack.Screen
-				name="addUser"
-				options={{
-					header: () => null,
-					presentation: "modal",
-					headerBackButtonMenuEnabled: true,
-				}}
-			/>
 		</Stack>
 	);
 }

@@ -30,8 +30,7 @@ export default function (isStepValidName) {
 	const days = translate("weekDays");
 	// redux
 	const { formData } = useSelector((state) => state.addPlan);
-	const { surahNames } = useSelector((state) => state.quran);
-	// select item
+	// add empty array at first
 	useEffect(() => {
 		dispatch(addPlanActions.setState(["workingDays", []]));
 	}, []);

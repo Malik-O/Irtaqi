@@ -5,6 +5,8 @@ import {
 	ScrollView,
 	StyleSheet,
 	ActivityIndicator,
+	TouchableWithoutFeedback,
+	Keyboard,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from "expo-router";
@@ -64,38 +66,40 @@ export default memo(function ({
 	}, []);
 
 	return (
-		<View style={[StyleSheet.absoluteFill, { flex: 1 }]}>
-			<Snackbar />
-			<View
-				style={[
-					styles.screenView(colorScheme),
-					{
-						paddingTop: paddingTop ? insets.top : 0,
-						paddingBottom: insets.bottom,
-						backgroundColor: theme.tertiary,
-					},
-					style,
-				]}
-			>
-				<ScrollViewExists
-					condition={hasScrollView}
-					scrollEnabled={scrollEnabled}
-					scrollViewRef={scrollViewRef}
+		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+			<View style={[StyleSheet.absoluteFill, { flex: 1 }]}>
+				{/* <Snackbar /> */}
+				<View
+					style={[
+						styles.screenView(colorScheme),
+						{
+							paddingTop: paddingTop ? insets.top : 0,
+							paddingBottom: insets.bottom,
+							backgroundColor: theme.tertiary,
+						},
+						style,
+					]}
 				>
-					<IsExists value={!isLoading}>{children}</IsExists>
-					<IsExists value={isLoading}>
-						<View
-							style={{
-								flex: 1,
-								justifyContent: "center",
-								alignItems: "center",
-							}}
-						>
-							<ActivityIndicator />
-						</View>
-					</IsExists>
-				</ScrollViewExists>
+					<ScrollViewExists
+						condition={hasScrollView}
+						scrollEnabled={scrollEnabled}
+						scrollViewRef={scrollViewRef}
+					>
+						<IsExists value={!isLoading}>{children}</IsExists>
+						<IsExists value={isLoading}>
+							<View
+								style={{
+									flex: 1,
+									justifyContent: "center",
+									alignItems: "center",
+								}}
+							>
+								<ActivityIndicator />
+							</View>
+						</IsExists>
+					</ScrollViewExists>
+				</View>
 			</View>
-		</View>
+		</TouchableWithoutFeedback>
 	);
 });

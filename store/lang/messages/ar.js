@@ -32,6 +32,9 @@ export default {
 		},
 	},
 	// form
+	title: "عنوان",
+	groupTitle: "اسم المجموعة",
+	groupDescription: "وصف المجموعة",
 	add_student: "اضف طالب",
 	add_teacher: "اضف معلم",
 	email: "البريد الالكتروني",
@@ -193,6 +196,7 @@ export default {
 	noTeacherYetMessage: "لم يتم تعيين معلم لهذه المجموعة بعد",
 	assignTeacher: "تعيين معلم",
 	noStudentsYetMessage: "لم يتم اضافة طلاب الى هذه المجموعة بعد",
+	noStaffYetMessage: "لم يتم اضافة طاقم عمل الى هذه المجموعة بعد",
 	addTeacher: "اضف معلم جديد",
 	assignExistingTeacher: "تعيين معلم موجود",
 	manageGroup: "ادارة المجموعة",
@@ -202,7 +206,10 @@ export default {
 	networkError: "اتصل بالانترنت ثم اعد المحاولة",
 	QueryError: "خطأ غير متوقع برجاء اعادة المحاولة في وقت لاحق",
 	MutationError: "لم يتم حفظ البيانات برجاء اعادة المحاولة في وقت لاحق",
-	createUserSuccessfully: "تم اضافة ### بنجاح",
+	createUserSuccessfully: "تم اضافة ###",
+	removeUserSuccessfully: "تم حذف ### نهائيا",
+	createGroupeSuccessfully: "تم اضافة مجموعة ###",
+	CompleatForm: "اكمل البيانات اولا",
 	// sittings
 	darkTheme: "الوضع الليلي",
 	language: "اللغة",
@@ -211,4 +218,5 @@ export default {
 	//
 	attendance: "الحضور",
 	showAllCalendar: "التقويم",
+	staff: "طاقم العمل",
 };

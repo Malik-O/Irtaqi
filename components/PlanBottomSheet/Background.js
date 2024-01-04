@@ -1,5 +1,4 @@
-import React, { useMemo } from "react";
-import { BottomSheetBackgroundProps } from "@gorhom/bottom-sheet";
+import React from "react";
 import Animated, {
 	useAnimatedStyle,
 	interpolateColor,

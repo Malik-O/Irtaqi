@@ -24,14 +24,6 @@ export default function () {
 					header: () => null,
 				}}
 			/>
-			<Stack.Screen
-				name="[planID]"
-				options={{
-					presentation: "modal",
-					// headerBackButtonMenuEnabled: true,
-					header: () => null,
-				}}
-			/>
 		</Stack>
 	);
 }

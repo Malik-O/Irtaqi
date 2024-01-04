@@ -1,28 +1,32 @@
 import { useCallback, useState, useMemo } from "react";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { Button, SafeAreaView, Text } from "react-native";
+import { Keyboard, TouchableWithoutFeedback, View } from "react-native";
 import { useRouter, usePathname, useLocalSearchParams } from "expo-router";
 // redux
-import { useSelector, useDispatch } from "react-redux";
-import { addPlanActions } from "../../store/addPlan";
+import { useSelector } from "react-redux";
 // apollo
 import graphQl from "../../graphQl";
 import { useMutation } from "@apollo/client";
 // components
+import { BottomSheetView } from "@gorhom/bottom-sheet";
+import BottomSheet from "../BottomSheet";
 import Stepper from "../Stepper";
+import DismissKeyboard from "../DismissKeyboard";
 // hook
 import connectToPlansStore from "../../hook/useConnectToStore/instants/connectToPlansStore";
-import useCreateUser from "../../hook/useCreateUser";
+import useCreateUser from "../../hook/user/useCreateUser";
 import useTranslate from "../../hook/useTranslate";
 import useTheme from "../../hook/useTheme";
 // styles
 import { SHADOWS } from "../../styles/layout";
 // steps components
-import pageAmount from "../addPlanSteps/pageAmount";
-import directionPicker from "../addPlanSteps/directionPicker";
-import startingFrom from "../addPlanSteps/startingFrom";
-import dateStep from "../addPlanSteps/dateStep";
-import workingDays from "../addPlanSteps/workingDays";
+import pageAmount from "./pageAmount";
+import directionPicker from "./directionPicker";
+import startingFrom from "./startingFrom";
+import dateStep from "./dateStep";
+import workingDays from "./workingDays";
+
+// create a view component with dismiss hook
+const DismissKeyboardView = DismissKeyboard();
 
 function pageNumberFromVerseKey(versesPerPage, verse_key) {
 	let pageNumber;
@@ -86,7 +90,7 @@ function useAddPlan() {
 	return { doAddPlan, loading };
 }
 
-function App({ sheetRef }) {
+export default function ({ sheetRef }) {
 	const translate = useTranslate();
 	const theme = useTheme();
 	const [activeIndex, setActiveIndex] = useState(0);
@@ -97,18 +101,11 @@ function App({ sheetRef }) {
 		{ ele: directionPicker, isStepValid: "directionPicker_isValid" },
 		{ ele: startingFrom, isStepValid: "startingFrom_isValid" },
 	];
-	// connect with plan store
-	const PlanStoreConnectionsInstance = connectToPlansStore();
-	// mutation
-	const { doAddPlan, loading } = useAddPlan();
 	// redux
+	const { doAddPlan, loading } = useAddPlan();
 	const { formData } = useSelector((state) => state.addPlan);
-	const { pages, surahAdj, versesPerPage } = useSelector(
-		(state) => state.quran,
-	);
-	//
-	const snapPoints = useMemo(() => ["1%", "100%"], []);
 	// callbacks
+	const snapPoints = useMemo(() => ["90%"], []);
 	const handleSheetChange = useCallback((index) => {
 		console.log("handleSheetChange", index);
 	}, []);
@@ -116,26 +113,22 @@ function App({ sheetRef }) {
 	return (
 		<BottomSheet
 			ref={sheetRef}
-			index={0}
 			snapPoints={snapPoints}
 			onChange={handleSheetChange}
-			enablePanDownToClose
-			backgroundStyle={{
-				backgroundColor: theme.secondary,
-			}}
-			style={SHADOWS.medium}
+			enableDismissOnClose
 		>
 			<BottomSheetView style={{ flex: 1 }}>
-				<Stepper
-					title={translate("addPlan", true)}
-					steps={steps}
-					activeIndex={activeIndex}
-					setActiveIndex={setActiveIndex}
-					submitEvent={{ mutationAction: doAddPlan, loading }}
-					formData={formData}
-				/>
+				<DismissKeyboardView>
+					<Stepper
+						title={translate("addPlan", true)}
+						steps={steps}
+						activeIndex={activeIndex}
+						setActiveIndex={setActiveIndex}
+						submitEvent={{ mutationAction: doAddPlan, loading }}
+						formData={formData}
+					/>
+				</DismissKeyboardView>
 			</BottomSheetView>
 		</BottomSheet>
 	);
 }
-export default App;

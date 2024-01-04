@@ -3,13 +3,15 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 // graphQL
 import { useLazyQuery } from "@apollo/client";
-import graphQl from "../graphQl";
+import graphQl from "../../graphQl";
 // hook
-import connectToGroupsStore from "./useConnectToStore/instants/connectToGroupsStore";
+import connectToGroupsStore from "../useConnectToStore/instants/connectToGroupsStore";
+import usePush from "../notifications/usePush";
 
 export default function () {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
+	const pushNotification = usePush();
 	// const [groups, setGroups] = useState([]);
 	const StoreConnectionsInstance = connectToGroupsStore();
 	// user state
@@ -31,23 +33,32 @@ export default function () {
 					StoreConnectionsInstance.init(data?.groups);
 					setIsLoading(false);
 				})
-				.catch((error) => {
-					setError(
-						"there is a problem loading the groups, please try again later.",
-					);
+				.catch((err) => {
+					// setError(
+					// 	"there is a problem loading the groups, please try again later.",
+					// );
+					pushNotification({
+						type: "error",
+						message: "MutationError",
+						error: JSON.stringify(err),
+						floatingNotification: true,
+					});
 				});
 		}
 	}, [userData]);
 	// refetch data
 	async function refetchGroups() {
 		setIsLoading(true);
-		console.log("variables:", variables);
 		try {
 			const { data } = await refetch(variables);
-			console.log("data:", data?.groups);
 			StoreConnectionsInstance.init(data?.groups);
-		} catch (error) {
-			console.log("error:", error);
+		} catch (err) {
+			pushNotification({
+				type: "error",
+				message: "MutationError",
+				error: JSON.stringify(err),
+				floatingNotification: true,
+			});
 		}
 		setIsLoading(false);
 	}

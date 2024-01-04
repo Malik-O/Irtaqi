@@ -1,55 +1,73 @@
-import React, { useRef, useEffect } from "react";
-import { Button, StyleSheet, View } from "react-native";
-import LottieView from "lottie-react-native";
+import React, { useState } from "react";
+import {
+	Button,
+	Platform,
+	SafeAreaView,
+	StatusBar,
+	StyleSheet,
+	Text,
+	View,
+} from "react-native";
 
-export default function App() {
-	const animation = useRef(null);
-	useEffect(() => {
-		// You can control the ref programmatically, rather than using autoPlay
-		// animation.current?.play();
-	}, []);
+const STYLES = ["default", "dark-content", "light-content"];
+const TRANSITIONS = ["fade", "slide", "none"];
 
+const App = () => {
 	return (
-		<View style={styles.animationContainer}>
-			<LottieView
-				// autoPlay
-				ref={animation}
-				style={{
-					width: "100%",
-					height: "100%",
-					position: "absolute",
-				}}
-				// Find more Lottie files at https://lottiefiles.com/featured
-				source={require("../../../assets/gradientBall.json")}
+		<SafeAreaView style={styles.container}>
+			<StatusBar
+				animated={true}
+				backgroundColor="#61dafb"
+				style={{ backgroundColor: "red", color: "cyan" }}
+				theme="light"
 			/>
-			<View style={styles.buttonContainer}>
+			{/* <Text style={styles.textStyle}> */}
+			{/* StatusBar Visibility:{"\n"}
+				{hidden ? "Hidden" : "Visible"}
+			</Text>
+			<Text style={styles.textStyle}>
+				StatusBar Style:{"\n"}
+				{statusBarStyle}
+			</Text>
+			{Platform.OS === "ios" ? (
+				<Text style={styles.textStyle}>
+					StatusBar Transition:{"\n"}
+					{statusBarTransition}
+				</Text>
+			) : null}
+			<View style={styles.buttonsContainer}>
 				<Button
-					title="Restart Animation"
-					onPress={() => {
-						animation.current?.reset();
-						animation.current?.play();
-					}}
+					title="Toggle StatusBar"
+					onPress={changeStatusBarVisibility}
 				/>
 				<Button
-					title="stop"
-					onPress={() => {
-						console.log("0:", animation.current);
-						// animation.current?.stop();
-					}}
+					title="Change StatusBar Style"
+					onPress={changeStatusBarStyle}
 				/>
-			</View>
-		</View>
+				{Platform.OS === "ios" ? (
+					<Button
+						title="Change StatusBar Transition"
+						onPress={changeStatusBarTransition}
+					/>
+				) : null}
+			</View> */}
+		</SafeAreaView>
 	);
-}
+};
 
 const styles = StyleSheet.create({
-	animationContainer: {
-		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center",
+	container: {
 		flex: 1,
+		justifyContent: "center",
+		backgroundColor: "#ECF0F1",
 	},
-	buttonContainer: {
-		paddingTop: 20,
+	buttonsContainer: {
+		padding: 10,
+	},
+	textStyle: {
+		textAlign: "center",
+		marginBottom: 8,
 	},
 });
+
+export default App;

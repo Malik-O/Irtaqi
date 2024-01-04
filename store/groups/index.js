@@ -7,6 +7,7 @@ export const groupsSlice = createSlice({
 		groups: [],
 		attendanceHistory: [],
 		groupsDataKey: "GROUPS",
+		addGroupFormData: {},
 	},
 	reducers,
 });

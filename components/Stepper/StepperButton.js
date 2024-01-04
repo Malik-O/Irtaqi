@@ -1,4 +1,4 @@
-import { View, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	withTiming,
@@ -32,10 +32,6 @@ export default function ({
 	function onPress() {
 		setActiveIndex(newValue);
 	}
-	if (isValid) {
-		if (isStepValid) 1;
-		else if (isStepValid) 0.4;
-	} else 0;
 	const opacityStyle = useAnimatedStyle(() => ({
 		opacity: isValid
 			? isStepValid

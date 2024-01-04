@@ -1,124 +1,96 @@
-import { View, TouchableOpacity } from "react-native";
-import {
-	useLocalSearchParams,
-	usePathname,
-	useRouter,
-	Stack,
-} from "expo-router";
-import Animated from "react-native-reanimated";
+import { useRef, useCallback } from "react";
+import { useLocalSearchParams, Stack } from "expo-router";
 // redux
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 // components
-import { AnimatedFAB } from "react-native-paper";
-import Card from "../../../../../components/Card";
 import ScreenView from "../../../../../components/ScreenView";
-import ScreenText from "../../../../../components/ScreenText";
-import CoolScrollView from "../../../../../components/CoolScrollView";
 import HeaderButton from "../../../../../components/HeaderButton";
-import MenuButton from "../../../../../components/CoolScrollView/MenuButton";
-import FBA from "../../../../../components/FBA";
+import AddUserBottomSheet from "../../../../../components/addUserSteps";
+import AdminUsersList from "../../../../../components/AdminUsersList";
+import SectionHeader from "../../../../../components/AdminUsersList/SectionHeader";
 // hook
+import { useBottomSheetModal } from "@gorhom/bottom-sheet";
 import useTranslate from "../../../../../hook/useTranslate";
-import useTheme from "../../../../../hook/useTheme";
-// paper
-import {
-	Button as PaperButton,
-	Dialog,
-	Portal,
-	PaperProvider,
-	Text as PaperText,
-} from "react-native-paper";
-import { useEffect } from "react";
 
 // resolvers
-function fullName(entity) {
-	return `${entity?.first_name} ${entity?.parent_name || ""} ${
-		entity?.rest_of_name || ""
-	}`;
-}
 function resolveRouter(pathname, studentID) {
 	return { pathname: `${pathname}/[studentID]`, params: { studentID } };
 }
-
-function StudentsList({ students }) {
-	const translate = useTranslate();
-	const theme = useTheme();
-	if (students?.length)
-		return (
-			<Animated.FlatList
-				style={[{ marginBottom: 80 }]}
-				data={students}
-				scrollEventThrottle={16}
-				keyExtractor={(_, i) => i}
-				renderItem={({ item, index }) => {
-					return (
-						<Card
-							key={index}
-							item={{ ...item, title: fullName(item) }}
-						/>
-					);
-				}}
-			/>
-		);
-	else
-		return (
-			<View style={{ marginTop: 20 }}>
-				<ScreenText style={{ textAlign: "center" }} variant="bodyLarge">
-					{translate("noStudentsYetMessage")}
-				</ScreenText>
-				<TouchableOpacity onPress={() => {}}>
-					<ScreenText
-						style={{
-							textAlign: "center",
-							marginTop: 10,
-							color: theme.reverse.primary,
-						}}
-						variant="bodyLarge"
-					>
-						{translate("add_student")}
-					</ScreenText>
-				</TouchableOpacity>
-			</View>
-		);
-}
-
 export default function () {
 	const translate = useTranslate();
-	const pathname = usePathname();
-	const router = useRouter();
 	const { groupID } = useLocalSearchParams();
 	// redux
 	const { groups } = useSelector((state) => state.groups);
-	const selectedGroup = groups.filter((group) => group.id === groupID)[0];
+	const selectedGroup = groups.find((group) => group.id === groupID);
+	// add user sheet
+	const addUserSheetRef = useRef(null);
+	const { dismissAll } = useBottomSheetModal();
+	const openAddUserSheet = useCallback(() => {
+		dismissAll();
+		addUserSheetRef.current?.present();
+	}, []);
 	// scroll view props
-	const props = {
-		title: selectedGroup.title,
-		back: true,
-		more: {
-			// icon: "",
-			items: [
-				{
-					title: translate("addUser"),
-					onPress: () => {
-						router.push(`${pathname}/addUser`);
-					},
-				},
-			],
-		},
-	};
+	// const props = useMemo(
+	// 	() => ({
+	// 		title: selectedGroup.title,
+	// 		back: true,
+	// 		more: {
+	// 			// icon: "",
+	// 			items: [
+	// 				{
+	// 					title: translate("addUser"),
+	// 					onPress: () => addUserSheetRef.current?.present(),
+	// 				},
+	// 			],
+	// 		},
+	// 	}),
+	// 	[],
+	// );
+	//
 	return (
-		<ScreenView hasScrollView={false} paddingTop={false}>
+		<>
 			<Stack.Screen
 				options={{
 					headerTitle: selectedGroup.title,
-					headerRight: () => <MenuButton menu={props.more} />,
+					// headerRight: () => <MenuButton menu={props.more} />,
 					headerLeft: () => <HeaderButton isExists={true} back />,
 				}}
 			/>
-			<StudentsList
-				students={selectedGroup.courses[0]?.floatingStudents}
-			/>
-		</ScreenView>
+			<ScreenView
+				hasScrollView={false}
+				paddingTop={false}
+				style={{ paddingTop: 15 }}
+			>
+				{/* Teachers */}
+				<SectionHeader
+					title={translate("staff")}
+					openAddUserSheet={openAddUserSheet}
+				/>
+				<AdminUsersList
+					users={selectedGroup.teachers}
+					emptyMessage={[
+						translate("noStaffYetMessage"),
+						translate("add_teacher"),
+					]}
+					openAddUserSheet={openAddUserSheet}
+				/>
+				{/* Students */}
+				<SectionHeader
+					title={translate("students")}
+					openAddUserSheet={openAddUserSheet}
+				/>
+				<AdminUsersList
+					users={selectedGroup.courses[0]?.floatingStudents}
+					emptyMessage={[
+						translate("noStudentsYetMessage"),
+						translate("add_student"),
+					]}
+					openAddUserSheet={openAddUserSheet}
+				/>
+				{/* bottom sheets */}
+				<AddUserBottomSheet sheetRef={addUserSheetRef} />
+			</ScreenView>
+		</>
 	);
 }
 

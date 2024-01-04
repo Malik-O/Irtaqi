@@ -8,6 +8,7 @@ export default gql`
 		$seen: Boolean
 		$icon: String
 		$error: String
+		$data: [String]
 	) {
 		pushNotification(
 			userID: $userID
@@ -16,6 +17,7 @@ export default gql`
 			seen: $seen
 			icon: $icon
 			error: $error
+			data: $data
 		) {
 			createdAt
 			icon
@@ -24,6 +26,7 @@ export default gql`
 			seen
 			type
 			userID
+			data
 		}
 	}
 `;

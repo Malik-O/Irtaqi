@@ -9,12 +9,8 @@ const AnimatedBottomSheetFlatList =
 // redux
 import { useSelector } from "react-redux";
 // components
-import {
-	BottomSheetModal,
-	BottomSheetScrollView,
-	BottomSheetFlatList,
-} from "@gorhom/bottom-sheet";
-import Background from "./Background";
+import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
+import BottomSheet from "../BottomSheet";
 import ScreenText from "../ScreenText";
 import Card from "../Card";
 import Handle from "./Handle";
@@ -107,16 +103,7 @@ function index({ sheetRef, selectedPlan, isLoading }) {
 	);
 
 	return (
-		<BottomSheetModal
-			ref={sheetRef}
-			snapPoints={snapPoints}
-			onChange={() => {}}
-			backgroundStyle={{
-				backgroundColor: "#009688" || selectedPlan.color,
-			}}
-			backgroundComponent={Background}
-			handleComponent={(params) => Handle({ selectedPlan, ...params })}
-		>
+		<BottomSheet ref={sheetRef} snapPoints={snapPoints} onChange={() => {}}>
 			<BottomSheetFlatList
 				data={[
 					{ loadingEle: true },
@@ -146,7 +133,7 @@ function index({ sheetRef, selectedPlan, isLoading }) {
 						);
 				}}
 			/>
-		</BottomSheetModal>
+		</BottomSheet>
 	);
 }
 export default memo(index);

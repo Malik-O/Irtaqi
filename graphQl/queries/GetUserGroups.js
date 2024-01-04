@@ -6,12 +6,32 @@ export default gql`
 			id
 			as
 			title
+			teachers {
+				id
+				first_name
+				parent_name
+				rest_of_name
+				dateOfBirth
+				email
+				gender
+				nationalID
+				parentPhone
+				phone
+			}
 			courses {
 				id
 				title
 				floatingStudents {
 					id
 					first_name
+					parent_name
+					rest_of_name
+					dateOfBirth
+					email
+					gender
+					nationalID
+					parentPhone
+					phone
 				}
 				subgroups {
 					id
@@ -20,6 +40,14 @@ export default gql`
 					students {
 						id
 						first_name
+						parent_name
+						rest_of_name
+						dateOfBirth
+						email
+						gender
+						nationalID
+						parentPhone
+						phone
 					}
 				}
 			}

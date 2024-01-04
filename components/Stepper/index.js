@@ -1,4 +1,4 @@
-import { View, FlatList, Dimensions } from "react-native";
+import { View } from "react-native";
 // Components
 import ScreenView from "../ScreenView";
 import StepHead from "./Step";
@@ -12,8 +12,6 @@ import { paddingHorizontal } from "../../styles/layout";
 //hook
 import useTranslate from "../../hook/useTranslate";
 
-const { width } = Dimensions.get("screen");
-
 export default function ({
 	title,
 	steps,
@@ -25,7 +23,6 @@ export default function ({
 	const translate = useTranslate();
 	// is valid
 	const isStepValidValue = formData[steps[activeIndex]?.isStepValid];
-
 	return (
 		<View>
 			<Text

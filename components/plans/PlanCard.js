@@ -26,7 +26,6 @@ import {
 	Text,
 } from "react-native-paper";
 import ScreenText from "../ScreenText";
-import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 
 let timeout;
 

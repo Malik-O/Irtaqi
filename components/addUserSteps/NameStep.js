@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { Text } from "react-native";
 // components
-import { ToggleButton } from "react-native-paper";
 import TextInput from "../TextInput";
 import Card from "../Card";
 // redux
@@ -9,11 +9,13 @@ import { addUserActions } from "../../store/addUser";
 // hook
 import useAddUserValidate from "../../hook/useAddUserValidate";
 import useTranslate from "../../hook/useTranslate";
-import { ImageBackgroundComponent } from "react-native";
 
 export default function (isStepValidName) {
 	const [value, setValue] = useState("left");
 	const translate = useTranslate();
+	// refs
+	const parent_name_Ref = useRef(null);
+	const rest_of_name_Ref = useRef(null);
 	// redux
 	const { formData } = useSelector((state) => state.addUser);
 	// valid
@@ -31,13 +33,6 @@ export default function (isStepValidName) {
 
 	return (
 		<Card>
-			{/* <ToggleButton.Row
-				onValueChange={(value) => setValue(value)}
-				value={value}
-			>
-				<ToggleButton icon="format-align-lefdt" value="left" />
-				<ToggleButton icon="format-align-right" value="right" />
-			</ToggleButton.Row> */}
 			<TextInput
 				stateName="first_name"
 				isValidStateName={isValidStateNames.first_name}
@@ -45,22 +40,33 @@ export default function (isStepValidName) {
 				storeAction={addUserActions}
 				formData={formData}
 				regex={/^[A-z\u0600-\u06FF\s]+$/} // any arabic or english character with space
+				// on submit press
+				onSubmitEditing={() => parent_name_Ref.current.focus()}
+				returnKeyType="next"
 			/>
 			<TextInput
+				ref={parent_name_Ref}
 				stateName="parent_name"
 				isValidStateName={isValidStateNames.parent_name}
 				errorHint={translate("wordHint")}
 				storeAction={addUserActions}
 				formData={formData}
 				regex={/^[A-z\u0600-\u06FF\s]+$/} // any arabic or english character with space
+				// on submit press
+				onSubmitEditing={() => rest_of_name_Ref.current.focus()}
+				returnKeyType="next"
 			/>
 			<TextInput
+				ref={rest_of_name_Ref}
 				stateName="rest_of_name"
 				isValidStateName={isValidStateNames.rest_of_name}
 				errorHint={translate("wordHint")}
 				storeAction={addUserActions}
 				formData={formData}
 				regex={/^[A-z\u0600-\u06FF\s]+$/} // any arabic or english character with space
+				// on submit press
+				onSubmitEditing={() => {}}
+				returnKeyType="next"
 			/>
 		</Card>
 	);

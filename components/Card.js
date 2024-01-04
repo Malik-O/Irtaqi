@@ -19,19 +19,22 @@ export default memo(function ({
 	href,
 	children,
 	style,
+	onPress,
 }) {
 	// console.log("title:");
 	const theme = useTheme();
 	// router
 	const router = useRouter();
-	const onPress = useCallback(() => {
-		router.push(href);
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-	}, []);
+	const onPressEvent =
+		onPress ||
+		useCallback(() => {
+			router.push(href);
+			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+		}, []);
 	const cardStyle = [styles.planCardContainer(theme.cardColor), style];
 
 	return (
-		<TouchableOpacity disabled={!href} onPress={onPress}>
+		<TouchableOpacity disabled={!onPress && !href} onPress={onPressEvent}>
 			<View style={cardStyle}>
 				{title ? (
 					<ScreenText variant="bodyLarge">{title}</ScreenText>

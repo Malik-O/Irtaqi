@@ -8,6 +8,7 @@ export default gql`
 			message
 			seen
 			type
+			data
 			createdAt
 		}
 	}

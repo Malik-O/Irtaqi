@@ -45,6 +45,9 @@ export default {
 	add: "add",
 	date: "date",
 	// titles
+	title: "title",
+	groupTitle: "group title",
+	groupDescription: "group description",
 	teachers: "teachers",
 	teacher: "teacher",
 	students: "students",
@@ -174,6 +177,7 @@ export default {
 	noTeacherYetMessage: "there is no teacher assigned to this group yet",
 	assignTeacher: "assign teacher",
 	noStudentsYetMessage: "there is no students in this group yet",
+	noStaffYetMessage: "there is no staff members in this group yet",
 	addTeacher: "create new teacher",
 	assignExistingTeacher: "assign existing teacher",
 	manageGroup: "manage group",
@@ -183,7 +187,10 @@ export default {
 	networkError: "Reconnect to the internet then try again.",
 	QueryError: "Unexpected error happened, please try again later.",
 	MutationError: "The data was not saved, please try again later",
-	createUserSuccessfully: "### was successfully added",
+	createUserSuccessfully: "### has been added",
+	removeUserSuccessfully: "### has been removed permanently",
+	createGroupeSuccessfully: "### group has been add",
+	CompleatForm: "compleat the form first",
 	// sittings
 	darkTheme: "dark theme",
 	language: "language",
@@ -192,4 +199,5 @@ export default {
 	//
 	attendance: "attendance",
 	showAllCalendar: "calendar",
+	staff: "staff members",
 };

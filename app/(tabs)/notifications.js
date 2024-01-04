@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, Dimensions } from "react-native";
+import { Stack } from "expo-router";
 import Animated, {
 	useSharedValue,
 	withTiming,
@@ -37,18 +38,27 @@ export default function notifications() {
 		more: false,
 	};
 	return (
-		<ScreenView hasScrollView={false} paddingTop={false}>
-			<Animated.FlatList
-				style={[{ marginBottom: 80 }]}
-				data={[...notifications].sort(
-					(a, b) => b.createdAt - a.createdAt,
-				)}
-				scrollEventThrottle={16}
-				keyExtractor={(_, i) => i}
-				renderItem={({ item, index }) => {
-					return <NotificationCard notification={item} key={index} />;
+		<>
+			<Stack.Screen
+				options={{
+					headerTitle: translate("notifications"),
 				}}
 			/>
-		</ScreenView>
+			<ScreenView hasScrollView={false} paddingTop={false}>
+				<Animated.FlatList
+					style={[{ marginBottom: 80 }]}
+					data={[...notifications].sort(
+						(a, b) => b.createdAt - a.createdAt,
+					)}
+					scrollEventThrottle={16}
+					keyExtractor={(_, i) => i}
+					renderItem={({ item, index }) => {
+						return (
+							<NotificationCard notification={item} key={index} />
+						);
+					}}
+				/>
+			</ScreenView>
+		</>
 	);
 }

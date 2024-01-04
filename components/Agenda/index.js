@@ -11,7 +11,6 @@ import { SafeAreaView, View, Text, ActivityIndicator } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { globalDateActions } from "../../store/globalDate";
 // components
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Agenda, LocaleConfig } from "../Calendar";
 import ScreenText from "../ScreenText";
 const AnimatedAgenda = Animated.createAnimatedComponent(Agenda);

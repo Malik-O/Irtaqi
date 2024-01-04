@@ -18,6 +18,7 @@ import { paddingHorizontal } from "../../styles/layout";
 //hook
 import useTranslate from "../../hook/useTranslate";
 import useTheme from "../../hook/useTheme";
+import usePush from "../../hook/notifications/usePush";
 // styles
 import { buttonsSize } from "./styles";
 
@@ -27,14 +28,26 @@ export default function ({
 	isStepValid,
 	submitEvent: { mutationAction, loading },
 }) {
+	console.log("isStepValid:", isStepValid);
 	const translate = useTranslate();
 	const theme = useTheme();
+	const pushNotification = usePush();
 	// redux
 	const opacityStyle = useAnimatedStyle(() => ({
 		opacity: isStepValid ? withTiming(1) : withTiming(0.4),
 	}));
+	//
+	function onPress() {
+		if (isStepValid) mutationAction();
+		else
+			pushNotification({
+				type: "error",
+				message: "CompleatForm",
+				floatingNotification: true,
+			});
+	}
 	return (
-		<TouchableOpacity onPress={mutationAction}>
+		<TouchableOpacity onPress={onPress}>
 			{loading ? (
 				<ActivityIndicator />
 			) : (

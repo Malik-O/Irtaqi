@@ -23,7 +23,7 @@ import connectToLangStore from "../../../hook/useConnectToStore/instants/connect
 import useSub from "../../../hook/useSub";
 import useTranslate from "../../../hook/useTranslate";
 import useSetupLanguage from "../../../hook/useSetupLanguage";
-import useGroups from "../../../hook/useGroups";
+import useGroups from "../../../hook/groups/useGroups";
 // utils
 import treeFinder from "../../../utils/treeFinder";
 // components

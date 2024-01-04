@@ -1,7 +1,9 @@
 import "../wdyr";
+import { StatusBar } from "react-native";
 import { Stack } from "expo-router";
 // components
 import ApolloProvider from "../components/ApolloProvider";
+import Snackbar from "../components/notifications/Snackbar";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 // redux
 import { Provider } from "react-redux";
@@ -15,6 +17,7 @@ export default function _layout() {
 			<Provider store={Store}>
 				<PaperProvider>
 					<BottomSheetModalProvider>
+						<Snackbar />
 						<Stack
 							screenOptions={{
 								headerShown: false,

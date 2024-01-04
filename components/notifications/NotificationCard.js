@@ -11,6 +11,7 @@ import useTheme from "../../hook/useTheme";
 import useTranslate from "../../hook/useTranslate";
 // utils
 import calcNotificationTime from "../../utils/calcNotificationTime";
+import replaceWordsWithList from "../../utils/replaceWordsWithList";
 
 function SeenIndicator(seen) {
 	const theme = useTheme();
@@ -54,8 +55,9 @@ const notificationTypes = {
 };
 
 export default function ({ notification }) {
-	const translate = useTranslate();
+	const translate = useTranslate(null, replaceWordsWithList);
 	const theme = useTheme();
+	console.log("notification:", notification);
 	return (
 		<TouchableRipple
 			onPress={() => {}}
@@ -88,7 +90,12 @@ export default function ({ notification }) {
 					}}
 				>
 					<ScreenText textOverflow>
-						{translate(notification.message)}
+						{translate(
+							notification.message,
+							false,
+							false,
+							notification.data,
+						)}
 					</ScreenText>
 					<ScreenText
 						style={

@@ -19,12 +19,14 @@ import ScreenText from "../../components/ScreenText";
 import useZero from "../../hook/useZero";
 import useTheme from "../../hook/useTheme";
 import useTranslate from "../../hook/useTranslate";
+//
+import replaceWordsWithList from "../../utils/replaceWordsWithList";
 // styles
 import { paddingHorizontal } from "../../styles/layout";
 
 let timeout;
 export default function ({ duration = 4000 }) {
-	const translate = useTranslate();
+	const translate = useTranslate(null, replaceWordsWithList);
 	const zero = useZero();
 	const theme = useTheme();
 	// redux
@@ -78,7 +80,12 @@ export default function ({ duration = 4000 }) {
 					onLayout={onLayout}
 				>
 					<ScreenText style={{ color: theme.reverse.secondary }}>
-						{translate(snackbar.data?.message)}
+						{translate(
+							snackbar.data?.message,
+							false,
+							false,
+							snackbar.data?.data,
+						)}
 					</ScreenText>
 				</Animated.View>
 			</Pressable>

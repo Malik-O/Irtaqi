@@ -7,13 +7,16 @@ import GetPlanInstanceHistoryAtDate from "./queries/GetPlanInstanceHistoryAtDate
 import groupAttendance from "./queries/groupAttendance";
 import GetNotifications from "./queries/GetNotifications";
 //* Mutations
-import CreateUser from "./mutations/CreateUser";
 import AddPlan from "./mutations/AddPlan";
 import UpdateHistory from "./mutations/UpdateHistory";
 import UpdateAttendance from "./mutations/UpdateAttendance";
+import CreateGroup from "./mutations/CreateGroup";
+// user
+import CreateUser from "./mutations/user/CreateUser";
+import RemoveUser from "./mutations/user/RemoveUser";
 // notifications
-import SeenAllNotifications from "./mutations/SeenAllNotifications";
-import PushNotification from "./mutations/PushNotification";
+import SeenAllNotifications from "./mutations/notification/SeenAllNotifications";
+import PushNotification from "./mutations/notification/PushNotification";
 
 export default {
 	queries: {
@@ -25,6 +28,7 @@ export default {
 		groupAttendance,
 	},
 	mutations: {
+		CreateGroup,
 		CreateUser,
 		AddPlan,
 		UpdateHistory,
@@ -32,6 +36,8 @@ export default {
 		// notifications
 		SeenAllNotifications,
 		PushNotification,
+		// user
+		RemoveUser,
 	},
 	subscriptions: {
 		NewNotification: gql`

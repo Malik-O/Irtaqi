@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { View } from "react-native";
+import { useGlobalSearchParams } from "expo-router";
 // components
 import { Text } from "react-native-paper";
 import TextInput from "../TextInput";
@@ -16,26 +17,41 @@ import useAddUserValidate from "../../hook/useAddUserValidate";
 import { paddingHorizontal } from "../../styles/layout";
 
 export default function (isStepValidName) {
+	const { groupID } = useGlobalSearchParams();
 	const translate = useTranslate();
 	// redux
 	const { formData } = useSelector((state) => state.addUser);
 	const { groups } = useSelector((state) => state.groups);
 	const dispatch = useDispatch();
+	// add empty array at first
+	useEffect(() => {
+		dispatch(addUserActions.setState(["selectedGroups", [groupID]]));
+	}, []);
 	// is valid
 	const isValidStateNames = {
 		groups: "groups_isValid",
 	};
+	useEffect(() => {
+		dispatch(
+			addUserActions.setState([
+				isValidStateNames.groups,
+				!!formData.selectedGroups?.length,
+			]),
+		);
+	}, [formData.selectedGroups]);
 	useAddUserValidate(
 		isValidStateNames,
 		isStepValidName,
 		addUserActions,
 		formData,
 	);
-	// add empty array at first
-	useEffect(() => {
-		dispatch(addUserActions.setState(["selectedGroups", []]));
-	}, []);
 	// select action
+	function isChecked(id) {
+		return (
+			formData.selectedGroups &&
+			formData.selectedGroups.indexOf(id) !== -1
+		);
+	}
 	function selectItemAction(id) {
 		let newSelectedGroups = [];
 		if (formData.selectedGroups?.indexOf(id) !== -1)
@@ -46,13 +62,6 @@ export default function (isStepValidName) {
 		// update state
 		dispatch(
 			addUserActions.setState(["selectedGroups", newSelectedGroups]),
-		);
-		//
-		dispatch(
-			addUserActions.setState([
-				"groups_isValid",
-				!!newSelectedGroups.length,
-			]),
 		);
 	}
 
@@ -69,13 +78,11 @@ export default function (isStepValidName) {
 					<ListItemRipple
 						title={group.title}
 						checkbox
-						isChecked={
-							formData.selectedGroups?.indexOf(group.id) !== -1
-						}
+						isChecked={isChecked(group.id)}
 						action={() => selectItemAction(group.id)}
 					/>
 					{/* make a spread line between checkboxes */}
-					{i + 1 !== groups.length && <Hr />}
+					{i + 1 !== groups.length && <Hr opacity={0.1} />}
 				</View>
 			))}
 		</Card>

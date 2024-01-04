@@ -2,15 +2,16 @@ import { useState } from "react";
 import { useRouter } from "expo-router";
 // graphQL
 import { useMutation } from "@apollo/client";
-import graphQl from "../graphQl";
+import graphQl from "../../graphQl";
 // hooks
-import useGroups from "./useGroups";
-import usePush from "./notifications/usePush";
+import useGroups from "../groups/useGroups";
+import usePush from "../notifications/usePush";
+//
+import fullName from "../../utils/fullName";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 
-export default function () {
-	const router = useRouter();
+export default function (sheetRef) {
 	const [loading, setIsLoading] = useState(false);
 	const pushNotification = usePush();
 	// redux
@@ -39,6 +40,7 @@ export default function () {
 			roleTitle: "student",
 			resourceIds: formData.selectedGroups,
 		};
+		console.log("variables:", JSON.stringify(variables));
 		// mutate the database
 		setIsLoading(true);
 		try {
@@ -47,6 +49,7 @@ export default function () {
 			pushNotification({
 				type: "success",
 				message: "createUserSuccessfully",
+				data: [fullName(variables)],
 			});
 		} catch (err) {
 			pushNotification({
@@ -58,7 +61,7 @@ export default function () {
 		}
 		setIsLoading(false);
 		// go back
-		router.back();
+		sheetRef.current.close();
 	}
 	return { mutationAction, loading };
 }

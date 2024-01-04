@@ -1,6 +1,10 @@
 import sameHistoryCondition from "../../utils/sameHistoryCondition";
 
 export default {
+	setState(state, action) {
+		const [arg, val] = action.payload;
+		state.addGroupFormData[arg] = val;
+	},
 	initGroupsState(state, action) {
 		state.groups = action.payload;
 	},

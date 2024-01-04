@@ -19,6 +19,7 @@ import { usePathname, Stack, useRouter } from "expo-router";
 import { useSelector } from "react-redux";
 // components
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useBottomSheetModal } from "@gorhom/bottom-sheet";
 import ScreenText from "../../../../../../../components/ScreenText";
 import AdvancedArea from "../../../../../../../components/plans/AdvancedArea";
 import PlansArea from "../../../../../../../components/plans/PlansArea";
@@ -27,7 +28,7 @@ import HeaderButton from "../../../../../../../components/HeaderButton";
 import MenuButton from "../../../../../../../components/CoolScrollView/MenuButton";
 import PlanBottomSheet from "../../../../../../../components/PlanBottomSheet";
 import Agenda from "../../../../../../../components/Agenda";
-import AddPlanBottomSheet from "../../../../../../../components/AddPlanBottomSheet";
+import AddPlanBottomSheet from "../../../../../../../components/addPlanSteps";
 import {
 	BottomSheetModal,
 	BottomSheetModalProvider,
@@ -60,7 +61,7 @@ function index() {
 	const sheetRef = useRef(null);
 	const [selectedPlan, setSelectedPlan] = useState({});
 	const isLoading = useSharedValue(false);
-	const openSheet = useCallback((plan) => {
+	const openPlanDetailsSheet = useCallback((plan) => {
 		sheetRef.current?.present();
 		isLoading.value = true;
 		// timeout
@@ -70,14 +71,13 @@ function index() {
 			isLoading.value = false;
 		}, 200);
 	}, []);
-	// useEffect(() => {
-	// 	sheetRef.current?.onChange &&
-	// 		sheetRef.current?.onChange(() => {
-	// 			console.log("disssssssssssss");
-	// 		});
-	// }, [sheetRef.current]);
-	//
+	// add plan sheet
+	const { dismissAll } = useBottomSheetModal();
 	const addPlanSheetRef = useRef(null);
+	const openAddPlanSheet = useCallback(() => {
+		dismissAll();
+		addPlanSheetRef.current?.present();
+	}, []);
 
 	return (
 		// <BottomSheetModalProvider>
@@ -104,12 +104,7 @@ function index() {
 							<ScreenText variant="headlineLarge">
 								{translate("plans", true)}
 							</ScreenText>
-							<TouchableOpacity
-								onPress={() => {
-									addPlanSheetRef.current?.snapToIndex(1);
-									// router.push(`${pathname}/addPlan`);
-								}}
-							>
+							<TouchableOpacity onPress={openAddPlanSheet}>
 								<Ionicons
 									name="add-circle-outline"
 									color={
@@ -124,7 +119,7 @@ function index() {
 						{/* plans */}
 						<PlansArea
 							plans={plans}
-							openSheet={openSheet}
+							openSheet={openPlanDetailsSheet}
 							selectedPlan={selectedPlan}
 							isDetailsLoading={isLoading}
 						/>
