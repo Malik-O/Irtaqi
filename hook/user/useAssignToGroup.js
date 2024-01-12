@@ -6,39 +6,37 @@ import graphQl from "../../graphQl";
 // hooks
 import useGroups from "../groups/useGroups";
 import usePush from "../notifications/usePush";
-//
+// utils
 import fullName from "../../utils/fullName";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 
-export default function (sheetRef) {
+export default function () {
 	const [loading, setIsLoading] = useState(false);
 	const pushNotification = usePush();
-	const { refetchGroups } = useGroups();
 	// redux
-	const dispatch = useDispatch();
-	const { addGroupFormData } = useSelector((state) => state.groups);
+	const { refetchGroups } = useGroups();
 	// mutation
-	const CreateGroup = graphQl.mutations.CreateGroup;
-	const [CreateGroupMutation] = useMutation(CreateGroup);
+	const AssignToGroup = graphQl.mutations.AssignToGroup;
+	const [AssignToGroupMutation] = useMutation(AssignToGroup);
 	// mutation action
-	async function mutationAction(variables) {
-		variables = {
-			centerID: "650551e91bac85c6cc903431",
-			title: addGroupFormData.title,
-			description: addGroupFormData.description,
-		};
-		// mutate the database
+	async function mutationAction(user, group, sheetRef) {
+		const variables = { userID: user.id, groupID: group.id };
+		console.log("0:", user);
 		setIsLoading(true);
 		try {
-			const { data } = await CreateGroupMutation({ variables });
+			console.log("variables:", variables);
+			await AssignToGroupMutation({ variables });
 			await refetchGroups();
 			pushNotification({
 				type: "success",
-				message: "createGroupeSuccessfully",
-				data: [variables.title],
+				message: "assignUserToGroupSuccessfully",
+				data: [fullName(user), group.title],
 			});
+			// go back
+			sheetRef?.current && sheetRef.current.close();
 		} catch (err) {
+			console.log("err:", err);
 			pushNotification({
 				type: "error",
 				message: "MutationError",
@@ -47,8 +45,6 @@ export default function (sheetRef) {
 			});
 		}
 		setIsLoading(false);
-		// go back
-		sheetRef.current.close();
 	}
 	return { mutationAction, loading };
 }

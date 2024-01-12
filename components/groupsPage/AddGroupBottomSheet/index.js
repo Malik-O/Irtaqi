@@ -32,6 +32,7 @@ export default function ({ sheetRef }) {
 			onChange={handleSheetChange}
 			enableDismissOnClose
 			footerComponent={(props) => Footer(sheetRef, props)}
+			defaultBackDrop
 		>
 			<Felids sheetRef={sheetRef} />
 		</BottomSheet>

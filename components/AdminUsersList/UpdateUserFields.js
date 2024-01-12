@@ -1,24 +1,18 @@
-import { View, Text } from "react-native";
 // component
-import { BottomSheetView, useBottomSheetInternal } from "@gorhom/bottom-sheet";
+import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 import TextInput from "../TextInput";
 import BottomSheetCustomTextInput from "../BottomSheetCustomTextInput";
-import DismissKeyboard from "../DismissKeyboard";
 // hook
 import useTranslate from "../../hook/useTranslate";
 import useAddUserValidate from "../../hook/useAddUserValidate";
-// style
-import { paddingHorizontal } from "../../styles/layout";
-
-const DismissKeyboardView = DismissKeyboard();
 
 export default function ({ bottomSheetRef, selectedUser, setSelectedUser }) {
 	const { shouldHandleKeyboardEvents } = useBottomSheetInternal();
 	const translate = useTranslate();
 	const isValidStateNames = {
-		// nationalID: "nationalID_isValid",
-		// dateOfBirth: "dateOfBirth_isValid",
 		email: "email_isValid",
+		parentPhone: "parentPhone_isValid",
+		phone: "phone_isValid",
 	};
 	function updateSelectedUserValue(key, value) {
 		setSelectedUser({ ...selectedUser, [key]: value });
@@ -37,23 +31,41 @@ export default function ({ bottomSheetRef, selectedUser, setSelectedUser }) {
 	}
 	// renders
 	return (
-		<BottomSheetView style={{ flex: 1, paddingHorizontal }}>
-			<DismissKeyboardView onDismiss={onDismiss}>
-				{/* <Text>{JSON.stringify(selectedUser)}</Text> */}
-				<TextInput
-					stateName="email"
-					isValidStateName={isValidStateNames.email}
-					label={translate("email", true, false)}
-					keyboardType="email-address"
-					updateStoreFun={updateSelectedUserValue}
-					formData={selectedUser}
-					regex={
-						/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$/
-					}
-					errorHint={translate("emailHint")}
-					Comp={BottomSheetCustomTextInput}
-				/>
-			</DismissKeyboardView>
-		</BottomSheetView>
+		<>
+			<TextInput
+				stateName="email"
+				isValidStateName={isValidStateNames.email}
+				label={translate("email", true, false)}
+				keyboardType="email-address"
+				updateStoreFun={updateSelectedUserValue}
+				formData={selectedUser}
+				regex={
+					/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$/
+				}
+				errorHint={translate("emailHint")}
+				Comp={BottomSheetCustomTextInput}
+			/>
+			<TextInput
+				stateName="phone"
+				isValidStateName={isValidStateNames.phone}
+				label={translate("phone", true, false)}
+				keyboardType="phone-pad"
+				updateStoreFun={updateSelectedUserValue}
+				regex={/^\d{10,}$/}
+				formData={selectedUser}
+				errorHint={translate("requiredHint")}
+				Comp={BottomSheetCustomTextInput}
+			/>
+			<TextInput
+				stateName="parentPhone"
+				isValidStateName={isValidStateNames.parentPhone}
+				label={translate("parentPhone", true, false)}
+				keyboardType="phone-pad"
+				updateStoreFun={updateSelectedUserValue}
+				formData={selectedUser}
+				errorHint={translate("requiredHint")}
+				Comp={BottomSheetCustomTextInput}
+			/>
+		</>
 	);
 }

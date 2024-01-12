@@ -13,7 +13,6 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import BottomSheet from "../BottomSheet";
 import ScreenText from "../ScreenText";
 import Card from "../Card";
-import Handle from "./Handle";
 // hooks
 import usePlanInstanceString from "../../hook/plans/usePlanInstanceString";
 import useTheme from "../../hook/useTheme";
@@ -91,8 +90,18 @@ function PlanInstance({ instance, selectedPlan }) {
 }
 
 function index({ sheetRef, selectedPlan, isLoading }) {
-	const snapPoints = useMemo(() => ["50%", "90%"], []);
+	//
+	const data = useMemo(() => {
+		let Plans_instances = selectedPlan?.Plans_instances || [];
+		console.log(
+			"Plans_instances:",
+			Plans_instances.map((i) => i.date),
+		);
+		Plans_instances = [...Plans_instances].sort((a, b) => a.date - b.date);
+		return [{ loadingEle: true }, ...Plans_instances];
+	}, [selectedPlan]);
 	// Bottom Sheet style
+	const snapPoints = useMemo(() => ["50%", "90%"], []);
 	const contentStyle = useAnimatedStyle(
 		() => ({ display: isLoading.value ? "none" : "flex" }),
 		[],
@@ -103,12 +112,9 @@ function index({ sheetRef, selectedPlan, isLoading }) {
 	);
 
 	return (
-		<BottomSheet ref={sheetRef} snapPoints={snapPoints} onChange={() => {}}>
+		<BottomSheet ref={sheetRef} snapPoints={snapPoints}>
 			<BottomSheetFlatList
-				data={[
-					{ loadingEle: true },
-					...(selectedPlan?.Plans_instances || []),
-				]}
+				data={data}
 				renderItem={({ item, index }) => {
 					if (item.loadingEle)
 						return (

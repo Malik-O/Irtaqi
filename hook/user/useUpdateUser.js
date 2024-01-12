@@ -6,37 +6,38 @@ import graphQl from "../../graphQl";
 // hooks
 import useGroups from "../groups/useGroups";
 import usePush from "../notifications/usePush";
-//
+// utils
 import fullName from "../../utils/fullName";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 
-export default function (sheetRef) {
-	const [loading, setIsLoading] = useState(false);
+export default function (selectedUser, sheetRef) {
+	// const [loading, setIsLoading] = useState(false);
 	const pushNotification = usePush();
-	const { refetchGroups } = useGroups();
 	// redux
-	const dispatch = useDispatch();
-	const { addGroupFormData } = useSelector((state) => state.groups);
+	const { refetchGroups } = useGroups();
 	// mutation
-	const CreateGroup = graphQl.mutations.CreateGroup;
-	const [CreateGroupMutation] = useMutation(CreateGroup);
+	const UpdateUser = graphQl.mutations.UpdateUser;
+	const [UpdateUserMutation] = useMutation(UpdateUser);
 	// mutation action
 	async function mutationAction(variables) {
-		variables = {
-			centerID: "650551e91bac85c6cc903431",
-			title: addGroupFormData.title,
-			description: addGroupFormData.description,
-		};
+		// go back
+		sheetRef.current.close();
 		// mutate the database
-		setIsLoading(true);
+		variables = {
+			userID: selectedUser.id,
+			email: selectedUser.email,
+			phone: selectedUser.phone,
+			parentPhone: selectedUser.parentPhone,
+		};
+		// setIsLoading(true);
 		try {
-			const { data } = await CreateGroupMutation({ variables });
+			const { data } = await UpdateUserMutation({ variables });
 			await refetchGroups();
 			pushNotification({
 				type: "success",
-				message: "createGroupeSuccessfully",
-				data: [variables.title],
+				message: "UpdatedUserSuccessfully",
+				data: [fullName(data.updateUser)],
 			});
 		} catch (err) {
 			pushNotification({
@@ -46,9 +47,7 @@ export default function (sheetRef) {
 				floatingNotification: true,
 			});
 		}
-		setIsLoading(false);
-		// go back
-		sheetRef.current.close();
+		// setIsLoading(false);
 	}
-	return { mutationAction, loading };
+	return { mutationAction };
 }

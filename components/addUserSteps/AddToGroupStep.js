@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { useGlobalSearchParams } from "expo-router";
 // components
 import { Text } from "react-native-paper";
-import TextInput from "../TextInput";
+import ListItemRipple from "../ListItemRipple";
 import Hr from "../Hr";
 import Card from "../Card";
 // redux
@@ -11,7 +11,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { addUserActions } from "../../store/addUser";
 // hook
 import useTranslate from "../../hook/useTranslate";
-import ListItemRipple from "../ListItemRipple";
 import useAddUserValidate from "../../hook/useAddUserValidate";
 // styles
 import { paddingHorizontal } from "../../styles/layout";
@@ -28,9 +27,7 @@ export default function (isStepValidName) {
 		dispatch(addUserActions.setState(["selectedGroups", [groupID]]));
 	}, []);
 	// is valid
-	const isValidStateNames = {
-		groups: "groups_isValid",
-	};
+	const isValidStateNames = { groups: "groups_isValid" };
 	useEffect(() => {
 		dispatch(
 			addUserActions.setState([

@@ -6,7 +6,7 @@ import graphQl from "../../graphQl";
 // hooks
 import useGroups from "../groups/useGroups";
 import usePush from "../notifications/usePush";
-//
+// utils
 import fullName from "../../utils/fullName";
 // redux
 import { useSelector, useDispatch } from "react-redux";
@@ -37,7 +37,7 @@ export default function (sheetRef) {
 			phone: formData.phone,
 			parentPhone: formData.parentPhone,
 			// roles
-			roleTitle: "student",
+			roleTitle: formData.selectedRole,
 			resourceIds: formData.selectedGroups,
 		};
 		console.log("variables:", JSON.stringify(variables));
@@ -52,6 +52,7 @@ export default function (sheetRef) {
 				data: [fullName(variables)],
 			});
 		} catch (err) {
+			console.log("err:", err.contains("already exists"));
 			pushNotification({
 				type: "error",
 				message: "MutationError",

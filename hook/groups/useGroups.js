@@ -47,8 +47,8 @@ export default function () {
 		}
 	}, [userData]);
 	// refetch data
-	async function refetchGroups() {
-		setIsLoading(true);
+	async function refetchGroups(hasIndicator) {
+		hasIndicator && setIsLoading(true);
 		try {
 			const { data } = await refetch(variables);
 			StoreConnectionsInstance.init(data?.groups);
@@ -60,7 +60,7 @@ export default function () {
 				floatingNotification: true,
 			});
 		}
-		setIsLoading(false);
+		hasIndicator && setIsLoading(false);
 	}
 	return { isLoading, error, refetchGroups };
 }

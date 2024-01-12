@@ -1,39 +1,30 @@
-import "../../../../../../wdyr";
-import { useMemo, memo, useEffect, useState, useRef } from "react";
-import { View, Text } from "react-native";
+import { useMemo, memo, useRef } from "react";
 import {
 	useLocalSearchParams,
 	usePathname,
 	useRouter,
 	Stack,
 } from "expo-router";
-import Animated from "react-native-reanimated";
 // redux
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 // components
-import Card from "../../../../../../components/Card";
+import SwipeableList from "../../../../../../components/SwipeableList";
 import ScreenView from "../../../../../../components/ScreenView";
-import ScreenText from "../../../../../../components/ScreenText";
-import CoolScrollView from "../../../../../../components/CoolScrollView";
 import HeaderButton from "../../../../../../components/HeaderButton";
 import MenuButton from "../../../../../../components/CoolScrollView/MenuButton";
-// hook
-import useTheme from "../../../../../../hook/useTheme";
 // paper
 import useTranslate from "../../../../../../hook/useTranslate";
+//
+import fullName from "../../../../../../utils/fullName";
+
 // resolvers
-function fullName(entity) {
-	return `${entity.first_name} ${entity.parent_name || ""}`;
+function resolveRouter(pathname) {
+	return (student) => ({
+		pathname: `${pathname}/[studentID]`,
+		params: { studentID: student.id },
+	});
 }
-function resolveRouter(pathname, studentID) {
-	return { pathname: `${pathname}/[studentID]`, params: { studentID } };
-}
-function useCurrPth() {
-	const pathnameRef = useRef(null);
-	const pathname = usePathname();
-	pathnameRef.current = pathname;
-	return "/groups/650552241bac85c6cc903432/asTeacher/651438b01ffb2f1f855acff7";
-}
+
 function index() {
 	// console.log("renders----------------------------------:", 0);
 	const { groupID, courseID } = useLocalSearchParams();
@@ -57,15 +48,15 @@ function index() {
 			(course) => course.id === courseID,
 		)[0]?.floatingStudents;
 	}, []);
-	const studentList = useMemo(
-		() =>
-			floatingStudents.map((student) => ({
-				...student,
-				title: fullName(student),
-				href: resolveRouter(pathname, student.id),
-			})),
-		[],
-	);
+	// const studentList = useMemo(
+	// 	() =>
+	// 		floatingStudents.map((student) => ({
+	// 			...student,
+	// 			title: fullName(student),
+	// 			href: resolveRouter(pathname, student.id),
+	// 		})),
+	// 	[],
+	// );
 	const props = useMemo(
 		() => ({
 			title: selectedGroup.title,
@@ -94,21 +85,14 @@ function index() {
 					headerLeft: () => <HeaderButton isExists={true} back />,
 				}}
 			/>
-			<Animated.FlatList
-				style={[{ marginBottom: 80 }]}
-				data={studentList}
-				scrollEventThrottle={16}
-				keyExtractor={(_, i) => i}
-				renderItem={({ item, index }) => {
-					return <Card key={index} item={item} href={item.href} />;
-				}}
+			<SwipeableList
+				data={floatingStudents}
+				hasAvatar
+				resolver={resolveRouter(pathname)}
 			/>
 		</ScreenView>
 	);
 }
-index.whyDidYouRender = {
-	logOnDifferentValues: true,
-};
 export default memo(index);
 
 // const groups = [

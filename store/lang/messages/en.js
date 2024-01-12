@@ -48,6 +48,9 @@ export default {
 	title: "title",
 	groupTitle: "group title",
 	groupDescription: "group description",
+	// confirmRemoveGroup: "are you sure you want to remove ###",
+	saveChanges: "save changes",
+	removeUser: "remove user",
 	teachers: "teachers",
 	teacher: "teacher",
 	students: "students",
@@ -135,6 +138,7 @@ export default {
 	addUser: "add a new user",
 	description: "description",
 	transport: "transport",
+	transportToGroup: "transport to group",
 	remove: "remove",
 	edit: "edit",
 	close: "close",
@@ -154,10 +158,12 @@ export default {
 	//
 	drag2Arrow: "Drag toward the arrows",
 	// remove plan messages
-	confirmRemoveMsg: "are you sure you want to remove",
+	confirmRemoveMsg: "are you sure you want to remove ###",
 	someCustomsRemainingMsg:
 		"the plan was removed partially because there is some progress been made by other users like:",
 	confirmForceRemoveMsg: "do you want to force delete ### plan?",
+	assignUserToGroupSuccessfully: "the user ### has been moved to ### group",
+	UpdatedUserSuccessfully: "### data has been moved updated",
 	forceRemove: "force remove",
 	noPlansMsg: "there is no plans",
 	yesterday: "yesterday",
@@ -200,4 +206,5 @@ export default {
 	attendance: "attendance",
 	showAllCalendar: "calendar",
 	staff: "staff members",
+	permission: "permission",
 };

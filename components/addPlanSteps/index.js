@@ -3,6 +3,7 @@ import { Keyboard, TouchableWithoutFeedback, View } from "react-native";
 import { useRouter, usePathname, useLocalSearchParams } from "expo-router";
 // redux
 import { useSelector } from "react-redux";
+import { addPlanActions } from "../../store/addPlan";
 // apollo
 import graphQl from "../../graphQl";
 import { useMutation } from "@apollo/client";
@@ -43,7 +44,7 @@ function pageNumberFromVerseKey(versesPerPage, verse_key) {
 const arabicNumbs2EnglishNumbs = (s) =>
 	s.replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
 
-function useAddPlan() {
+function useAddPlan(sheetRef) {
 	const [loading, setLoading] = useState(false);
 	const { studentID } = useLocalSearchParams();
 	const router = useRouter();
@@ -57,6 +58,7 @@ function useAddPlan() {
 	const [addPlanAction] = useMutation(AddPlan);
 	async function doAddPlan() {
 		setLoading(true);
+		sheetRef.close();
 		// get page from verse_key
 		const verse_key = `${formData.fromSurah + 1}:${formData.fromVerse}`;
 		const variables = {
@@ -84,7 +86,6 @@ function useAddPlan() {
 		} catch (error) {
 			console.log("error:", error);
 		}
-		router.back();
 		setLoading(false);
 	}
 	return { doAddPlan, loading };
@@ -102,19 +103,16 @@ export default function ({ sheetRef }) {
 		{ ele: startingFrom, isStepValid: "startingFrom_isValid" },
 	];
 	// redux
-	const { doAddPlan, loading } = useAddPlan();
+	const { doAddPlan, loading } = useAddPlan(sheetRef);
 	const { formData } = useSelector((state) => state.addPlan);
 	// callbacks
 	const snapPoints = useMemo(() => ["90%"], []);
-	const handleSheetChange = useCallback((index) => {
-		console.log("handleSheetChange", index);
-	}, []);
 
 	return (
 		<BottomSheet
 			ref={sheetRef}
 			snapPoints={snapPoints}
-			onChange={handleSheetChange}
+			storeAction={addPlanActions}
 			enableDismissOnClose
 		>
 			<BottomSheetView style={{ flex: 1 }}>

@@ -1,16 +1,22 @@
 import { useCallback, useMemo } from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 // component
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { BottomSheetView } from "@gorhom/bottom-sheet";
 import BottomSheet from "../BottomSheet";
-import TextInput from "../TextInput";
 import Footer from "./Footer";
-import BottomSheetCustomTextInput from "../BottomSheetCustomTextInput";
 import UpdateUserFields from "./UpdateUserFields";
+import DismissKeyboard from "../DismissKeyboard";
+import ScreenText from "../ScreenText";
+import Avatar from "../Avatar";
+// style
+import { paddingHorizontal } from "../../styles/layout";
 // hook
-import useTranslate from "../../hook/useTranslate";
 import useAddUserValidate from "../../hook/useAddUserValidate";
 import useTheme from "../../hook/useTheme";
+// utils
+import fullName from "../../utils/fullName";
+
+const DismissKeyboardView = DismissKeyboard();
 
 export default function ({
 	bottomSheetRef,
@@ -20,7 +26,7 @@ export default function ({
 }) {
 	const theme = useTheme();
 	// callbacks
-	const snapPoints = useMemo(() => ["50%", "90%"], []);
+	const snapPoints = useMemo(() => ["70%", "90%"], []);
 	const handleSheetChanges = useCallback((index) => {
 		if (index === -1) setSelectedUser({});
 		// console.log("handleSheetChanges", index);
@@ -41,6 +47,11 @@ export default function ({
 		selectedUser,
 		updateSelectedUserValue,
 	);
+	//
+	function onDismiss() {
+		shouldHandleKeyboardEvents.value = false;
+		if (bottomSheetRef.current) bottomSheetRef.current.expand();
+	}
 	// renders
 	return (
 		<BottomSheet
@@ -48,15 +59,33 @@ export default function ({
 			snapPoints={snapPoints}
 			onChange={handleSheetChanges}
 			enableDismissOnClose
+			defaultBackDrop
 			footerComponent={(props) =>
-				Footer({ ...props, userID: selectedUser?.id, bottomSheetRef })
+				Footer({ ...props, selectedUser, bottomSheetRef })
 			}
 		>
-			<UpdateUserFields
-				bottomSheetRef={bottomSheetRef}
-				selectedUser={selectedUser}
-				setSelectedUser={setSelectedUser}
-			/>
+			<BottomSheetView style={{ flex: 1, paddingHorizontal }}>
+				<DismissKeyboardView onDismiss={onDismiss}>
+					<View
+						style={{
+							justifyContent: "center",
+							alignItems: "center",
+							marginVertical: paddingHorizontal,
+							gap: paddingHorizontal / 2,
+						}}
+					>
+						<Avatar size={78} />
+						<ScreenText variant="titleLarge">
+							{fullName(selectedUser)}
+						</ScreenText>
+					</View>
+					<UpdateUserFields
+						bottomSheetRef={bottomSheetRef}
+						selectedUser={selectedUser}
+						setSelectedUser={setSelectedUser}
+					/>
+				</DismissKeyboardView>
+			</BottomSheetView>
 		</BottomSheet>
 	);
 }

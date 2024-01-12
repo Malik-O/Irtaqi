@@ -16,14 +16,6 @@ export default function () {
 			}
 		>
 			<Stack.Screen name="index" />
-			<Stack.Screen
-				name="addPlan"
-				options={{
-					presentation: "modal",
-					headerBackButtonMenuEnabled: true,
-					header: () => null,
-				}}
-			/>
 		</Stack>
 	);
 }

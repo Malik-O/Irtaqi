@@ -17,37 +17,33 @@ import useAddUserValidate from "../../hook/useAddUserValidate";
 import { paddingHorizontal } from "../../styles/layout";
 
 export default function (isStepValidName) {
-	const { groupID } = useGlobalSearchParams();
 	const translate = useTranslate();
 	// redux
 	const { formData } = useSelector((state) => state.addUser);
-	const { groups } = useSelector((state) => state.groups);
 	const dispatch = useDispatch();
 	// add empty array at first
 	useEffect(() => {
-		dispatch(addUserActions.setState(["selectedGroups", [groupID]]));
+		dispatch(addUserActions.setState(["selectedRole", null]));
 	}, []);
 	const roles = useMemo(
 		() => [
-			{ title: translate("student") },
-			{ title: translate("teacher") },
-			{ title: translate("admin") },
-			{ title: translate("secretary") },
+			{ title: translate("student"), value: "student" },
+			{ title: translate("teacher"), value: "teacher" },
+			// { title: translate("admin"), value: "admin" },
+			// { title: translate("secretary"), value: "secretary" },
 		],
 		[],
 	);
 	// is valid
-	const isValidStateNames = {
-		groups: "groups_isValid",
-	};
+	const isValidStateNames = { role: "role_isValid" };
 	useEffect(() => {
 		dispatch(
 			addUserActions.setState([
-				isValidStateNames.groups,
-				!!formData.selectedGroups?.length,
+				isValidStateNames.role,
+				!!formData.selectedRole,
 			]),
 		);
-	}, [formData.selectedGroups]);
+	}, [formData.selectedRole]);
 	useAddUserValidate(
 		isValidStateNames,
 		isStepValidName,
@@ -55,23 +51,13 @@ export default function (isStepValidName) {
 		formData,
 	);
 	// select action
-	function isChecked(id) {
-		return (
-			formData.selectedGroups &&
-			formData.selectedGroups.indexOf(id) !== -1
-		);
+	function isChecked(value) {
+		return formData.selectedRole === value;
 	}
-	function selectItemAction(id) {
-		let newSelectedGroups = [];
-		if (formData.selectedGroups?.indexOf(id) !== -1)
-			newSelectedGroups = formData.selectedGroups?.filter(
-				(sg) => sg !== id,
-			);
-		else newSelectedGroups = [...formData?.selectedGroups, id];
-		// update state
-		dispatch(
-			addUserActions.setState(["selectedGroups", newSelectedGroups]),
-		);
+	function selectItemAction(value) {
+		if (formData.selectedRole !== value)
+			dispatch(addUserActions.setState(["selectedRole", value]));
+		console.log("value:", value, formData.selectedRole);
 	}
 
 	return (
@@ -80,15 +66,15 @@ export default function (isStepValidName) {
 				variant="headlineSmall"
 				style={{ marginBottom: paddingHorizontal }}
 			>
-				{translate("assignToGroup")}
+				{translate("permission")}
 			</Text>
 			{roles.map((role, i) => (
 				<View key={i}>
 					<ListItemRipple
 						title={role.title}
 						checkbox
-						isChecked={isChecked(role.id)}
-						action={() => selectItemAction(role.id)}
+						isChecked={isChecked(role.value)}
+						action={() => selectItemAction(role.value)}
 					/>
 					{/* make a spread line between checkboxes */}
 					{i + 1 !== roles.length && <Hr opacity={0.1} />}

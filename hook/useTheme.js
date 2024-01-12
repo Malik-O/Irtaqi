@@ -4,9 +4,12 @@ import theme from "../styles/theme";
 
 export default function () {
 	let colorScheme = useColorScheme();
-	return useMemo(() => ({
-		...theme[colorScheme],
-		reverse: theme[colorScheme === "light" ? "dark" : "light"],
-		theme,
-	}));
+	return useMemo(
+		() => ({
+			...theme[colorScheme],
+			reverse: theme[colorScheme === "light" ? "dark" : "light"],
+			theme,
+		}),
+		[],
+	);
 }

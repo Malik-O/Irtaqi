@@ -26,7 +26,7 @@ export default function DatePickerListItem({
 	// actions
 	function validate(val) {
 		const isValid = !!(val || datePickerStateValue);
-		console.log("s:", val, datePickerStateValue);
+		// console.log("s:", val, datePickerStateValue);
 		dispatch(storeAction.setState([isValidStateName, isValid]));
 	}
 	function showDatePicker() {

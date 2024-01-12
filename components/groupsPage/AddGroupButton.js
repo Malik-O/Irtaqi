@@ -10,10 +10,14 @@ export default function ({ sheetRef }) {
 	const theme = useTheme();
 	// redux
 	const { userData } = useSelector((state) => state.user);
-	console.log("userData:", userData);
-	const hasAccessToAddGroup = userData.roles.some(
-		(role) => role.title === "organization_owner",
-	);
+	// only the owners can add groups
+	const hasAccessToAddGroup =
+		userData?.roles &&
+		userData.roles.some(
+			(role) =>
+				role.title === "organization_owner" ||
+				role.title === "center_admin",
+		);
 	// return the button if the user has access to add group
 	if (hasAccessToAddGroup)
 		return (

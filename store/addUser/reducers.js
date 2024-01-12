@@ -3,4 +3,7 @@ export default {
 		const [arg, val] = action.payload;
 		state.formData[arg] = val;
 	},
+	resetFrom(state) {
+		state.formData = {};
+	},
 };

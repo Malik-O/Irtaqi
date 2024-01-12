@@ -57,7 +57,6 @@ const notificationTypes = {
 export default function ({ notification }) {
 	const translate = useTranslate(null, replaceWordsWithList);
 	const theme = useTheme();
-	console.log("notification:", notification);
 	return (
 		<TouchableRipple
 			onPress={() => {}}

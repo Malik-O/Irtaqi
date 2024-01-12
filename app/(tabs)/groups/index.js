@@ -15,7 +15,7 @@ export default function () {
 	const translate = useTranslate();
 	const sheetRef = useRef(null);
 	return (
-		<ScreenView hasLoading={true}>
+		<ScreenView hasLoading={true} hasScrollView={false}>
 			<View
 				style={{
 					paddingHorizontal,
@@ -30,7 +30,11 @@ export default function () {
 				</ScreenText>
 				<AddGroupButton sheetRef={sheetRef} />
 			</View>
-			<GroupList />
+			<GroupList
+				emptyAction={() =>
+					sheetRef.current && sheetRef.current.present()
+				}
+			/>
 			<AddGroupBottomSheet sheetRef={sheetRef} />
 		</ScreenView>
 	);

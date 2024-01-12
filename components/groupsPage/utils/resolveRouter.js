@@ -1,6 +1,6 @@
-export default function ({ id, as }, { groups, groupID }) {
+export default function ({ id, as }, itemList) {
 	// console.log(id, as);
-	const selectedGroup = groups.filter((group) => group.id === groupID)[0];
+	const selectedGroup = itemList.filter((group) => group.id === id)[0];
 	let pathname;
 	switch (as) {
 		case "teacher":

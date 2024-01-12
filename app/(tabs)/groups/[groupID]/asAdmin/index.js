@@ -1,5 +1,6 @@
 import { useRef, useCallback } from "react";
 import { useLocalSearchParams, Stack } from "expo-router";
+import { useSharedValue } from "react-native-reanimated";
 // redux
 import { useSelector } from "react-redux";
 // components
@@ -16,9 +17,12 @@ import useTranslate from "../../../../../hook/useTranslate";
 function resolveRouter(pathname, studentID) {
 	return { pathname: `${pathname}/[studentID]`, params: { studentID } };
 }
+let timeout;
 export default function () {
 	const translate = useTranslate();
 	const { groupID } = useLocalSearchParams();
+	//
+	const isLoading = useSharedValue(false);
 	// redux
 	const { groups } = useSelector((state) => state.groups);
 	const selectedGroup = groups.find((group) => group.id === groupID);
@@ -28,6 +32,12 @@ export default function () {
 	const openAddUserSheet = useCallback(() => {
 		dismissAll();
 		addUserSheetRef.current?.present();
+		isLoading.value = true;
+		// timeout
+		clearTimeout(timeout);
+		timeout = setTimeout(() => {
+			isLoading.value = false;
+		}, 500);
 	}, []);
 	// scroll view props
 	// const props = useMemo(
@@ -88,7 +98,10 @@ export default function () {
 					openAddUserSheet={openAddUserSheet}
 				/>
 				{/* bottom sheets */}
-				<AddUserBottomSheet sheetRef={addUserSheetRef} />
+				<AddUserBottomSheet
+					sheetRef={addUserSheetRef}
+					isLoading={isLoading}
+				/>
 			</ScreenView>
 		</>
 	);

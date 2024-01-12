@@ -1,35 +1,30 @@
 import { useCallback, useState, useMemo } from "react";
-import { Keyboard, TouchableWithoutFeedback, View } from "react-native";
-import { useRouter, usePathname, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator } from "react-native";
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
 // redux
 import { useSelector } from "react-redux";
-// apollo
-import graphQl from "../../graphQl";
-import { useMutation } from "@apollo/client";
+import { addUserActions } from "../../store/addUser";
 // components
-import { BottomSheetView, BottomSheetModal } from "@gorhom/bottom-sheet";
+import { BottomSheetView } from "@gorhom/bottom-sheet";
 import Stepper from "../Stepper";
 import BottomSheet from "../BottomSheet";
 import DismissKeyboard from "../DismissKeyboard";
 // hook
-import connectToPlansStore from "../../hook/useConnectToStore/instants/connectToPlansStore";
 import useCreateUser from "../../hook/user/useCreateUser";
 import useTranslate from "../../hook/useTranslate";
 import useTheme from "../../hook/useTheme";
 // styles
-import { SHADOWS } from "../../styles/layout";
 // steps components
 import RoleStep from "./RoleStep";
 import NameStep from "./NameStep";
 import NationalIDStep from "./NationalIDStep";
 import ContactStep from "./ContactStep";
 import AddToGroupStep from "./AddToGroupStep";
-import GenderStep from "./GenderStep";
 
 // create a view component with dismiss hook
 const DismissKeyboardView = DismissKeyboard();
 
-export default function ({ sheetRef }) {
+export default function ({ sheetRef, isLoading }) {
 	const translate = useTranslate();
 	const theme = useTheme();
 	const [activeIndex, setActiveIndex] = useState(0);
@@ -46,27 +41,39 @@ export default function ({ sheetRef }) {
 	const { mutationAction, loading } = useCreateUser(sheetRef);
 	// callbacks
 	const snapPoints = useMemo(() => ["90%"], []);
-	const handleSheetChange = useCallback((index) => {
-		// console.log("handleSheetChange", index);
-	}, []);
+	// Bottom Sheet loading style
+	const contentStyle = useAnimatedStyle(
+		() => ({ display: loading ? "none" : "flex" }),
+		[],
+	);
+	const indicatorStyle = useAnimatedStyle(
+		() => ({ display: loading ? "flex" : "none" }),
+		[],
+	);
 
 	return (
 		<BottomSheet
 			ref={sheetRef}
 			snapPoints={snapPoints}
-			onChange={handleSheetChange}
+			storeAction={addUserActions}
+			loading={loading}
 			enableDismissOnClose
 		>
 			<BottomSheetView style={{ flex: 1 }}>
 				<DismissKeyboardView>
-					<Stepper
-						title={translate("addUser", true)}
-						steps={steps}
-						activeIndex={activeIndex}
-						setActiveIndex={setActiveIndex}
-						submitEvent={{ mutationAction, loading }}
-						formData={formData}
-					/>
+					<Animated.View style={indicatorStyle}>
+						<ActivityIndicator />
+					</Animated.View>
+					<Animated.View style={contentStyle}>
+						<Stepper
+							title={translate("addUser", true)}
+							steps={steps}
+							activeIndex={activeIndex}
+							setActiveIndex={setActiveIndex}
+							submitEvent={{ mutationAction, loading }}
+							formData={formData}
+						/>
+					</Animated.View>
 				</DismissKeyboardView>
 			</BottomSheetView>
 		</BottomSheet>

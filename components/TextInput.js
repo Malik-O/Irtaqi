@@ -82,6 +82,7 @@ export default forwardRef(
 					keyboardType={keyboardType}
 					underlineColor={underlineColor}
 					placeholder={placeholder}
+					placeholderTextColor={theme.reverse.moreFadeSecondary}
 					secureTextEntry={secureTextEntry && isPasswordSecure}
 					right={
 						secureTextEntry && (

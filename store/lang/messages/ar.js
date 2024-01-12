@@ -35,6 +35,9 @@ export default {
 	title: "عنوان",
 	groupTitle: "اسم المجموعة",
 	groupDescription: "وصف المجموعة",
+	// confirmRemoveGroup: "هل انت متأكد من رغبتك في حذف ###",
+	saveChanges: "احفظ التغييرات",
+	removeUser: "حذف المستخدم",
 	add_student: "اضف طالب",
 	add_teacher: "اضف معلم",
 	email: "البريد الالكتروني",
@@ -153,6 +156,7 @@ export default {
 	addUser: "اضف منتسب جديد",
 	description: "وصف",
 	transport: "نقل",
+	transportToGroup: "نقل الى مجموعة",
 	remove: "حذف",
 	edit: "تعديل",
 	close: "اغلق",
@@ -177,6 +181,8 @@ export default {
 		"لم يتم حذف كل الخطة لان هناك بعض التقدم تم حفظه لبعض المستخدمين تابع لهذة الخطة مثل:",
 	confirmForceRemoveMsg:
 		"هل انت متأكد من رغبتك في حذف التقدم المحفوظ مع الخطة؟",
+	assignUserToGroupSuccessfully: "تم نقل المستخدم ### الى مجموعة ###",
+	UpdatedUserSuccessfully: "بيانات ### تم تحديثها",
 	forceRemove: "حذف اجباري",
 	noPlansMsg: "لا يوجد خطط",
 	yesterday: "الامس",
@@ -219,4 +225,5 @@ export default {
 	attendance: "الحضور",
 	showAllCalendar: "التقويم",
 	staff: "طاقم العمل",
+	permission: "صلاحية",
 };
