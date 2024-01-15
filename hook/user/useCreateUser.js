@@ -40,7 +40,6 @@ export default function (sheetRef) {
 			roleTitle: formData.selectedRole,
 			resourceIds: formData.selectedGroups,
 		};
-		console.log("variables:", JSON.stringify(variables));
 		// mutate the database
 		setIsLoading(true);
 		try {

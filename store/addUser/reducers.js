@@ -4,6 +4,7 @@ export default {
 		state.formData[arg] = val;
 	},
 	resetFrom(state) {
+		console.log("resetFromresetFromresetFromresetFrom");
 		state.formData = {};
 	},
 };

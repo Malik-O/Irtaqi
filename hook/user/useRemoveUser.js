@@ -28,13 +28,13 @@ export default function (bottomSheetRef) {
 			await refetchGroups();
 			// close bottom sheet
 			bottomSheetRef?.current && bottomSheetRef.current.close();
-			//
+			// push notification
 			pushNotification({
 				type: "success",
 				message: "removeUserSuccessfully",
 				data: [fullName(removeUser)],
 			});
-		} catch (e) {
+		} catch (err) {
 			pushNotification({
 				type: "error",
 				message: "MutationError",

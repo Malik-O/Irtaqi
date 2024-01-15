@@ -1,57 +1,107 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useState, useMemo } from "react";
 import { View } from "react-native";
 // component
-import { BottomSheetView } from "@gorhom/bottom-sheet";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import BottomSheet from "../BottomSheet";
-import Footer from "./Footer";
 import UpdateUserFields from "./UpdateUserFields";
-import DismissKeyboard from "../DismissKeyboard";
-import ScreenText from "../ScreenText";
+import GroupsTab from "./GroupsTab";
+import Tabs from "../Tabs";
 import Avatar from "../Avatar";
+import ScreenText from "../ScreenText";
+// hook
+import useTranslate from "../../hook/useTranslate";
+import useAssignToGroup from "../../hook/user/useAssignToGroup";
+import useUpdateUser from "../../hook/user/useUpdateUser";
 // style
 import { paddingHorizontal } from "../../styles/layout";
-// hook
-import useAddUserValidate from "../../hook/useAddUserValidate";
-import useTheme from "../../hook/useTheme";
 // utils
 import fullName from "../../utils/fullName";
-
-const DismissKeyboardView = DismissKeyboard();
+import deepEqual from "../../utils/deepEqual";
 
 export default function ({
 	bottomSheetRef,
 	selectedUser,
 	setSelectedUser,
+	selectedUserFrom,
+	setSelectedUserFrom,
 	isLoading,
 }) {
-	const theme = useTheme();
+	const [activeIndex, setActiveIndex] = useState(0);
+	const translate = useTranslate();
 	// callbacks
 	const snapPoints = useMemo(() => ["70%", "90%"], []);
 	const handleSheetChanges = useCallback((index) => {
-		if (index === -1) setSelectedUser({});
-		// console.log("handleSheetChanges", index);
+		if (index === -1) {
+			setSelectedUser({});
+			setChangeableRoles([]);
+		}
 	}, []);
-
-	const isValidStateNames = {
-		// nationalID: "nationalID_isValid",
-		// dateOfBirth: "dateOfBirth_isValid",
-		email: "email_isValid",
-	};
-	function updateSelectedUserValue(key, value) {
-		setSelectedUser({ ...selectedUser, [key]: value });
-	}
-	useAddUserValidate(
-		isValidStateNames,
-		"isFormValid",
-		null,
-		selectedUser,
-		updateSelectedUserValue,
+	// get user groups
+	const fields = useMemo(
+		() => ({
+			static: [
+				{ label: "nationalID" },
+				{ label: "gender" },
+				{ label: "dateOfBirth", date: true },
+			],
+			editable: [
+				{
+					label: "email",
+					keyboardType: "email-address",
+					errorHint: "emailHint",
+				},
+				{
+					label: "phone",
+					keyboardType: "phone-pad",
+					errorHint: "requiredHint",
+				},
+				{
+					label: "parentPhone",
+					keyboardType: "phone-pad",
+					errorHint: "requiredHint",
+				},
+			],
+		}),
+		[],
 	);
-	//
-	function onDismiss() {
-		shouldHandleKeyboardEvents.value = false;
-		if (bottomSheetRef.current) bottomSheetRef.current.expand();
-	}
+	// tabs
+	const tabs = useMemo(() => [
+		{
+			title: translate("personalInfo"),
+			ele: () => (
+				<UpdateUserFields
+					fields={fields}
+					bottomSheetRef={bottomSheetRef}
+					selectedUser={selectedUser}
+					setSelectedUser={setSelectedUser}
+					selectedUserFrom={selectedUserFrom}
+					setSelectedUserFrom={setSelectedUserFrom}
+				/>
+			),
+		},
+		{
+			title: translate("groups"),
+			ele: (params) => GroupsTab(selectedUser, params),
+		},
+	]);
+	// big button
+	const compareList = useMemo(
+		() => fields.editable.map((field) => field.label),
+		[],
+	);
+	// update user
+	const isUserDataChanged = useMemo(
+		() => !deepEqual(selectedUser, selectedUserFrom, compareList),
+		[selectedUser, selectedUserFrom],
+	);
+	const { mutationAction: updateUserData } = useUpdateUser(
+		selectedUserFrom,
+		bottomSheetRef,
+	);
+	// update user role
+	const [changeableRoles, setChangeableRoles] = useState([]);
+	const { mutationAction: updateRole, loading: roleLoading } =
+		useAssignToGroup(false, true);
 	// renders
 	return (
 		<BottomSheet
@@ -60,32 +110,57 @@ export default function ({
 			onChange={handleSheetChanges}
 			enableDismissOnClose
 			defaultBackDrop
-			footerComponent={(props) =>
-				Footer({ ...props, selectedUser, bottomSheetRef })
+			// big button
+			bigButtonTitle={
+				(isUserDataChanged || changeableRoles?.length) &&
+				translate("saveChanges")
 			}
+			bigButtonOnPress={async () => {
+				const updateUser = async () =>
+					isUserDataChanged && (await updateUserData());
+				if (changeableRoles?.length) {
+					await Promise.all(
+						changeableRoles
+							.map(
+								async (role) =>
+									await updateRole(
+										selectedUser,
+										role,
+										bottomSheetRef,
+									),
+							)
+							.concat(updateUser),
+					);
+				}
+				setChangeableRoles([]);
+			}}
+			loading={roleLoading}
 		>
-			<BottomSheetView style={{ flex: 1, paddingHorizontal }}>
-				<DismissKeyboardView onDismiss={onDismiss}>
-					<View
-						style={{
-							justifyContent: "center",
-							alignItems: "center",
-							marginVertical: paddingHorizontal,
-							gap: paddingHorizontal / 2,
-						}}
+			<BottomSheetScrollView contentContainerStyle={{ marginTop: 30 }}>
+				{/* avatar and name */}
+				<View
+					style={{
+						justifyContent: "center",
+						alignItems: "center",
+						marginTop: paddingHorizontal,
+						gap: 10,
+					}}
+				>
+					<Avatar size={78} />
+					<ScreenText
+						variant="titleLarge"
+						style={{ marginBottom: paddingHorizontal }}
 					>
-						<Avatar size={78} />
-						<ScreenText variant="titleLarge">
-							{fullName(selectedUser)}
-						</ScreenText>
-					</View>
-					<UpdateUserFields
-						bottomSheetRef={bottomSheetRef}
-						selectedUser={selectedUser}
-						setSelectedUser={setSelectedUser}
-					/>
-				</DismissKeyboardView>
-			</BottomSheetView>
+						{fullName(selectedUser)}
+					</ScreenText>
+				</View>
+				<Tabs
+					tabs={tabs}
+					activeIndex={activeIndex}
+					setActiveIndex={setActiveIndex}
+					params={{ changeableRoles, setChangeableRoles }}
+				/>
+			</BottomSheetScrollView>
 		</BottomSheet>
 	);
 }

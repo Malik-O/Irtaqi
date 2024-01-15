@@ -29,6 +29,7 @@ export default function () {
 		router.push(href);
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 	}
+	// console.log("groups:", groups);
 	return (
 		<SwipeableList
 			data={groups}
@@ -36,7 +37,7 @@ export default function () {
 			onRefresh={refetchGroups}
 			emptyMessage={[
 				translate("noGroupsYetMessage"),
-				translate("add_teacher"),
+				translate("add_group"),
 			]}
 			hasConfirmation
 			// remove

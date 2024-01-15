@@ -1,5 +1,4 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	interpolate,
@@ -10,7 +9,14 @@ import useTheme from "../../hook/useTheme";
 import ScreenText from "../ScreenText";
 import { paddingHorizontal } from "../../styles/layout";
 
-const Handle = ({ selected, style, animatedIndex }) => {
+const Handle = ({
+	selected,
+	style,
+	animatedIndex,
+	// big button
+	bigButtonOnPress,
+	bigButtonTitle,
+}) => {
 	const theme = useTheme();
 	const isAlive = useAnimatedStyle(() => ({
 		height: interpolate(animatedIndex.value, [0, 1], [0, 50]),
@@ -19,10 +25,28 @@ const Handle = ({ selected, style, animatedIndex }) => {
 			{ translateX: interpolate(animatedIndex.value, [0, 1], [20, 0]) },
 		],
 	}));
+	const bigButton = useAnimatedStyle(() => ({
+		opacity: interpolate(+!!bigButtonTitle, [0, 1], [0, 1]),
+		display: bigButtonTitle ? "flex" : "none",
+	}));
 	// render
 	return (
 		<Animated.View style={[styles.header]}>
-			<Animated.View
+			<Animated.View style={[bigButton, styles.buttonContainer(theme)]}>
+				<TouchableOpacity onPress={bigButtonOnPress}>
+					<ScreenText
+						style={{
+							textAlign: "center",
+							paddingTop: 30,
+							height: "100%",
+						}}
+						variant="titleLarge"
+					>
+						{bigButtonTitle}
+					</ScreenText>
+				</TouchableOpacity>
+			</Animated.View>
+			<View
 				style={[
 					styles.indicator,
 					{
@@ -33,7 +57,7 @@ const Handle = ({ selected, style, animatedIndex }) => {
 			/>
 			{selected.title && (
 				<Animated.View style={[isAlive, styles.title]}>
-					<ScreenText variant="headlineMedium">
+					<ScreenText variant="headlineSmall">
 						{selected.title}
 					</ScreenText>
 				</Animated.View>
@@ -51,7 +75,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		// backgroundColor: "red",
 		paddingVertical: 14,
-		paddingHorizontal,
+		// paddingHorizontal,
 	},
 	title: {
 		alignSelf: "flex-start",
@@ -60,6 +84,21 @@ const styles = StyleSheet.create({
 	indicator: {
 		width: 30,
 		height: 4,
-		borderRadius: 20,
+		borderRadius: paddingHorizontal,
 	},
+	buttonContainer: (theme) => ({
+		width: "100%",
+		height: 70,
+		borderTopEndRadius: 15,
+		borderTopLeftRadius: 15,
+		borderTopRightRadius: 15,
+		borderTopStartRadius: 15,
+		borderBottomEndRadius: 100,
+		borderBottomLeftRadius: 100,
+		borderBottomRightRadius: 100,
+		borderBottomStartRadius: 100,
+		backgroundColor: theme.primary,
+		position: "absolute",
+		top: 0,
+	}),
 });

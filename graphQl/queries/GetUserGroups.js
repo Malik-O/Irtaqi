@@ -6,8 +6,9 @@ export default gql`
 			id
 			as
 			title
-			teachers {
+			staff {
 				id
+				as
 				first_name
 				parent_name
 				rest_of_name

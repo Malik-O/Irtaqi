@@ -69,9 +69,10 @@ export default {
 	date: "التاريخ",
 	// titles
 	teachers: "المعلمين",
-	teacher: "المعلم",
+	teacher: "معلم",
+	group_admin: "مشرف مجموعة",
 	students: "الطلاب",
-	student: "الطالب",
+	student: "طالب",
 	centers: "المراكز",
 	// days
 	weekDays: [
@@ -142,6 +143,8 @@ export default {
 	startingDate: "تاريخ البداية",
 	//
 	type: "النوع",
+	gender: "الجنس",
+	genders: ["انثى", "ذكر"],
 	custom: "مخصص",
 	tajweed: "تجويد",
 	tafseer: "تفسير",
@@ -183,6 +186,8 @@ export default {
 		"هل انت متأكد من رغبتك في حذف التقدم المحفوظ مع الخطة؟",
 	assignUserToGroupSuccessfully: "تم نقل المستخدم ### الى مجموعة ###",
 	UpdatedUserSuccessfully: "بيانات ### تم تحديثها",
+	removeGroupeSuccessfully: "تم حذف مجموعة ###",
+	emptyTransportMessage: "لا يوجد مجموعة اخرى للنقل اليها",
 	forceRemove: "حذف اجباري",
 	noPlansMsg: "لا يوجد خطط",
 	yesterday: "الامس",
@@ -226,4 +231,5 @@ export default {
 	showAllCalendar: "التقويم",
 	staff: "طاقم العمل",
 	permission: "صلاحية",
+	personalInfo: "معلومات شخصية",
 };

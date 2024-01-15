@@ -24,6 +24,7 @@ export default function ({
 	title,
 	color = "primary",
 	disabled,
+	style,
 }) {
 	const theme = useTheme();
 	const translate = useTranslate();
@@ -37,6 +38,7 @@ export default function ({
 		>
 			<Animated.View
 				style={[
+					style,
 					{
 						backgroundColor: theme[color],
 						textAlign: "center",

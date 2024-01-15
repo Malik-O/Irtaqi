@@ -1,71 +1,91 @@
+import { View } from "react-native";
 // component
+import { TextInput as PaperTextInput } from "react-native-paper";
 import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 import TextInput from "../TextInput";
 import BottomSheetCustomTextInput from "../BottomSheetCustomTextInput";
+import DismissKeyboard from "../DismissKeyboard";
 // hook
 import useTranslate from "../../hook/useTranslate";
 import useAddUserValidate from "../../hook/useAddUserValidate";
+// style
+import { paddingHorizontal } from "../../styles/layout";
+// utils
+import extractISODate from "../../utils/extractISODate";
 
-export default function ({ bottomSheetRef, selectedUser, setSelectedUser }) {
-	const { shouldHandleKeyboardEvents } = useBottomSheetInternal();
+const DismissKeyboardView = DismissKeyboard();
+
+export default function ({
+	fields,
+	bottomSheetRef,
+	selectedUser,
+	setSelectedUser,
+	selectedUserFrom,
+	setSelectedUserFrom,
+}) {
 	const translate = useTranslate();
+	// onDismiss
+	const { shouldHandleKeyboardEvents } = useBottomSheetInternal();
+	function onDismiss() {
+		shouldHandleKeyboardEvents.value = false;
+		if (bottomSheetRef.current) bottomSheetRef.current.expand();
+	}
+	// validation
 	const isValidStateNames = {
 		email: "email_isValid",
 		parentPhone: "parentPhone_isValid",
 		phone: "phone_isValid",
 	};
 	function updateSelectedUserValue(key, value) {
-		setSelectedUser({ ...selectedUser, [key]: value });
+		setSelectedUserFrom({ ...selectedUserFrom, [key]: value });
 	}
 	useAddUserValidate(
 		isValidStateNames,
 		"isFormValid",
 		null,
-		selectedUser,
+		selectedUserFrom,
 		updateSelectedUserValue,
 	);
-	// onDismiss
-	function onDismiss() {
-		shouldHandleKeyboardEvents.value = false;
-		if (bottomSheetRef.current) bottomSheetRef.current.expand();
-	}
 	// renders
 	return (
-		<>
-			<TextInput
-				stateName="email"
-				isValidStateName={isValidStateNames.email}
-				label={translate("email", true, false)}
-				keyboardType="email-address"
-				updateStoreFun={updateSelectedUserValue}
-				formData={selectedUser}
-				regex={
-					/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$/
-				}
-				errorHint={translate("emailHint")}
-				Comp={BottomSheetCustomTextInput}
-			/>
-			<TextInput
-				stateName="phone"
-				isValidStateName={isValidStateNames.phone}
-				label={translate("phone", true, false)}
-				keyboardType="phone-pad"
-				updateStoreFun={updateSelectedUserValue}
-				regex={/^\d{10,}$/}
-				formData={selectedUser}
-				errorHint={translate("requiredHint")}
-				Comp={BottomSheetCustomTextInput}
-			/>
-			<TextInput
-				stateName="parentPhone"
-				isValidStateName={isValidStateNames.parentPhone}
-				label={translate("parentPhone", true, false)}
-				keyboardType="phone-pad"
-				updateStoreFun={updateSelectedUserValue}
-				formData={selectedUser}
-				errorHint={translate("requiredHint")}
-				Comp={BottomSheetCustomTextInput}
-			/>
-		</>
+		<DismissKeyboardView
+			onDismiss={onDismiss}
+			style={{ flex: 1, paddingHorizontal }}
+		>
+			{/* static data */}
+			{fields.static.map((field) => {
+				// prepare value
+				let value = selectedUser[field.label];
+				if (field.label === "gender")
+					value = translate("genders")[+value];
+				else if (field.date) value = extractISODate({ date: value });
+				// render
+				return (
+					<PaperTextInput
+						key={field.label}
+						label={translate(field.label, true, false)}
+						value={value + ""}
+						disabled
+					/>
+				);
+			})}
+			{/* editable fields */}
+			{fields.editable.map((field) => (
+				<TextInput
+					key={field.label}
+					stateName={field.label}
+					isValidStateName={isValidStateNames[field.label]}
+					label={translate(field.label, true, false)}
+					keyboardType={field.keyboardType}
+					updateStoreFun={updateSelectedUserValue}
+					formData={selectedUserFrom}
+					regex={
+						/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$/
+					}
+					errorHint={translate(field.errorHint)}
+					Comp={BottomSheetCustomTextInput}
+				/>
+			))}
+		</DismissKeyboardView>
 	);
 }

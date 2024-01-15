@@ -18,7 +18,6 @@ export default function () {
 	return async (variables) => {
 		try {
 			variables = { ...variables, userID: userData?.id };
-			// console.log("variables:", variables);
 			// fire snackbar
 			dispatch(notificationsActions.setSnackbarVisible(true));
 			dispatch(notificationsActions.setSnackbarData(variables));

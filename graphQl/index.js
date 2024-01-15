@@ -2,6 +2,7 @@ import { gql } from "@apollo/client";
 //* Queries
 import GetUserById from "./queries/GetUserById";
 import GetUserGroups from "./queries/GetUserGroups";
+import GetUserGroupsLight from "./queries/GetUserGroupsLight";
 import GetPlans from "./queries/GetPlans";
 import GetPlanInstanceHistoryAtDate from "./queries/GetPlanInstanceHistoryAtDate";
 import groupAttendance from "./queries/groupAttendance";
@@ -27,6 +28,7 @@ export default {
 		GetUserById,
 		GetNotifications,
 		GetUserGroups,
+		GetUserGroupsLight,
 		GetPlans,
 		GetPlanInstanceHistoryAtDate,
 		groupAttendance,

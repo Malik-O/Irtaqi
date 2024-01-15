@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useMemo } from "react";
 import { useLocalSearchParams, Stack } from "expo-router";
 import { useSharedValue } from "react-native-reanimated";
 // redux
@@ -40,22 +40,13 @@ export default function () {
 		}, 500);
 	}, []);
 	// scroll view props
-	// const props = useMemo(
-	// 	() => ({
-	// 		title: selectedGroup.title,
-	// 		back: true,
-	// 		more: {
-	// 			// icon: "",
-	// 			items: [
-	// 				{
-	// 					title: translate("addUser"),
-	// 					onPress: () => addUserSheetRef.current?.present(),
-	// 				},
-	// 			],
-	// 		},
-	// 	}),
-	// 	[],
-	// );
+	const transportRoles = useMemo(
+		() => [
+			{ id: 1, title: translate("teacher"), value: "teacher" },
+			{ id: 2, title: translate("group_admin"), value: "group_admin" },
+		],
+		[],
+	);
 	//
 	return (
 		<>
@@ -77,12 +68,16 @@ export default function () {
 					openAddUserSheet={openAddUserSheet}
 				/>
 				<AdminUsersList
-					users={selectedGroup.teachers}
+					users={selectedGroup.staff}
 					emptyMessage={[
 						translate("noStaffYetMessage"),
 						translate("add_teacher"),
 					]}
 					openAddUserSheet={openAddUserSheet}
+					// roles
+					showAs
+					transportRoles={transportRoles}
+					transportTitle={translate("assignAs")}
 				/>
 				{/* Students */}
 				<SectionHeader
@@ -90,7 +85,7 @@ export default function () {
 					openAddUserSheet={openAddUserSheet}
 				/>
 				<AdminUsersList
-					users={selectedGroup.courses[0]?.floatingStudents}
+					users={selectedGroup.courses?.[0]?.floatingStudents}
 					emptyMessage={[
 						translate("noStudentsYetMessage"),
 						translate("add_student"),

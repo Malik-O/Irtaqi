@@ -19,6 +19,7 @@ import { paddingHorizontal } from "../../styles/layout";
 import fullName from "../../utils/fullName";
 // hook
 import useTheme from "../../hook/useTheme";
+import useTranslate from "../../hook/useTranslate";
 
 function LeftActions({ props, swipeableRef, transportAction, editAction }) {
 	const theme = useTheme();
@@ -58,11 +59,13 @@ export default function ({
 	onPress,
 	hasAvatar = false,
 	hasConfirmation,
+	secondColumn,
 	// action
 	removeActionIterator,
 	editAction,
 	transportActionIterator,
 }) {
+	const translate = useTranslate();
 	const theme = useTheme();
 	const swipeableRef = useRef(null);
 	// remove action animation
@@ -157,6 +160,9 @@ export default function ({
 								</ScreenText>
 							)}
 						</View>
+						<ScreenText style={{ flex: 1, textAlign: "right" }}>
+							{translate(item?.[secondColumn])}
+						</ScreenText>
 					</View>
 				</Reanimated.View>
 			</TouchableRipple>

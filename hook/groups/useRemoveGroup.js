@@ -13,14 +13,12 @@ export default function (refetchGroups) {
 	const RemoveGroup = graphQl.mutations.RemoveGroup;
 	const [RemoveGroupMutation] = useMutation(RemoveGroup);
 	// mutation action
-	async function mutationAction(id) {
+	async function mutationAction({ id }) {
 		let variables = { id };
-		console.log("variables:", variables);
 		// mutate the database
 		setIsLoading(true);
 		try {
 			const { data } = await RemoveGroupMutation({ variables });
-			console.log("data:", data);
 			await refetchGroups();
 			pushNotification({
 				type: "success",

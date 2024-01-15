@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addUserActions } from "../../store/addUser";
 // Components
 import ScreenView from "../ScreenView";
-import StepHead from "./Step";
+import StepHead from "./StepHead";
 import StepperButton from "./StepperButton";
 import StepperContent from "./StepperContent";
 // styles

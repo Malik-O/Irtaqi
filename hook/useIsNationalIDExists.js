@@ -32,7 +32,6 @@ export default function () {
 				translate("nationalIDHint"),
 			]);
 		setIsLoading(true);
-		// console.log("variables:", variables);
 		getIsNationalIDExists({ variables })
 			.then(({ data }) => {
 				setIsLoading(false);

@@ -1,7 +1,7 @@
 import { View } from "react-native";
 // Components
 import ScreenView from "../ScreenView";
-import StepHead from "./Step";
+import StepHead from "./StepHead";
 import StepperButton from "./StepperButton";
 import StepperContent from "./StepperContent";
 import SubmitButton from "./SubmitButton";

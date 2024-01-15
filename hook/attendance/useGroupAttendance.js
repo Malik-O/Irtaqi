@@ -33,7 +33,6 @@ export default function () {
 	// first fetch
 	useEffect(() => {
 		setIsLoading(true);
-		// console.log("variables:", variables);
 		getGroupAttendance({ variables })
 			.then(({ data }) => {
 				setIsLoading(false);

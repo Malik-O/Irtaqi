@@ -23,6 +23,7 @@ export default function (selectedUser, sheetRef) {
 	async function mutationAction(variables) {
 		// go back
 		sheetRef.current.close();
+		console.log("selectedUser:", selectedUser);
 		// mutate the database
 		variables = {
 			userID: selectedUser.id,
@@ -33,6 +34,7 @@ export default function (selectedUser, sheetRef) {
 		// setIsLoading(true);
 		try {
 			const { data } = await UpdateUserMutation({ variables });
+			console.log("data:", data);
 			await refetchGroups();
 			pushNotification({
 				type: "success",

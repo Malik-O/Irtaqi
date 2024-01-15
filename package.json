@@ -69,7 +69,8 @@
     "twrnc": "^3.6.4",
     "typescript": "^5.3.3",
     "xdate": "^0.8.0",
-    "lottie-react-native": "5.1.6"
+    "lottie-react-native": "5.1.6",
+    "expo-image-picker": "~14.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

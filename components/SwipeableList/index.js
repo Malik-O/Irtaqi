@@ -63,6 +63,10 @@ export default function ({
 	onPress,
 	hasAvatar,
 	onRefresh,
+	// staff
+	secondColumn,
+	transportRoles,
+	transportTitle,
 	// empty
 	emptyMessage,
 	emptyAction,
@@ -120,10 +124,11 @@ export default function ({
 						<Item
 							item={item}
 							key={item.id}
-							hasBottomDev={index + 1 !== data.length}
+							hasBottomDev={index + 1 !== data?.length}
 							onPress={onPress}
 							hasAvatar={hasAvatar}
 							hasConfirmation={hasConfirmation}
+							secondColumn={secondColumn}
 							// action
 							removeActionIterator={removeActionIterator}
 							transportActionIterator={transportActionIterator}
@@ -147,7 +152,7 @@ export default function ({
 				refreshing={refreshing}
 			/>
 			{/* render empty message with add button */}
-			{!data.length && (
+			{!data?.length && (
 				<EmptyMessage
 					emptyMessage={emptyMessage}
 					emptyAction={emptyAction}
@@ -169,6 +174,8 @@ export default function ({
 				list={transportList}
 				transportActionIterator={transportActionIterator}
 				emptyMessage={emptyTransportMessage}
+				transportRoles={transportRoles}
+				transportTitle={transportTitle}
 				loading={transportLoading}
 			/>
 		</>

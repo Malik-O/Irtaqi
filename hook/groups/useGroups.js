@@ -26,24 +26,23 @@ export default function () {
 	const variables = { user_id: userData?.id };
 	// do the request as soon as the user id loads (do not worry it wont fetch again)
 	useEffect(() => {
+		console.log("variables:", variables);
 		if (userData?.id) {
 			setIsLoading(true);
 			getGroups({ variables })
 				.then(({ data }) => {
 					StoreConnectionsInstance.init(data?.groups);
-					setIsLoading(false);
 				})
 				.catch((err) => {
-					// setError(
-					// 	"there is a problem loading the groups, please try again later.",
-					// );
+					console.log("err:", err);
 					pushNotification({
 						type: "error",
 						message: "MutationError",
 						error: JSON.stringify(err),
 						floatingNotification: true,
 					});
-				});
+				})
+				.finally(() => setIsLoading(false));
 		}
 	}, [userData]);
 	// refetch data

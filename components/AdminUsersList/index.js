@@ -16,12 +16,22 @@ import useRemoveUser from "../../hook/user/useRemoveUser";
 import useAssignToGroup from "../../hook/user/useAssignToGroup";
 
 let timeout;
-export default function ({ users, emptyMessage, openAddUserSheet }) {
+export default function ({
+	users,
+	emptyMessage,
+	openAddUserSheet,
+	// role
+	showAs,
+	transportRoles,
+	transportTitle,
+}) {
 	const { groupID } = useGlobalSearchParams();
 	const translate = useTranslate();
 	// redux
 	const { groups } = useSelector((state) => state.groups);
-	const { mutationAction, loading } = useAssignToGroup();
+	const { mutationAction, loading } = useAssignToGroup(
+		!transportRoles?.length,
+	);
 	const transportList = useMemo(
 		() =>
 			groups
@@ -34,6 +44,7 @@ export default function ({ users, emptyMessage, openAddUserSheet }) {
 	const bottomSheetRef = useRef(null);
 	// open details action
 	const [selectedUser, setSelectedUser] = useState({});
+	const [selectedUserFrom, setSelectedUserFrom] = useState({});
 	const isLoading = useSharedValue(false);
 	const openUserDetailsSheet = useCallback((user) => {
 		dismissAll();
@@ -43,6 +54,7 @@ export default function ({ users, emptyMessage, openAddUserSheet }) {
 		clearTimeout(timeout);
 		timeout = setTimeout(() => {
 			setSelectedUser(user);
+			setSelectedUserFrom(user);
 			isLoading.value = false;
 		}, 0);
 	}, []);
@@ -58,8 +70,10 @@ export default function ({ users, emptyMessage, openAddUserSheet }) {
 				onPress={(user) => {
 					openUserDetailsSheet(user);
 				}}
-				// actions
-				// editAction={(plan) => () => openUserDetailsSheet(plan)}
+				// staff members
+				transportRoles={transportRoles}
+				secondColumn={showAs && "as"}
+				transportTitle={transportTitle}
 				// remove action
 				hasConfirmation
 				removeActionMutation={removeUser}
@@ -77,6 +91,8 @@ export default function ({ users, emptyMessage, openAddUserSheet }) {
 				bottomSheetRef={bottomSheetRef}
 				selectedUser={selectedUser}
 				setSelectedUser={setSelectedUser}
+				selectedUserFrom={selectedUserFrom}
+				setSelectedUserFrom={setSelectedUserFrom}
 				isLoading={isLoading}
 			/>
 		</View>

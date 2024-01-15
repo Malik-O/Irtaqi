@@ -18,6 +18,9 @@ const BottomSheet = forwardRef(
 			Comp = BottomSheetModal,
 			defaultBackDrop,
 			loading,
+			// big button
+			bigButtonTitle,
+			bigButtonOnPress,
 			...rest
 		},
 		ref,
@@ -53,7 +56,12 @@ const BottomSheet = forwardRef(
 					}}
 					onChange={handleSheetChange}
 					handleComponent={(params) =>
-						Handle({ selected, ...params })
+						Handle({
+							bigButtonOnPress,
+							bigButtonTitle,
+							selected,
+							...params,
+						})
 					}
 					backdropComponent={(props) =>
 						defaultBackDrop && Backdrop(props, ref)

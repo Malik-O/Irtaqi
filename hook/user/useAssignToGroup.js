@@ -11,7 +11,7 @@ import fullName from "../../utils/fullName";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 
-export default function () {
+export default function (move, update) {
 	const [loading, setIsLoading] = useState(false);
 	const pushNotification = usePush();
 	// redux
@@ -20,18 +20,27 @@ export default function () {
 	const AssignToGroup = graphQl.mutations.AssignToGroup;
 	const [AssignToGroupMutation] = useMutation(AssignToGroup);
 	// mutation action
-	async function mutationAction(user, group, sheetRef) {
-		const variables = { userID: user.id, groupID: group.id };
-		console.log("0:", user);
+	async function mutationAction(
+		user,
+		{ selectedRole, selectedGroup, remove },
+		sheetRef,
+	) {
+		const variables = {
+			userID: user.id,
+			groupID: selectedGroup.id,
+			roleTitle: selectedRole?.value || "student",
+			move,
+			update,
+			remove,
+		};
 		setIsLoading(true);
 		try {
-			console.log("variables:", variables);
 			await AssignToGroupMutation({ variables });
 			await refetchGroups();
 			pushNotification({
 				type: "success",
 				message: "assignUserToGroupSuccessfully",
-				data: [fullName(user), group.title],
+				data: [fullName(user), selectedGroup.title],
 			});
 			// go back
 			sheetRef?.current && sheetRef.current.close();

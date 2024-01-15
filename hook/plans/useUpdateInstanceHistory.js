@@ -16,7 +16,6 @@ export default function () {
 		useMutation(UpdateHistory);
 
 	return async (variables) => {
-		console.log("variables:", variables);
 		// add locally
 		dispatch(plansActions.addInstancesHistory(variables));
 		// mutate the database

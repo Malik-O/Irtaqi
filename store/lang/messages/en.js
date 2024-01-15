@@ -53,6 +53,7 @@ export default {
 	removeUser: "remove user",
 	teachers: "teachers",
 	teacher: "teacher",
+	group_admin: "group_admin",
 	students: "students",
 	student: "student",
 	centers: "centers",
@@ -124,6 +125,8 @@ export default {
 	startingDate: "starting at date",
 	//
 	type: "type",
+	gender: "gender",
+	genders: ["female", "male"],
 	custom: "custom",
 	tajweed: "tajweed",
 	tafseer: "tafseer",
@@ -164,6 +167,8 @@ export default {
 	confirmForceRemoveMsg: "do you want to force delete ### plan?",
 	assignUserToGroupSuccessfully: "the user ### has been moved to ### group",
 	UpdatedUserSuccessfully: "### data has been moved updated",
+	removeGroupeSuccessfully: "### group has been removed",
+	emptyTransportMessage: "there is not group to transfer to",
 	forceRemove: "force remove",
 	noPlansMsg: "there is no plans",
 	yesterday: "yesterday",
@@ -207,4 +212,5 @@ export default {
 	showAllCalendar: "calendar",
 	staff: "staff members",
 	permission: "permission",
+	personalInfo: "user info",
 };
