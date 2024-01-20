@@ -18,11 +18,11 @@ import useTranslate from "../../../../../../hook/useTranslate";
 import fullName from "../../../../../../utils/fullName";
 
 // resolvers
-function resolveRouter(pathname) {
-	return (student) => ({
+function resolveRouter(student, pathname) {
+	return {
 		pathname: `${pathname}/[studentID]`,
 		params: { studentID: student.id },
-	});
+	};
 }
 
 function index() {
@@ -88,7 +88,14 @@ function index() {
 			<SwipeableList
 				data={floatingStudents}
 				hasAvatar
-				resolver={resolveRouter(pathname)}
+				// resolver={resolveRouter(pathname)}
+				onPress={(student) => {
+					console.log(
+						"resolveRouter:",
+						resolveRouter(student, pathname),
+					);
+					router.push(resolveRouter(student, pathname));
+				}}
 			/>
 		</ScreenView>
 	);

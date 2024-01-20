@@ -3,9 +3,6 @@ export default async function ({
 	lazyQuery,
 	StoreConnectionsInstance,
 	pushNotification,
-	redirectAction,
-	router,
-	redirectURL,
 }) {
 	if (!userId) return;
 	const [
@@ -20,10 +17,10 @@ export default async function ({
 		// update the user data after loading
 		delete user.__typename;
 		StoreConnectionsInstance.init({ id: userId, ...user });
+		StoreConnectionsInstance.get();
 		// success flag
 		return true;
 	} catch (err) {
-		console.log("err:", err);
 		pushNotification({
 			type: "error",
 			message: "QueryError",

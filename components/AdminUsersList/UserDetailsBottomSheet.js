@@ -3,15 +3,17 @@ import { View } from "react-native";
 // component
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import BottomSheet from "../BottomSheet";
-import UpdateUserFields from "./UpdateUserFields";
+import UserFieldsContainer from "./UserFieldsContainer";
 import GroupsTab from "./GroupsTab";
 import Tabs from "../Tabs";
 import Avatar from "../Avatar";
 import ScreenText from "../ScreenText";
+import UserPicAndName from "./UserPicAndName";
 // hook
 import useTranslate from "../../hook/useTranslate";
 import useAssignToGroup from "../../hook/user/useAssignToGroup";
 import useUpdateUser from "../../hook/user/useUpdateUser";
+import useUserFields from "../../hook/user/useUserFields";
 // style
 import { paddingHorizontal } from "../../styles/layout";
 // utils
@@ -37,39 +39,13 @@ export default function ({
 		}
 	}, []);
 	// get user groups
-	const fields = useMemo(
-		() => ({
-			static: [
-				{ label: "nationalID" },
-				{ label: "gender" },
-				{ label: "dateOfBirth", date: true },
-			],
-			editable: [
-				{
-					label: "email",
-					keyboardType: "email-address",
-					errorHint: "emailHint",
-				},
-				{
-					label: "phone",
-					keyboardType: "phone-pad",
-					errorHint: "requiredHint",
-				},
-				{
-					label: "parentPhone",
-					keyboardType: "phone-pad",
-					errorHint: "requiredHint",
-				},
-			],
-		}),
-		[],
-	);
+	const fields = useUserFields();
 	// tabs
 	const tabs = useMemo(() => [
 		{
 			title: translate("personalInfo"),
 			ele: () => (
-				<UpdateUserFields
+				<UserFieldsContainer
 					fields={fields}
 					bottomSheetRef={bottomSheetRef}
 					selectedUser={selectedUser}
@@ -116,44 +92,33 @@ export default function ({
 				translate("saveChanges")
 			}
 			bigButtonOnPress={async () => {
-				const updateUser = async () =>
-					isUserDataChanged && (await updateUserData());
+				console.log("pushded:", isUserDataChanged);
+				// requests list
+				let req = [];
+				if (isUserDataChanged)
+					req = req.concat(
+						isUserDataChanged && (await updateUserData()),
+					);
 				if (changeableRoles?.length) {
-					await Promise.all(
-						changeableRoles
-							.map(
-								async (role) =>
-									await updateRole(
-										selectedUser,
-										role,
-										bottomSheetRef,
-									),
-							)
-							.concat(updateUser),
+					req = req.concat(
+						changeableRoles.map(
+							async (role) =>
+								await updateRole(
+									selectedUser,
+									role,
+									bottomSheetRef,
+								),
+						),
 					);
 				}
+				await Promise.all(req);
 				setChangeableRoles([]);
 			}}
 			loading={roleLoading}
 		>
 			<BottomSheetScrollView contentContainerStyle={{ marginTop: 30 }}>
 				{/* avatar and name */}
-				<View
-					style={{
-						justifyContent: "center",
-						alignItems: "center",
-						marginTop: paddingHorizontal,
-						gap: 10,
-					}}
-				>
-					<Avatar size={78} />
-					<ScreenText
-						variant="titleLarge"
-						style={{ marginBottom: paddingHorizontal }}
-					>
-						{fullName(selectedUser)}
-					</ScreenText>
-				</View>
+				<UserPicAndName user={selectedUser} />
 				<Tabs
 					tabs={tabs}
 					activeIndex={activeIndex}

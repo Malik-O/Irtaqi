@@ -12,7 +12,7 @@ import fullName from "../../utils/fullName";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function (selectedUser, sheetRef) {
-	// const [loading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const pushNotification = usePush();
 	// redux
 	const { refetchGroups } = useGroups();
@@ -22,7 +22,7 @@ export default function (selectedUser, sheetRef) {
 	// mutation action
 	async function mutationAction(variables) {
 		// go back
-		sheetRef.current.close();
+		sheetRef?.current && sheetRef.current.close();
 		console.log("selectedUser:", selectedUser);
 		// mutate the database
 		variables = {
@@ -31,7 +31,7 @@ export default function (selectedUser, sheetRef) {
 			phone: selectedUser.phone,
 			parentPhone: selectedUser.parentPhone,
 		};
-		// setIsLoading(true);
+		setIsLoading(true);
 		try {
 			const { data } = await UpdateUserMutation({ variables });
 			console.log("data:", data);
@@ -49,7 +49,7 @@ export default function (selectedUser, sheetRef) {
 				floatingNotification: true,
 			});
 		}
-		// setIsLoading(false);
+		setIsLoading(false);
 	}
-	return { mutationAction };
+	return { mutationAction, isLoading };
 }

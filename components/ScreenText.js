@@ -24,7 +24,7 @@ export default memo(function ({
 			style={[
 				styles.text(colorScheme, reverse),
 				style,
-				// { fontFamily: "Quicksand" },
+				{ fontFamily: "Quicksand" },
 			]}
 			{...textOverflow}
 		>

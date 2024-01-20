@@ -9,6 +9,7 @@ import { BottomSheetView } from "@gorhom/bottom-sheet";
 import Stepper from "../Stepper";
 import BottomSheet from "../BottomSheet";
 import DismissKeyboard from "../DismissKeyboard";
+import ScreenText from "../ScreenText";
 // hook
 import useCreateUser from "../../hook/user/useCreateUser";
 import useTranslate from "../../hook/useTranslate";
@@ -30,8 +31,8 @@ export default function ({ sheetRef, isLoading }) {
 	const [activeIndex, setActiveIndex] = useState(0);
 	const steps = [
 		{ ele: RoleStep, isStepValid: "RoleStep_isValid" },
-		{ ele: NameStep, isStepValid: "NameStep_isValid" },
 		{ ele: AddToGroupStep, isStepValid: "AddToGroupStep_isValid" },
+		{ ele: NameStep, isStepValid: "NameStep_isValid" },
 		// { ele: GenderStep, isStepValid: "GenderStep_isValid" },
 		{ ele: NationalIDStep, isStepValid: "NationalIDStep_isValid" },
 		{ ele: ContactStep, isStepValid: "ContactStep_isValid" },
@@ -43,11 +44,11 @@ export default function ({ sheetRef, isLoading }) {
 	const snapPoints = useMemo(() => ["90%"], []);
 	// Bottom Sheet loading style
 	const contentStyle = useAnimatedStyle(
-		() => ({ display: loading ? "none" : "flex" }),
+		() => ({ display: isLoading?.value ? "none" : "flex" }),
 		[],
 	);
 	const indicatorStyle = useAnimatedStyle(
-		() => ({ display: loading ? "flex" : "none" }),
+		() => ({ display: isLoading?.value ? "flex" : "none" }),
 		[],
 	);
 
@@ -56,6 +57,7 @@ export default function ({ sheetRef, isLoading }) {
 			ref={sheetRef}
 			snapPoints={snapPoints}
 			storeAction={addUserActions}
+			onChange={(index) => index === -1 && setActiveIndex(0)}
 			loading={loading}
 			enableDismissOnClose
 		>

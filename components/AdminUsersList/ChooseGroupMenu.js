@@ -33,7 +33,6 @@ export default function ({
 		const inChangeableList = changeableRoles.find(
 			(r) => r.selectedGroup.id === group.id && !r.remove,
 		);
-		console.log("group:", { group, inChangeableList, changeableRoles });
 		return {
 			value: inChangeableList?.selectedRole?.value || group.as,
 			changed: !!inChangeableList,

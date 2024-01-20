@@ -1,6 +1,7 @@
-import { memo, useCallback, forwardRef, useEffect } from "react";
+import { memo, useCallback, forwardRef } from "react";
 import { View, ActivityIndicator } from "react-native";
-import Animated, { useAnimatedStyle } from "react-native-reanimated";
+// redux
+import { useDispatch } from "react-redux";
 // component
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { Portal } from "react-native-paper";
@@ -14,10 +15,12 @@ const BottomSheet = forwardRef(
 		{
 			children,
 			selected = {},
-			storeAction,
 			Comp = BottomSheetModal,
 			defaultBackDrop,
 			loading,
+			// on change
+			storeAction,
+			onChange,
 			// big button
 			bigButtonTitle,
 			bigButtonOnPress,
@@ -25,11 +28,17 @@ const BottomSheet = forwardRef(
 		},
 		ref,
 	) => {
+		const dispatch = useDispatch();
 		const theme = useTheme();
 		// handle change sheet
-		const handleSheetChange = useCallback((index) => {
-			if (index === -1 && storeAction) storeAction.resetFrom();
-		}, []);
+		const handleSheetChange = useCallback(
+			(index) => {
+				onChange && onChange(index);
+				if (index === -1 && storeAction)
+					dispatch(storeAction.resetFrom());
+			},
+			[storeAction],
+		);
 
 		return (
 			<>

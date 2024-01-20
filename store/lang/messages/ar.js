@@ -36,7 +36,7 @@ export default {
 	groupTitle: "اسم المجموعة",
 	groupDescription: "وصف المجموعة",
 	// confirmRemoveGroup: "هل انت متأكد من رغبتك في حذف ###",
-	saveChanges: "احفظ التغييرات",
+	saveChanges: "حفظ التغييرات",
 	removeUser: "حذف المستخدم",
 	add_student: "اضف طالب",
 	add_teacher: "اضف معلم",

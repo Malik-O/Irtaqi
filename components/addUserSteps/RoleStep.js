@@ -29,7 +29,7 @@ export default function (isStepValidName) {
 		() => [
 			{ title: translate("student"), value: "student" },
 			{ title: translate("teacher"), value: "teacher" },
-			// { title: translate("admin"), value: "admin" },
+			{ title: translate("group_admin"), value: "group_admin" },
 			// { title: translate("secretary"), value: "secretary" },
 		],
 		[],

@@ -61,6 +61,7 @@ function index() {
 	const sheetRef = useRef(null);
 	const [selectedPlan, setSelectedPlan] = useState({});
 	const isLoading = useSharedValue(false);
+	const addPlanLoading = useSharedValue(false);
 	const openPlanDetailsSheet = useCallback((plan) => {
 		sheetRef.current?.present();
 		isLoading.value = true;
@@ -74,9 +75,16 @@ function index() {
 	// add plan sheet
 	const { dismissAll } = useBottomSheetModal();
 	const addPlanSheetRef = useRef(null);
-	const openAddPlanSheet = useCallback(() => {
+	const openAddPlanSheet = useCallback((plan) => {
 		dismissAll();
 		addPlanSheetRef.current?.present();
+		addPlanLoading.value = true;
+		// timeout
+		// clearTimeout(timeout);
+		// timeout = setTimeout(() => {
+		// 	setSelectedPlan(plan);
+		// 	addPlanLoading.value = false;
+		// }, 200);
 	}, []);
 
 	return (
@@ -128,7 +136,10 @@ function index() {
 					</ScrollView>
 				</Agenda>
 				{/* bottom sheets */}
-				<AddPlanBottomSheet sheetRef={addPlanSheetRef} />
+				<AddPlanBottomSheet
+					sheetRef={addPlanSheetRef}
+					isLoading={addPlanLoading}
+				/>
 				<PlanBottomSheet
 					sheetRef={sheetRef}
 					selectedPlan={selectedPlan}

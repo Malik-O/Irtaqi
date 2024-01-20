@@ -1,35 +1,22 @@
 import { View } from "react-native";
 // component
 import { TextInput as PaperTextInput } from "react-native-paper";
-import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 import TextInput from "../TextInput";
 import BottomSheetCustomTextInput from "../BottomSheetCustomTextInput";
-import DismissKeyboard from "../DismissKeyboard";
 // hook
 import useTranslate from "../../hook/useTranslate";
 import useAddUserValidate from "../../hook/useAddUserValidate";
-// style
-import { paddingHorizontal } from "../../styles/layout";
 // utils
 import extractISODate from "../../utils/extractISODate";
 
-const DismissKeyboardView = DismissKeyboard();
-
 export default function ({
 	fields,
-	bottomSheetRef,
 	selectedUser,
-	setSelectedUser,
 	selectedUserFrom,
 	setSelectedUserFrom,
+	inSheet = true,
 }) {
 	const translate = useTranslate();
-	// onDismiss
-	const { shouldHandleKeyboardEvents } = useBottomSheetInternal();
-	function onDismiss() {
-		shouldHandleKeyboardEvents.value = false;
-		if (bottomSheetRef.current) bottomSheetRef.current.expand();
-	}
 	// validation
 	const isValidStateNames = {
 		email: "email_isValid",
@@ -48,10 +35,7 @@ export default function ({
 	);
 	// renders
 	return (
-		<DismissKeyboardView
-			onDismiss={onDismiss}
-			style={{ flex: 1, paddingHorizontal }}
-		>
+		<View>
 			{/* static data */}
 			{fields.static.map((field) => {
 				// prepare value
@@ -83,9 +67,9 @@ export default function ({
 						/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$/
 					}
 					errorHint={translate(field.errorHint)}
-					Comp={BottomSheetCustomTextInput}
+					Comp={inSheet ? BottomSheetCustomTextInput : PaperTextInput}
 				/>
 			))}
-		</DismissKeyboardView>
+		</View>
 	);
 }

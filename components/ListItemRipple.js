@@ -93,6 +93,8 @@ function ListContentComponent({ props, isRTL }) {
 					mode="date"
 					onConfirm={handleConfirm}
 					onCancel={hideDatePicker}
+					maximumDate={new Date("2024-01-6")}
+					androidVariant="iosClone"
 				/>
 			</View>
 		);

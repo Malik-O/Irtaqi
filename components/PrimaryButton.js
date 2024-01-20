@@ -25,6 +25,7 @@ export default function ({
 	color = "primary",
 	disabled,
 	style,
+	text,
 }) {
 	const theme = useTheme();
 	const translate = useTranslate();
@@ -40,7 +41,7 @@ export default function ({
 				style={[
 					style,
 					{
-						backgroundColor: theme[color],
+						backgroundColor: !text && theme[color],
 						textAlign: "center",
 						// marginHorizontal: paddingHorizontal,
 						borderRadius: paddingHorizontal,
@@ -56,7 +57,9 @@ export default function ({
 						variant="titleLarge"
 						style={{
 							textAlign: "center",
-							color: theme.reverse.secondary,
+							color: text
+								? theme[color]
+								: theme.reverse.secondary,
 						}}
 					>
 						{translate(title)}

@@ -1,14 +1,13 @@
-import { useState } from "react";
-import { View, ScrollView, TouchableOpacity, Switch } from "react-native";
+import { useEffect, useState, useMemo } from "react";
+import { View } from "react-native";
 // redux
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 // components
-import { Dialog, Portal, Button } from "react-native-paper";
 import ScreenView from "../../../components/ScreenView";
-import ScreenText from "../../../components/ScreenText";
-import Avatar from "../../../components/Avatar";
 import Card from "../../../components/Card";
-import ListItemRipple from "../../../components/ListItemRipple";
+import PrimaryButton from "../../../components/PrimaryButton";
+import UpdateUserFields from "../../../components/AdminUsersList/UpdateUserFields";
+import UserPicAndName from "../../../components/AdminUsersList/UserPicAndName";
 // styles
 import { paddingHorizontal } from "../../../styles/layout";
 // hook
@@ -16,7 +15,10 @@ import useSetupLanguage from "../../../hook/useSetupLanguage";
 import useLogout from "../../../hook/useLogout";
 import useTheme from "../../../hook/useTheme";
 import useTranslate from "../../../hook/useTranslate";
-import capitalize from "../../../utils/capitalize";
+import useUserFields from "../../../hook/user/useUserFields";
+import useUpdateUser from "../../../hook/user/useUpdateUser";
+// utils
+import deepEqual from "../../../utils/deepEqual";
 
 const langs = [
 	{ label: "English", value: "en" },
@@ -27,16 +29,25 @@ export default function () {
 	const theme = useTheme();
 	const translate = useTranslate();
 	const logout = useLogout();
-	// get the stored user data to redux state
-	const [visible, setVisible] = useState(false);
-
-	const hideDialog = () => setVisible(false);
-	//
-	const setupLanguage = useSetupLanguage();
-	const { locale, rtl } = useSelector((state) => state.lang);
-	const currentLanguage =
-		langs.filter((lang) => lang.value === locale)?.[0] || langs[0];
-
+	// user
+	const { userData } = useSelector((state) => state.user);
+	const fields = useUserFields();
+	// form
+	const [selectedUserFrom, setSelectedUserFrom] = useState({});
+	const { mutationAction: updateUserData, isLoading } =
+		useUpdateUser(selectedUserFrom);
+	useEffect(() => {
+		setSelectedUserFrom(userData);
+	}, [userData]);
+	// is there any changes
+	const compareList = useMemo(
+		() => fields.editable.map((field) => field.label),
+		[],
+	);
+	const isUserDataChanged = useMemo(
+		() => !deepEqual(userData, selectedUserFrom, compareList),
+		[userData, selectedUserFrom],
+	);
 	return (
 		<ScreenView>
 			<View
@@ -46,88 +57,92 @@ export default function () {
 					marginTop: paddingHorizontal,
 				}}
 			>
-				<Avatar size={100} />
-				{/* <Button title="Add Photo" onPress={() => {}} style={{}} /> */}
-				<ScreenText
-					style={{
-						alignSelf: "center",
-						color: theme.reverse.primary,
-						marginTop: paddingHorizontal,
-					}}
-					variant="titleLarge"
-				>
-					{translate("addPhoto", true)}
-				</ScreenText>
+				<UserPicAndName user={userData} avatarSize={100} />
 			</View>
 			<Card>
-				<View
-					style={{
-						width: "100%",
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignContent: "center",
-						marginTop: paddingHorizontal,
-					}}
-				>
-					<ScreenText
-						style={{ alignSelf: "center" }}
-						variant="titleMedium"
-					>
-						{translate("darkTheme", true)}
-					</ScreenText>
-					<Switch
-					// value={formData.hasRabt}
-					// onValueChange={(val) =>
-					// 	dispatch(addPlanActions.setState(["hasRabt", val]))
-					// }
+				{isUserDataChanged && (
+					<PrimaryButton
+						title={translate("saveChanges", true)}
+						text
+						mutationAction={async () =>
+							isUserDataChanged && (await updateUserData())
+						}
+						style={{ marginBottom: paddingHorizontal }}
+						loading={isLoading}
 					/>
-				</View>
-				<ListItemRipple
-					variant="titleMedium"
-					title={translate("language", true)}
-					selectedItem={currentLanguage.label}
-					action={() => {
-						setVisible(true);
-					}}
-					style={{
-						marginTop: paddingHorizontal,
-					}}
+				)}
+				<UpdateUserFields
+					fields={fields}
+					selectedUser={userData}
+					setSelectedUser={() => {}}
+					selectedUserFrom={selectedUserFrom}
+					setSelectedUserFrom={setSelectedUserFrom}
+					inSheet={false}
 				/>
-				<TouchableOpacity onPress={logout}>
-					<ScreenText
-						style={{
-							color: theme.error,
-							width: "auto",
-							textAlign: "center",
-							marginTop: paddingHorizontal,
-							fontWeight: "bold",
-						}}
-						variant="titleMedium"
-					>
-						{translate("logout", true)}
-					</ScreenText>
-				</TouchableOpacity>
+				<PrimaryButton
+					title={translate("logout", true)}
+					text
+					color="error"
+					mutationAction={logout}
+					style={{ marginTop: paddingHorizontal }}
+				/>
 			</Card>
-			<Portal>
-				<Dialog
-					visible={visible}
-					onDismiss={hideDialog}
-					// style={{ backgroundColor: "red" }}
-				>
-					<Dialog.Title>{translate("chooseLang", true)}</Dialog.Title>
-					<Dialog.Content>
-						{langs.map((lang) => (
-							<ListItemRipple
-								key={lang.value}
-								title={lang.label}
-								checkbox
-								isChecked={locale === lang.value}
-								action={() => setupLanguage(lang.value)}
-							/>
-						))}
-					</Dialog.Content>
-				</Dialog>
-			</Portal>
 		</ScreenView>
 	);
 }
+
+/*
+<View
+	style={{
+		width: "100%",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignContent: "center",
+		marginTop: paddingHorizontal,
+	}}
+>
+	<ScreenText
+		style={{ alignSelf: "center" }}
+		variant="titleMedium"
+	>
+		{translate("darkTheme", true)}
+	</ScreenText>
+	<Switch
+	// value={formData.hasRabt}
+	// onValueChange={(val) =>
+	// 	dispatch(addPlanActions.setState(["hasRabt", val]))
+	// }
+	/>
+</View>
+<ListItemRipple
+	variant="titleMedium"
+	title={translate("language", true)}
+	selectedItem={currentLanguage.label}
+	action={() => {
+		setVisible(true);
+	}}
+	style={{
+		marginTop: paddingHorizontal,
+	}}
+/>
+<Portal>
+	<Dialog
+		visible={visible}
+		onDismiss={hideDialog}
+		// style={{ backgroundColor: "red" }}
+	>
+		<Dialog.Title>{translate("chooseLang", true)}</Dialog.Title>
+		<Dialog.Content>
+			{langs.map((lang) => (
+				<ListItemRipple
+					key={lang.value}
+					title={lang.label}
+					checkbox
+					isChecked={locale === lang.value}
+					action={() => setupLanguage(lang.value)}
+				/>
+			))}
+		</Dialog.Content>
+	</Dialog>
+</Portal>
+*/
